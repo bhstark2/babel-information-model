@@ -2,9 +2,9 @@
 
 This is the working area for the IETF [BABEL Working Group](https://datatracker.ietf.org/wg/babel/documents/) Internet-Draft, "Babel Information Model".
 
-* [Editor's Copy](https://bhstark2.github.io/babel-information-model/#go.draft-ietf-babel-information-model.html)
+* [Editor's Copy](https://bhstark2.github.io/babel-information-model/draft-ietf-babel-information-model.html)
 * [Working Group Draft](https://tools.ietf.org/html/draft-ietf-babel-information-model)
-* [Compare Editor's Copy to Working Group Draft](https://bhstark2.github.io/babel-information-model/#go.draft-ietf-babel-information-model.diff)
+* [Compare Editor's Copy to Working Group Draft](https://tools.ietf.org//rfcdiff?url1=https://tools.ietf.org/id/draft-ietf-babel-information-model-03.txt&url2=https://bhstark2.github.io/babel-information-model/draft-ietf-babel-information-model.txt)
 
 ## Building the Draft
 
