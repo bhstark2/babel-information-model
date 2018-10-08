@@ -418,7 +418,7 @@ ul.toc li {
   <h1 id="rfc.section.1">
 <a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a>
 </h1>
-<p id="rfc.section.1.p.1">Babel is a loop-avoiding distance-vector routing protocol defined in <a href="#rfc6126bis" class="xref">draft-ietf-babel-hmac</a>. <a href="#BABEL-HMAC" class="xref">[BABEL-HMAC]</a> defines a security mechanism that allows Babel messages to be cryptographically authenticated, and <a href="#BABEL-DTLS" class="xref">[BABEL-DTLS]</a> defines a security mechanism that allows Babel messages to be encrypted.  This document describes an information model for Babel (including implementations using one of these security mechanisms) that can be used to created management protocol data models (such as a NETCONF <a href="#RFC6241" class="xref">[RFC6241]</a> YANG <a href="#RFC7950" class="xref">[RFC7950]</a> data model).</p>
+<p id="rfc.section.1.p.1">Babel is a loop-avoiding distance-vector routing protocol defined in <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>. <a href="#I-D.do-babel-hmac" class="xref">[I-D.do-babel-hmac]</a> defines a security mechanism that allows Babel messages to be cryptographically authenticated, and <a href="#I-D.decimo-babel-dtls" class="xref">[I-D.decimo-babel-dtls]</a> defines a security mechanism that allows Babel messages to be encrypted.  This document describes an information model for Babel (including implementations using one of these security mechanisms) that can be used to created management protocol data models (such as a NETCONF <a href="#RFC6241" class="xref">[RFC6241]</a> YANG <a href="#RFC7950" class="xref">[RFC7950]</a> data model).</p>
 <p id="rfc.section.1.p.2">Due to the simplicity of the Babel protocol, most of the information model is focused on reporting status of the Babel protocol, and very little of that is considered mandatory to implement (conditional on a management protocol with Babel support being implemented). Some parameters may be configurable; however, it is up to the Babel implementation whether to allow any of these to be configured within its implementation. Where the implementation does not allow configuration of these parameters, it may still choose to expose them as read-only.</p>
 <p id="rfc.section.1.p.3">The Information Model is presented using a hierarchical structure. This does not preclude a data model based on this Information Model from using a referential or other structure.</p>
 <h1 id="rfc.section.1.1">
@@ -526,7 +526,7 @@ information object
 <dt>babel-enable:</dt>
 <dd style="margin-left: 8">if true, the babel implementation is running; if false, the babel implementation is not currently running; MAY  be configurable to allow babel to be started or stopped</dd>
 <dt>babel-self-router-id:</dt>
-<dd style="margin-left: 8">the router-id used by this instance of the Babel protocol to identify itself; <a href="#rfc6126bis" class="xref">draft-ietf-babel-rfc6126bis</a> describes this as an arbitrary string of 8 octets</dd>
+<dd style="margin-left: 8">the router-id used by this instance of the Babel protocol to identify itself; <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a> describes this as an arbitrary string of 8 octets</dd>
 <dt>babel-supported-link-types:</dt>
 <dd style="margin-left: 8">set of values of supported link types; valid enumeration values are identified in Babel Link Types registry (see <a href="#iana-considerations" class="xref">Section 7</a>)</dd>
 <dt>babel-self-seqno:</dt>
@@ -628,9 +628,9 @@ information object
 <dt>babel-neighbor-address:</dt>
 <dd style="margin-left: 8">(IPv4 or v6) address the neighbor sends messages from</dd>
 <dt>babel-hello-mcast-history:</dt>
-<dd style="margin-left: 8">the multicast Hello history of whether or not the multicast Hello messages prior to babel-exp-mcast-hello-seqno were received; representation of a binary sequence where the most recently received Hello is expressed as a &#8220;1&#8221; placed in the left-most bit, with prior bits shifted right (and &#8220;0&#8221; bits placed between prior Hello bits and most recent Hello for any not-received Hellos); represented as a string using utf-8 encoded hex digits ([0-9a-fA-F]); note that this representation (supplied to a user interface or transmitted across a management interface) is a string representation of the stored binary value; see <a href="#rfc6126bis" class="xref">draft-ietf-babel-rfc6126bis</a>, section A.1</dd>
+<dd style="margin-left: 8">the multicast Hello history of whether or not the multicast Hello messages prior to babel-exp-mcast-hello-seqno were received; representation of a binary sequence where the most recently received Hello is expressed as a &#8220;1&#8221; placed in the left-most bit, with prior bits shifted right (and &#8220;0&#8221; bits placed between prior Hello bits and most recent Hello for any not-received Hellos); represented as a string using utf-8 encoded hex digits ([0-9a-fA-F]); note that this representation (supplied to a user interface or transmitted across a management interface) is a string representation of the stored binary value; see <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>, section A.1</dd>
 <dt>babel-hello-ucast-history:</dt>
-<dd style="margin-left: 8">the unicast Hello history of whether or not the unicast Hello messages prior to babel-exp-mcast-hello-seqno were received; representation of a binary sequence where the most recently received Hello is expressed as  a &#8220;1&#8221; placed in the left-most bit, with prior bits shifted right (and &#8220;0&#8221; bits placed between prior Hello bits and most recent Hello for any not-received Hellos); represented as a string using utf-8 encoded hex digits ([0-9a-fA-F]); note that this representation (supplied to a user interface or transmitted across a management interface) is a string representation of the stored binary value; see <a href="#rfc6126bis" class="xref">draft-ietf-babel-rfc6126bis</a>, section A.1</dd>
+<dd style="margin-left: 8">the unicast Hello history of whether or not the unicast Hello messages prior to babel-exp-mcast-hello-seqno were received; representation of a binary sequence where the most recently received Hello is expressed as  a &#8220;1&#8221; placed in the left-most bit, with prior bits shifted right (and &#8220;0&#8221; bits placed between prior Hello bits and most recent Hello for any not-received Hellos); represented as a string using utf-8 encoded hex digits ([0-9a-fA-F]); note that this representation (supplied to a user interface or transmitted across a management interface) is a string representation of the stored binary value; see <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>, section A.1</dd>
 <dt>babel-txcost:</dt>
 <dd style="margin-left: 8">transmission cost value from the last IHU packet received from this neighbor, or maximum value (infinity) to indicates the IHU hold timer for this neighbor has expired</dd>
 <dt>babel-exp-mcast-hello-seqno:</dt>
@@ -700,15 +700,15 @@ information object
 <dt>babel-route-neighbor:</dt>
 <dd style="margin-left: 8">reference to the babel-neighbors entry for the neighbor that advertised this route</dd>
 <dt>babel-route-received-metric:</dt>
-<dd style="margin-left: 8">the metric with which this route was advertised by the neighbor, or maximum value (infinity) to indicate a the route was recently retracted and is temporarily unreachable (see Section 3.5.5 of <a href="#rfc6126bis" class="xref">draft-ietf-babel-rfc6126bis</a>); this metric will be 0 (zero) if the route was not received from a neighbor but was generated through other means; either babel-route-calculated-metric or babel-route-received-metric MUST be provided</dd>
+<dd style="margin-left: 8">the metric with which this route was advertised by the neighbor, or maximum value (infinity) to indicate a the route was recently retracted and is temporarily unreachable (see Section 3.5.5 of <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>); this metric will be 0 (zero) if the route was not received from a neighbor but was generated through other means; either babel-route-calculated-metric or babel-route-received-metric MUST be provided</dd>
 <dt>babel-route-calculated-metric:</dt>
-<dd style="margin-left: 8">a calculated metric for this route; how the metric is calculated is implementation-specific; maximum value (infinity) indicates the route was recently retracted and is temporarily unreachable (see Section 3.5.5 of <a href="#rfc6126bis" class="xref">draft-ietf-babel-rfc6126bis</a>); either babel-route-calculated-metric or babel-route-received-metric MUST be provided</dd>
+<dd style="margin-left: 8">a calculated metric for this route; how the metric is calculated is implementation-specific; maximum value (infinity) indicates the route was recently retracted and is temporarily unreachable (see Section 3.5.5 of <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>); either babel-route-calculated-metric or babel-route-received-metric MUST be provided</dd>
 <dt>babel-route-seqno:</dt>
 <dd style="margin-left: 8">the sequence number with which this route was advertised</dd>
 <dt>babel-route-next-hop:</dt>
 <dd style="margin-left: 8">the next-hop address of this route; this will be empty if this route has no next-hop address</dd>
 <dt>babel-route-feasible:</dt>
-<dd style="margin-left: 8">a boolean flag indicating whether this route is feasible, as defined in Section 3.5.1 of <a href="#rfc6126bis" class="xref">draft-ietf-babel-rfc6126bis</a>)</dd>
+<dd style="margin-left: 8">a boolean flag indicating whether this route is feasible, as defined in Section 3.5.1 of <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>)</dd>
 <dt>babel-route-selected:</dt>
 <dd style="margin-left: 8">a boolean flag indicating whether this route is selected, i.e., whether it is currently being used for forwarding and is being advertised</dd>
 </dl>
@@ -764,7 +764,7 @@ information object
 
 <ul>
 <li>MUST be at least 1 character and no more than 20 characters long</li>
-<li>MUST contain only US-ASCII [ANSI.X3.4-1986] letters &#8216;A&#8217; - &#8216;Z&#8217; and &#8216;a&#8217; - &#8216;z&#8217;, digits &#8216;0&#8217; - &#8216;9&#8217;, and hyphens (&#8216;-&#8216;, ASCII 0x2D or decimal 45)</li>
+<li>MUST contain only US-ASCII <a href="#RFC0020" class="xref">[RFC0020]</a> letters &#8216;A&#8217; - &#8216;Z&#8217; and &#8216;a&#8217; - &#8216;z&#8217;, digits &#8216;0&#8217; - &#8216;9&#8217;, and hyphens (&#8216;-&#8216;, ASCII 0x2D or decimal 45)</li>
 <li>MUST contain at least one letter (&#8216;A&#8217; - &#8216;Z&#8217; or &#8216;a&#8217; - &#8216;z&#8217;)</li>
 <li>MUST NOT begin or end with a hyphen</li>
 <li>hyphens MUST NOT be adjacent to other hyphens</li>
@@ -824,14 +824,19 @@ information object
 <a href="#rfc.references.1">9.1.</a> Normative References</h1>
 <table><tbody>
 <tr>
+<td class="reference"><b id="I-D.ietf-babel-rfc6126bis">[I-D.ietf-babel-rfc6126bis]</b></td>
+<td class="top">
+<a>Chroboczek, J.</a> and <a>D. Schinazi</a>, "<a href="https://tools.ietf.org/html/draft-ietf-babel-rfc6126bis-05">The Babel Routing Protocol</a>", Internet-Draft draft-ietf-babel-rfc6126bis-05, May 2018.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC0020">[RFC0020]</b></td>
+<td class="top">
+<a>Cerf, V.</a>, "<a href="https://tools.ietf.org/html/rfc20">ASCII format for network interchange</a>", STD 80, RFC 20, DOI 10.17487/RFC0020, October 1969.</td>
+</tr>
+<tr>
 <td class="reference"><b id="RFC2119">[RFC2119]</b></td>
 <td class="top">
 <a>Bradner, S.</a>, "<a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
-</tr>
-<tr>
-<td class="reference"><b id="rfc6126bis">[rfc6126bis]</b></td>
-<td class="top">
-<a title="IRIF, University of Paris-Diderot">Chroboczek, J.</a>, "<a>The Babel Routing Protocol</a>", Work in Progress, draft-ietf-babel-rfc6126bis, October 2017.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC8126">[RFC8126]</b></td>
@@ -848,14 +853,14 @@ information object
 <a href="#rfc.references.2">9.2.</a> Informative References</h1>
 <table><tbody>
 <tr>
-<td class="reference"><b id="BABEL-DTLS">[BABEL-DTLS]</b></td>
+<td class="reference"><b id="I-D.decimo-babel-dtls">[I-D.decimo-babel-dtls]</b></td>
 <td class="top">
-<a>Decimo, A.</a>, <a>Schinazi, D.</a> and <a>J. Chroboczek</a>, "<a>Babel Routing Protocol over Datagram Transport Layer Security</a>", Work in Progress, draft-decimo-babel-dtls-01, July 2018.</td>
+<a>Decimo, A.</a>, <a>Schinazi, D.</a> and <a>J. Chroboczek</a>, "<a href="https://tools.ietf.org/html/draft-decimo-babel-dtls-01">Babel Routing Protocol over Datagram Transport Layer Security</a>", Internet-Draft draft-decimo-babel-dtls-01, July 2018.</td>
 </tr>
 <tr>
-<td class="reference"><b id="BABEL-HMAC">[BABEL-HMAC]</b></td>
+<td class="reference"><b id="I-D.do-babel-hmac">[I-D.do-babel-hmac]</b></td>
 <td class="top">
-<a>Do, C.</a>, <a>Kolodziejak, W.</a> and <a>J. Chroboczek</a>, "<a>Babel Cryptographic Authentification</a>", Work in Progress, draft-do-babel-hmac-00, July 2018.</td>
+<a>Do, C.</a>, <a>Kolodziejak, W.</a> and <a>J. Chroboczek</a>, "<a href="https://tools.ietf.org/html/draft-do-babel-hmac-00">Babel Cryptographic Authentification</a>", Internet-Draft draft-do-babel-hmac-00, July 2018.</td>
 </tr>
 <tr>
 <td class="reference"><b id="IEEE-802.11-2016">[IEEE-802.11-2016]</b></td>

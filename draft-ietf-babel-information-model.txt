@@ -88,14 +88,14 @@ Table of Contents
 1.  Introduction
 
    Babel is a loop-avoiding distance-vector routing protocol defined in
-   draft-ietf-babel-hmac [rfc6126bis].  [BABEL-HMAC] defines a security
+   [I-D.ietf-babel-rfc6126bis].  [I-D.do-babel-hmac] defines a security
    mechanism that allows Babel messages to be cryptographically
-   authenticated, and [BABEL-DTLS] defines a security mechanism that
-   allows Babel messages to be encrypted.  This document describes an
-   information model for Babel (including implementations using one of
-   these security mechanisms) that can be used to created management
-   protocol data models (such as a NETCONF [RFC6241] YANG [RFC7950] data
-   model).
+   authenticated, and [I-D.decimo-babel-dtls] defines a security
+   mechanism that allows Babel messages to be encrypted.  This document
+   describes an information model for Babel (including implementations
+   using one of these security mechanisms) that can be used to created
+   management protocol data models (such as a NETCONF [RFC6241] YANG
+   [RFC7950] data model).
 
    Due to the simplicity of the Babel protocol, most of the information
    model is focused on reporting status of the Babel protocol, and very
@@ -269,8 +269,8 @@ Internet-Draft           Babel Information Model            October 2018
       configurable to allow babel to be started or stopped
 
    babel-self-router-id:  the router-id used by this instance of the
-      Babel protocol to identify itself; draft-ietf-babel-rfc6126bis
-      [rfc6126bis] describes this as an arbitrary string of 8 octets
+      Babel protocol to identify itself; [I-D.ietf-babel-rfc6126bis]
+      describes this as an arbitrary string of 8 octets
 
 
 
@@ -439,8 +439,8 @@ Internet-Draft           Babel Information Model            October 2018
       received Hellos); represented as a string using utf-8 encoded hex
       digits ([0-9a-fA-F]); note that this representation (supplied to a
       user interface or transmitted across a management interface) is a
-      string representation of the stored binary value; see draft-ietf-
-      babel-rfc6126bis [rfc6126bis], section A.1
+      string representation of the stored binary value; see
+      [I-D.ietf-babel-rfc6126bis], section A.1
 
 
 
@@ -459,8 +459,8 @@ Internet-Draft           Babel Information Model            October 2018
       received Hellos); represented as a string using utf-8 encoded hex
       digits ([0-9a-fA-F]); note that this representation (supplied to a
       user interface or transmitted across a management interface) is a
-      string representation of the stored binary value; see draft-ietf-
-      babel-rfc6126bis [rfc6126bis], section A.1
+      string representation of the stored binary value; see
+      [I-D.ietf-babel-rfc6126bis], section A.1
 
    babel-txcost:  transmission cost value from the last IHU packet
       received from this neighbor, or maximum value (infinity) to
@@ -590,18 +590,18 @@ Internet-Draft           Babel Information Model            October 2018
    babel-route-received-metric:  the metric with which this route was
       advertised by the neighbor, or maximum value (infinity) to
       indicate a the route was recently retracted and is temporarily
-      unreachable (see Section 3.5.5 of draft-ietf-babel-rfc6126bis
-      [rfc6126bis]); this metric will be 0 (zero) if the route was not
-      received from a neighbor but was generated through other means;
-      either babel-route-calculated-metric or babel-route-received-
-      metric MUST be provided
+      unreachable (see Section 3.5.5 of [I-D.ietf-babel-rfc6126bis]);
+      this metric will be 0 (zero) if the route was not received from a
+      neighbor but was generated through other means; either babel-
+      route-calculated-metric or babel-route-received-metric MUST be
+      provided
 
    babel-route-calculated-metric:  a calculated metric for this route;
       how the metric is calculated is implementation-specific; maximum
       value (infinity) indicates the route was recently retracted and is
-      temporarily unreachable (see Section 3.5.5 of draft-ietf-babel-
-      rfc6126bis [rfc6126bis]); either babel-route-calculated-metric or
-      babel-route-received-metric MUST be provided
+      temporarily unreachable (see Section 3.5.5 of
+      [I-D.ietf-babel-rfc6126bis]); either babel-route-calculated-metric
+      or babel-route-received-metric MUST be provided
 
    babel-route-seqno:  the sequence number with which this route was
       advertised
@@ -619,8 +619,8 @@ Internet-Draft           Babel Information Model            October 2018
 
 
    babel-route-feasible:  a boolean flag indicating whether this route
-      is feasible, as defined in Section 3.5.1 of draft-ietf-babel-
-      rfc6126bis [rfc6126bis])
+      is feasible, as defined in Section 3.5.1 of
+      [I-D.ietf-babel-rfc6126bis])
 
    babel-route-selected:  a boolean flag indicating whether this route
       is selected, i.e., whether it is currently being used for
@@ -699,9 +699,8 @@ Internet-Draft           Babel Information Model            October 2018
 
    o  MUST be at least 1 character and no more than 20 characters long
 
-   o  MUST contain only US-ASCII [ANSI.X3.4-1986] letters 'A' - 'Z' and
-      'a' - 'z', digits '0' - '9', and hyphens ('-', ASCII 0x2D or
-      decimal 45)
+   o  MUST contain only US-ASCII [RFC0020] letters 'A' - 'Z' and 'a' -
+      'z', digits '0' - '9', and hyphens ('-', ASCII 0x2D or decimal 45)
 
    o  MUST contain at least one letter ('A' - 'Z' or 'a' - 'z')
 
@@ -722,6 +721,7 @@ Internet-Draft           Babel Information Model            October 2018
    The allocation policy of this registry is Specification Required
    [RFC8126].
 
+   The initial values in the "Babel Link Type" registry are:
 
 
 
@@ -729,8 +729,6 @@ Stark                    Expires April 11, 2019                [Page 13]
 
 Internet-Draft           Babel Information Model            October 2018
 
-
-   The initial values in the "Babel Link Type" registry are:
 
    +----------+-------------------------------------------+------------+
    | Name     | Used for Links Defined By                 | Reference  |
@@ -758,14 +756,19 @@ Internet-Draft           Babel Information Model            October 2018
 
 9.1.  Normative References
 
+   [I-D.ietf-babel-rfc6126bis]
+              Chroboczek, J. and D. Schinazi, "The Babel Routing
+              Protocol", draft-ietf-babel-rfc6126bis-05 (work in
+              progress), May 2018.
+
+   [RFC0020]  Cerf, V., "ASCII format for network interchange", STD 80,
+              RFC 20, DOI 10.17487/RFC0020, October 1969,
+              <https://www.rfc-editor.org/info/rfc20>.
+
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
-
-   [rfc6126bis]
-              Chroboczek, J., "The Babel Routing Protocol", Work in
-              Progress, draft-ietf-babel-rfc6126bis, October 2017.
 
    [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
               Writing an IANA Considerations Section in RFCs", BCP 26,
@@ -778,9 +781,6 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-
-
-
 Stark                    Expires April 11, 2019                [Page 14]
 
 Internet-Draft           Babel Information Model            October 2018
@@ -788,15 +788,15 @@ Internet-Draft           Babel Information Model            October 2018
 
 9.2.  Informative References
 
-   [BABEL-DTLS]
+   [I-D.decimo-babel-dtls]
               Decimo, A., Schinazi, D., and J. Chroboczek, "Babel
               Routing Protocol over Datagram Transport Layer Security",
-              Work in Progress, draft-decimo-babel-dtls-01, July 2018.
+              draft-decimo-babel-dtls-01 (work in progress), July 2018.
 
-   [BABEL-HMAC]
+   [I-D.do-babel-hmac]
               Do, C., Kolodziejak, W., and J. Chroboczek, "Babel
-              Cryptographic Authentification", Work in Progress, draft-
-              do-babel-hmac-00, July 2018.
+              Cryptographic Authentification", draft-do-babel-hmac-00
+              (work in progress), July 2018.
 
    [IEEE-802.11-2016]
               "IEEE Standard 802.11-2016 - IEEE Standard for Information
