@@ -29,55 +29,21 @@ author:
   email: barbara.stark@att.com
 ref: {}
 normative:
-  RFC2119: 
-  RFC8126: 
-  RFC8174: 
-  rfc6126bis:
-    title: The Babel Routing Protocol
-    author:
-    - ins: J. Chroboczek
-      name: Juliusz Chroboczek
-      org: IRIF, University of Paris-Diderot
-    date: 2017-10
-    seriesinfo:
-      Work in Progress,: draft-ietf-babel-rfc6126bis
+  RFC0020:
+  RFC2119:
+  RFC8126:
+  RFC8174:
+  I-D.ietf-babel-rfc6126bis:
+
 informative:
-  RFC3339: 
-  RFC3986: 
-  RFC5234: 
-  RFC6241: 
-  RFC7950: 
-  RFC8193: 
-  BABEL-DTLS:
-    title: Babel Routing Protocol over Datagram Transport Layer Security
-    author:
-    - ins: A. Decimo
-      name: Antonin Decimo
-      org: ''
-    - ins: D. Schinazi
-      name: David Schinazi
-      org: ''
-    - ins: J. Chroboczek
-      name: Juliusz Chroboczek
-      org: ''
-    date: 2018-07
-    seriesinfo:
-      Work in Progress,: draft-decimo-babel-dtls-01
-  BABEL-HMAC:
-    title: Babel Cryptographic Authentification
-    author:
-    - ins: C. Do
-      name: Clara Do
-      org: ''
-    - ins: W. Kolodziejak
-      name: Weronika Kolodziejak
-      org: ''
-    - ins: J. Chroboczek
-      name: Juliusz Chroboczek
-      org: ''
-    date: 2018-07
-    seriesinfo:
-      Work in Progress,: draft-do-babel-hmac-00
+  RFC3339:
+  RFC3986:
+  RFC5234:
+  RFC6241:
+  RFC7950:
+  RFC8193:
+  I-D.decimo-babel-dtls:
+  I-D.do-babel-hmac:
   IEEE-802.3-2018:
     title: IEEE Standard 802.3-2018 - IEEE Approved Draft Standard for Ethernet.
     author:
@@ -110,8 +76,8 @@ may allow some limited configuration of protocol constants.
 
 # Introduction
 
-Babel is a loop-avoiding distance-vector routing protocol defined in [draft-ietf-babel-hmac](#rfc6126bis). {{BABEL-HMAC}} defines a security mechanism that allows Babel messages to be cryptographically
-authenticated, and {{BABEL-DTLS}} defines a security mechanism that allows Babel messages to be encrypted.
+Babel is a loop-avoiding distance-vector routing protocol defined in {{I-D.ietf-babel-rfc6126bis}}. {{I-D.do-babel-hmac}} defines a security mechanism that allows Babel messages to be cryptographically
+authenticated, and {{I-D.decimo-babel-dtls}} defines a security mechanism that allows Babel messages to be encrypted.
 This document describes an information model for Babel (including implementations
 using one of these security mechanisms) that can be used to created management
 protocol data models (such as a NETCONF {{RFC6241}} YANG {{RFC7950}} data model).
@@ -283,7 +249,7 @@ babel-enable:
 
 babel-self-router-id:
 : the router-id used by this instance of the Babel protocol
-  to identify itself; [draft-ietf-babel-rfc6126bis](#rfc6126bis)
+  to identify itself; {{I-D.ietf-babel-rfc6126bis}}
   describes this as an arbitrary string of 8 octets
 
 babel-supported-link-types:
@@ -454,7 +420,7 @@ babel-hello-mcast-history:
   for any not-received Hellos); represented as a string using utf-8 encoded
   hex digits (\[0-9a-fA-F]); note that this representation (supplied to a user
   interface or transmitted across a management interface) is a string representation
-  of the stored binary value; see [draft-ietf-babel-rfc6126bis](#rfc6126bis), section A.1
+  of the stored binary value; see {{I-D.ietf-babel-rfc6126bis}}, section A.1
 
 babel-hello-ucast-history:
 : the unicast Hello history of whether or not the
@@ -465,7 +431,7 @@ babel-hello-ucast-history:
   for any not-received Hellos); represented as a string using utf-8 encoded
   hex digits (\[0-9a-fA-F]); note that this representation (supplied to a user
   interface or transmitted across a management interface) is a string representation
-  of the stored binary value; see [draft-ietf-babel-rfc6126bis](#rfc6126bis), section A.1
+  of the stored binary value; see {{I-D.ietf-babel-rfc6126bis}}, section A.1
 
 babel-txcost:
 : transmission cost value from the last IHU packet received from
@@ -594,7 +560,7 @@ babel-route-received-metric:
 : the metric with which this route was advertised
   by the neighbor, or maximum value (infinity) to indicate a the route was
   recently retracted and is temporarily unreachable (see Section 3.5.5
-  of [draft-ietf-babel-rfc6126bis](#rfc6126bis)); this metric will be
+  of {{I-D.ietf-babel-rfc6126bis}}); this metric will be
   0 (zero) if the route was not received from a neighbor
   but was generated through other means; either babel-route-calculated-metric
   or babel-route-received-metric MUST be provided
@@ -603,7 +569,7 @@ babel-route-calculated-metric:
 : a calculated metric for this route; how the
   metric is calculated is implementation-specific; maximum value (infinity)
   indicates the route was recently retracted and is temporarily unreachable
-  (see Section 3.5.5 of [draft-ietf-babel-rfc6126bis](#rfc6126bis));
+  (see Section 3.5.5 of {{I-D.ietf-babel-rfc6126bis}});
   either babel-route-calculated-metric or babel-route-received-metric MUST
   be provided
 
@@ -616,7 +582,7 @@ babel-route-next-hop:
 
 babel-route-feasible:
 : a boolean flag indicating whether this route is feasible,
-  as defined in Section 3.5.1 of [draft-ietf-babel-rfc6126bis](#rfc6126bis))
+  as defined in Section 3.5.1 of {{I-D.ietf-babel-rfc6126bis}})
 
 babel-route-selected:
 : a boolean flag indicating whether this route is selected,
@@ -695,7 +661,7 @@ Protocol registry.
 Valid Babel Link Type names are normatively defined as
 
 - MUST be at least 1 character and no more than 20 characters long
-- MUST contain only US-ASCII [ANSI.X3.4-1986] letters 'A' - 'Z' and 'a' -
+- MUST contain only US-ASCII {{RFC0020}} letters 'A' - 'Z' and 'a' -
 'z', digits '0' - '9', and hyphens ('-', ASCII 0x2D or decimal 45)
 - MUST contain at least one letter ('A' - 'Z' or 'a' - 'z')
 - MUST NOT begin or end with a hyphen
