@@ -312,7 +312,7 @@ ul.toc li {
 
   <meta name="dct.creator" content="Stark, B." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-babel-information-model-04" />
-  <meta name="dct.issued" scheme="ISO8601" content="2018-08" />
+  <meta name="dct.issued" scheme="ISO8601" content="2018-13" />
   <meta name="dct.abstract" content="This Babel Information Model can be used to create data models under various data modeling regimes (e.g., YANG). It allows a Babel implementation (via a management protocol such as NETCONF) to report on its current state and may allow some limited configuration of protocol constants." />
   <meta name="description" content="This Babel Information Model can be used to create data models under various data modeling regimes (e.g., YANG). It allows a Babel implementation (via a management protocol such as NETCONF) to report on its current state and may allow some limited configuration of protocol constants." />
 
@@ -333,10 +333,10 @@ ul.toc li {
 </tr>
 <tr>
 <td class="left">Intended status: Informational</td>
-<td class="right">October 8, 2018</td>
+<td class="right">October 13, 2018</td>
 </tr>
 <tr>
-<td class="left">Expires: April 11, 2019</td>
+<td class="left">Expires: April 16, 2019</td>
 <td class="right"></td>
 </tr>
 
@@ -353,7 +353,7 @@ ul.toc li {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on April 11, 2019.</p>
+<p>This Internet-Draft will expire on April 16, 2019.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2018 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -418,8 +418,8 @@ ul.toc li {
   <h1 id="rfc.section.1">
 <a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a>
 </h1>
-<p id="rfc.section.1.p.1">Babel is a loop-avoiding distance-vector routing protocol defined in <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>. <a href="#I-D.do-babel-hmac" class="xref">[I-D.do-babel-hmac]</a> defines a security mechanism that allows Babel messages to be cryptographically authenticated, and <a href="#I-D.decimo-babel-dtls" class="xref">[I-D.decimo-babel-dtls]</a> defines a security mechanism that allows Babel messages to be encrypted.  This document describes an information model for Babel (including implementations using one of these security mechanisms) that can be used to created management protocol data models (such as a NETCONF <a href="#RFC6241" class="xref">[RFC6241]</a> YANG <a href="#RFC7950" class="xref">[RFC7950]</a> data model).</p>
-<p id="rfc.section.1.p.2">Due to the simplicity of the Babel protocol, most of the information model is focused on reporting status of the Babel protocol, and very little of that is considered mandatory to implement (conditional on a management protocol with Babel support being implemented). Some parameters may be configurable; however, it is up to the Babel implementation whether to allow any of these to be configured within its implementation. Where the implementation does not allow configuration of these parameters, it may still choose to expose them as read-only.</p>
+<p id="rfc.section.1.p.1">Babel is a loop-avoiding distance-vector routing protocol defined in <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>. <a href="#I-D.ietf-babel-hmac" class="xref">[I-D.ietf-babel-hmac]</a> defines a security mechanism that allows Babel messages to be cryptographically authenticated, and <a href="#I-D.ietf-babel-dtls" class="xref">[I-D.ietf-babel-dtls]</a> defines a security mechanism that allows Babel messages to be encrypted.  This document describes an information model for Babel (including implementations using one of these security mechanisms) that can be used to create management protocol data models (such as a NETCONF <a href="#RFC6241" class="xref">[RFC6241]</a> YANG <a href="#RFC7950" class="xref">[RFC7950]</a> data model).</p>
+<p id="rfc.section.1.p.2">Due to the simplicity of the Babel protocol, most of the information model is focused on reporting Babel protocol operational state, and very little of that is considered mandatory to implement (contingent on a management protocol with Babel support being implemented). Some parameters may be configurable.  However, it is up to the Babel implementation whether to allow any of these to be configured within its implementation. Where the implementation does not allow configuration of these parameters, it may still choose to expose them as read-only.</p>
 <p id="rfc.section.1.p.3">The Information Model is presented using a hierarchical structure. This does not preclude a data model based on this Information Model from using a referential or other structure.</p>
 <h1 id="rfc.section.1.1">
 <a href="#rfc.section.1.1">1.1.</a> <a href="#requirements-language" id="requirements-language">Requirements Language</a>
@@ -428,13 +428,11 @@ ul.toc li {
 <h1 id="rfc.section.1.2">
 <a href="#rfc.section.1.2">1.2.</a> <a href="#notation" id="notation">Notation</a>
 </h1>
-<p id="rfc.section.1.2.p.1">This document uses a programming language-like notation to define the properties of the objects of the information model. An optional property is enclosed by square brackets, [ ], and a list property is indicated by two numbers in angle brackets, &lt;m..n&gt;, where m indicates the minimal number of values, and n is the maximum.  The symbol * for n means no upper bound.</p>
+<p id="rfc.section.1.2.p.1">This document uses a programming language-like notation to define the properties of the objects of the information model. An optional property is enclosed by square brackets, [ ], and a list property is indicated by two numbers in angle brackets, &lt;m..n&gt;, where m indicates the minimal number of list elements, and n indicates the maximum number of list elements.  The symbol * for n means there are no defined limits on the number of list elements. Each parameter and object includes an indication of &#8220;ro&#8221; or &#8220;rw&#8221;. &#8220;ro&#8221; means the parameter or object is read-only. &#8220;rw&#8221; means it is read-write. For an object, read-write means instances of the object can be created or deleted.  If an implementation is allowed to choose to implement a &#8220;rw&#8221; parameter as read-only, this is noted in the parameter description.</p>
 <p id="rfc.section.1.2.p.2">The object definitions use base types that are defined as follows:</p>
 <p></p>
 
 <dl>
-<dt>base64</dt>
-<dd style="margin-left: 12">An opaque array of bytes.</dd>
 <dt>boolean</dt>
 <dd style="margin-left: 12">A type representing a boolean value.</dd>
 <dt>counter</dt>
@@ -480,16 +478,16 @@ information object
         advertising neighbor, metric, sequence number, whether
         route is feasible, whether route is selected
 </pre>
-<p id="rfc.section.2.p.2">Following is a list of the data elements that an implementation can choose to allow to be configurable:</p>
+<p id="rfc.section.2.p.2">Most parameters are read-only. Following is a list of the parameters that are not required to be read-only:</p>
 <p></p>
 
 <ul>
-<li>enable/disable babel</li>
+<li>enable/disable Babel</li>
 <li>Constant: UDP port</li>
 <li>Constant: IPv6 multicast group</li>
 <li>Interface: Link type</li>
 <li>Interface: External cost (must be configurable if implemented, but implementation is optional)</li>
-<li>Interface: enable/disable babel on this interface</li>
+<li>Interface: enable/disable Babel on this interface</li>
 <li>Interface: enable/disable message log</li>
 <li>Security: enable/disable this security mechanism</li>
 <li>Security: self credentials</li>
@@ -504,19 +502,19 @@ information object
 <a href="#rfc.section.3.1">3.1.</a> <a href="#definition-of-babel-information-obj" id="definition-of-babel-information-obj">Definition of babel-information-obj</a>
 </h1>
 <pre>
-     object {
-          string                babel-implementation-version;
-          boolean               babel-enable;
-          base64                babel-self-router-id;
-          string                babel-supported-link-types&lt;1..*&gt;;
-         [int                   babel-self-seqno;]
-          string                babel-metric-comp-algorithms&lt;1..*&gt;;
-          string                babel-security-supported&lt;0..*&gt;;
-          babel-constants-obj   babel-constants;
-          babel-interfaces-obj  babel-interfaces&lt;0..*&gt;;
-          babel-routes-obj      babel-routes&lt;0..*&gt;;
-          babel-security-obj    babel-security&lt;0..*&gt;;
-      }babel-information-obj;
+  object {
+       string               ro babel-implementation-version;
+       boolean              rw babel-enable;
+       base64               ro babel-self-router-id;
+       string               ro babel-supported-link-types&lt;1..*&gt;;
+      [int                  ro babel-self-seqno;]
+       string               ro babel-metric-comp-algorithms&lt;1..*&gt;;
+       string               ro babel-security-supported&lt;0..*&gt;;
+       babel-constants-obj  ro babel-constants;
+       babel-interfaces-obj ro babel-interfaces&lt;0..*&gt;;
+       babel-routes-obj     ro babel-routes&lt;0..*&gt;;
+       babel-security-obj   ro babel-security&lt;0..*&gt;;
+   } babel-information-obj;
 </pre>
 <p></p>
 
@@ -524,193 +522,198 @@ information object
 <dt>babel-implementation-version:</dt>
 <dd style="margin-left: 8">the version of this implementation of the Babel protocol</dd>
 <dt>babel-enable:</dt>
-<dd style="margin-left: 8">if true, the babel implementation is running; if false, the babel implementation is not currently running; MAY  be configurable to allow babel to be started or stopped</dd>
+<dd style="margin-left: 8">When written, it configures whether the protocol shoud be enabled (true) or disabled (false).  A read from the running or intended datastore indicates the configured administrative value of whether the protocol is enabled (true) or not (false). A read from the operational datastore indicates whether the protocol is actually running (true) or not (i.e., it indicates the operational state of the protocol).  A data model that does not replicate parameters for running and operational datastores can implement this as two separate parameters.  An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
 <dt>babel-self-router-id:</dt>
-<dd style="margin-left: 8">the router-id used by this instance of the Babel protocol to identify itself; <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a> describes this as an arbitrary string of 8 octets</dd>
+<dd style="margin-left: 8">The router-id used by this instance of the Babel protocol to identify itself. <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a> describes this as an arbitrary string of 8 octets.</dd>
 <dt>babel-supported-link-types:</dt>
-<dd style="margin-left: 8">set of values of supported link types; valid enumeration values are identified in Babel Link Types registry (see <a href="#iana-considerations" class="xref">Section 7</a>)</dd>
+<dd style="margin-left: 8">Lists the set of link types supported by this instance of Babel.  Valid enumeration values are defined in the Babel Link Types registry (see <a href="#iana-considerations" class="xref">Section 7</a>).</dd>
 <dt>babel-self-seqno:</dt>
-<dd style="margin-left: 8">the current sequence number included in route updates for routes originated by this node</dd>
+<dd style="margin-left: 8">The current sequence number included in route updates for routes originated by this node.</dd>
 <dt>babel-metric-comp-algorithms:</dt>
-<dd style="margin-left: 8">a set of names of supported cost computation algorithms; possible values include &#8220;k-out-of-j&#8221;, &#8220;ETX&#8221;</dd>
+<dd style="margin-left: 8">List of supported cost computation algorithms. Possible values include &#8220;k-out-of-j&#8221;, and &#8220;ETX&#8221;.</dd>
 <dt>babel-security-supported:</dt>
-<dd style="margin-left: 8">list of supported security mechanisms; as babel security mechanisms are defined, they will need to indicate what enumeration value is to be used to represent them in this parameter</dd>
+<dd style="margin-left: 8">List of supported security mechanisms. As Babel security mechanisms are defined, they will need to indicate what enumeration value is to be used to represent them in this parameter.</dd>
 <dt>babel-constants:</dt>
-<dd style="margin-left: 8">a babel-constants-obj object</dd>
+<dd style="margin-left: 8">A babel-constants-obj object.</dd>
 <dt>babel-interfaces:</dt>
-<dd style="margin-left: 8">a set of babel-interface-obj objects</dd>
+<dd style="margin-left: 8">A set of babel-interface-obj objects.</dd>
 <dt>babel-security:</dt>
-<dd style="margin-left: 8">a babel-security-obj object that applies to all interfaces; if this object is implemented, it allows a security mechanism to be enabled or disabled in a manner that applies to all Babel messages on all interfaces</dd>
+<dd style="margin-left: 8">A babel-security-obj object that applies to all interfaces. If this object is implemented, it allows a security mechanism to be enabled or disabled in a manner that applies to all Babel messages on all interfaces.</dd>
 <dt>babel-routes:</dt>
-<dd style="margin-left: 8">a set of babel-route-obj objects; includes received and routes routes</dd>
+<dd style="margin-left: 8">A set of babel-route-obj objects. Contains the routes known to this node.</dd>
 </dl>
 <h1 id="rfc.section.3.2">
 <a href="#rfc.section.3.2">3.2.</a> <a href="#definition-of-babel-constants-obj" id="definition-of-babel-constants-obj">Definition of babel-constants-obj</a>
 </h1>
 <pre>
-     object {
-          int          babel-udp-port;
-         [ip-address   babel-mcast-group;]
-      }babel-constants-obj;
+  object {
+       int          rw babel-udp-port;
+      [ip-address   rw babel-mcast-group;]
+   } babel-constants-obj;
 </pre>
 <p></p>
 
 <dl>
 <dt>babel-udp-port:</dt>
-<dd style="margin-left: 8">UDP port for sending and listening for Babel messages; default is 6696; MAY be configurable</dd>
+<dd style="margin-left: 8">UDP port for sending and listening for Babel messages. Default is 6696. An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
 <dt>babel-mcast-group:</dt>
-<dd style="margin-left: 8">multicast group for sending and listening to multicast announcements on IPv6; default is ff02:0:0:0:0:0:1:6; MAY be configurable</dd>
+<dd style="margin-left: 8">Multicast group for sending and listening to multicast announcements on IPv6. Default is ff02:0:0:0:0:0:1:6.  An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
 </dl>
 <h1 id="rfc.section.3.3">
 <a href="#rfc.section.3.3">3.3.</a> <a href="#definition-of-babel-interfaces-obj" id="definition-of-babel-interfaces-obj">Definition of babel-interfaces-obj</a>
 </h1>
 <pre>
-     object {
-          string               babel-interface-reference;
-         [boolean              babel-interface-enable;]
-          int                  babel-link-type;
-         [int                  babel-mcast-hello-seqno;]
-         [int                  babel-mcast-hello-interval;]
-         [int                  babel-update-interval;]
-         [int                  babel-external-cost;]
-         [boolean              babel-message-log-enable;]
-         [babel-log-obj        babel-message-log&lt;0..*&gt;;]
-          babel-neighbors-obj  babel-neighbors&lt;0..*&gt;;
-         [babel-security-obj   babel-interface-security&lt;0..*&gt;;]
-      }babel-interfaces-obj;
+  object {
+       string               ro babel-interface-reference;
+      [boolean              rw babel-interface-enable;]
+       int                  rw babel-link-type;
+       string               ro babel-interface-metric-algorithm;
+      [int                  ro babel-mcast-hello-seqno;]
+      [int                  ro babel-mcast-hello-interval;]
+      [int                  ro babel-update-interval;]
+      [int                  rw babel-external-cost;]
+      [boolean              rw babel-message-log-enable;]
+      [babel-log-obj        ro babel-message-log&lt;0..*&gt;;]
+       babel-neighbors-obj  ro babel-neighbors&lt;0..*&gt;;
+      [babel-security-obj   ro babel-interface-security&lt;0..*&gt;;]
+   } babel-interfaces-obj;
 </pre>
 <p></p>
 
 <dl>
 <dt>babel-interface-reference:</dt>
-<dd style="margin-left: 8">reference to an interface object as defined by the data model (e.g., YANG <a href="#RFC7950" class="xref">[RFC7950]</a>, BBF TR-181); data model is assumed to allow for referencing of interface objects which may be at any layer (physical, Ethernet MAC, IP, tunneled IP, etc.); referencing syntax will be specific to the data model; if there is no set of interface objects available, this should be a string that indicates the interface name used by the underlying operating system</dd>
+<dd style="margin-left: 8">Reference to an interface object as defined by the data model (e.g., YANG <a href="#RFC7950" class="xref">[RFC7950]</a>, BBF <a href="#TR-181" class="xref">[TR-181]</a>). Data model is assumed to allow for referencing of interface objects which may be at any layer (physical, Ethernet MAC, IP, tunneled IP, etc.).  referencing syntax will be specific to the data model. If there is no set of interface objects available, this should be a string that indicates the interface name used by the underlying operating system.</dd>
 <dt>babel-interface-enable:</dt>
-<dd style="margin-left: 8">if true, babel sends and receives messages on this interface; if false, babel messages received on this interface are ignored and none are sent; MAY be configurable</dd>
+<dd style="margin-left: 8">When written, it configures whether the protocol should be enabled (true) or disabled (false) on this interface.  A read from the running or intended datastore indicates the configured administrative value of whether the protocol is enabled (true) or not (false). A read from the operational datastore indicates whether the protocol is actually running (true) or not (i.e., it indicates the operational state of the protocol).  A data model that does not replicate parameters for running and operational datastores can implement this as two separate parameters.  An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
 <dt>babel-link-type:</dt>
-<dd style="margin-left: 8">indicates the type of link; valid enumeration values are identified in Babel Link Types registry; MAY be configurable</dd>
+<dd style="margin-left: 8">Indicates the type of link. Valid enumeration values are identified in Babel Link Types registry.  An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
+<dt>babel-interface-metric-algorithm:</dt>
+<dd style="margin-left: 8">Indicates the metric computation algorithm used on this interface.  The value MUST be one of those listed in the babel-information-obj babel-metric-comp-algorithms parameter.</dd>
 <dt>babel-mcast-hello-seqno:</dt>
-<dd style="margin-left: 8">the current sequence number in use for multicast hellos sent on this interface</dd>
+<dd style="margin-left: 8">The current sequence number in use for multicast hellos sent on this interface.</dd>
 <dt>babel-mcast-hello-interval:</dt>
-<dd style="margin-left: 8">the current interval in use for multicast hellos sent on this interface</dd>
+<dd style="margin-left: 8">The current interval in use for multicast hellos sent on this interface.</dd>
 <dt>babel-update-interval:</dt>
-<dd style="margin-left: 8">the current interval in use for all updates (multicast and unicast) sent on this interface</dd>
+<dd style="margin-left: 8">The current interval in use for all updates (multicast and unicast) sent on this interface.</dd>
 <dt>babel-external-cost:</dt>
-<dd style="margin-left: 8">external input to cost of link of this interface; if supported, this is a value that is added to the metrics of routes learned over this interface; how an implementation uses the value is up to the implementation, which means the use may not be consistent across implementations; MUST be configurable if implemented</dd>
+<dd style="margin-left: 8">External input to cost of link of this interface. If supported, this is a value that is added to the metrics of routes learned over this interface.  How an implementation uses the value is up to the implementation, which means the use may not be consistent across implementations.</dd>
 <dt>babel-message-log-enable:</dt>
-<dd style="margin-left: 8">if true, logging of babel messages received on this interface is enabled; if false, babel messages are not logged; MUST be configurable, if implemented</dd>
+<dd style="margin-left: 8">When written, it configures whether logging should be enabled (true) or disabled (false).  A read from the running or intended datastore indicates the configured administrative value of whether logging is enabled (true) or not (false). A read from the operational datastore indicates whether logging is actually running (true) or not (i.e., it indicates the operational state).  A data model that does not replicate parameters for running and operational datastores can implement this as two separate parameters.  An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
 <dt>babel-message-log:</dt>
-<dd style="margin-left: 8">log entries that have timestamp of a received Babel message and the entire received Babel message  (including Ethernet frame and IP headers, if possible); an implementation must restrict the size of this log, but how and what size is implementation-specific; if this log is implemented, a mechanism to clear it SHOULD be provided</dd>
+<dd style="margin-left: 8">Log entries that have timestamp of a received Babel message and the entire received Babel message  (including Ethernet frame and IP headers, if possible). An implementation must restrict the size of this log, but how and what size is implementation-specific.  If this log is implemented, a mechanism to clear it SHOULD be provided.</dd>
 <dt>babel-neighbors:</dt>
-<dd style="margin-left: 8">a set of babel-neighbors-obj objects</dd>
+<dd style="margin-left: 8">A set of babel-neighbors-obj objects.</dd>
 <dt>babel-interface-security:</dt>
-<dd style="margin-left: 8">a babel-security-obj object that applies to this interface; if implemented, this allows security to be enabled only on specific interfaces or allows different security mechanisms to be enabled on different interfaces</dd>
+<dd style="margin-left: 8">A babel-security-obj object that applies to this interface. If implemented, this allows security to be enabled only on specific interfaces or allows different security mechanisms to be enabled on different interfaces.</dd>
 </dl>
 <h1 id="rfc.section.3.4">
 <a href="#rfc.section.3.4">3.4.</a> <a href="#definition-of-babel-neighbors-obj" id="definition-of-babel-neighbors-obj">Definition of babel-neighbors-obj</a>
 </h1>
 <pre>
-     object {
-          ip-address           babel-neighbor-address;
-         [string               babel-hello-mcast-history;]
-         [string               babel-hello-ucast-history;]
-          int                  babel-txcost;
-          int                  babel-exp-mcast-hello-seqno;
-          int                  babel-exp-ucast-hello-seqno;
-         [int                  babel-ucast-hello-seqno;]
-         [int                  babel-ucast-hello-interval;]
-         [int                  babel-rxcost]
-         [int                  babel-cost]
-      }babel-neighbors-obj;
+  object {
+       ip-address        ro babel-neighbor-address;
+      [string            ro babel-hello-mcast-history;]
+      [string            ro babel-hello-ucast-history;]
+       int               ro babel-txcost;
+       int               ro babel-exp-mcast-hello-seqno;
+       int               ro babel-exp-ucast-hello-seqno;
+      [int               ro babel-ucast-hello-seqno;]
+      [int               ro babel-ucast-hello-interval;]
+      [int               ro babel-rxcost]
+      [int               ro babel-cost]
+   } babel-neighbors-obj;
 </pre>
 <p></p>
 
 <dl>
 <dt>babel-neighbor-address:</dt>
-<dd style="margin-left: 8">(IPv4 or v6) address the neighbor sends messages from</dd>
+<dd style="margin-left: 8">IPv4 or IPv6 address the neighbor sends messages from</dd>
 <dt>babel-hello-mcast-history:</dt>
-<dd style="margin-left: 8">the multicast Hello history of whether or not the multicast Hello messages prior to babel-exp-mcast-hello-seqno were received; representation of a binary sequence where the most recently received Hello is expressed as a &#8220;1&#8221; placed in the left-most bit, with prior bits shifted right (and &#8220;0&#8221; bits placed between prior Hello bits and most recent Hello for any not-received Hellos); represented as a string using utf-8 encoded hex digits ([0-9a-fA-F]); note that this representation (supplied to a user interface or transmitted across a management interface) is a string representation of the stored binary value; see <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>, section A.1</dd>
+<dd style="margin-left: 8">The multicast Hello history of whether or not the multicast Hello messages prior to babel-exp-mcast-hello-seqno were received.  Representation of a binary sequence where the most recently received Hello is expressed as a &#8220;1&#8221; placed in the left-most bit, with prior bits shifted right (and &#8220;0&#8221; bits placed between prior Hello bits and most recent Hello for any not-received Hellos). Represented as a string using utf-8 encoded hex digits ([0-9a-fA-F]). Note that this representation (supplied to a user interface or transmitted across a management interface) is a string representation of the stored binary value. See <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>, section A.1.</dd>
 <dt>babel-hello-ucast-history:</dt>
-<dd style="margin-left: 8">the unicast Hello history of whether or not the unicast Hello messages prior to babel-exp-mcast-hello-seqno were received; representation of a binary sequence where the most recently received Hello is expressed as  a &#8220;1&#8221; placed in the left-most bit, with prior bits shifted right (and &#8220;0&#8221; bits placed between prior Hello bits and most recent Hello for any not-received Hellos); represented as a string using utf-8 encoded hex digits ([0-9a-fA-F]); note that this representation (supplied to a user interface or transmitted across a management interface) is a string representation of the stored binary value; see <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>, section A.1</dd>
+<dd style="margin-left: 8">The unicast Hello history of whether or not the unicast Hello messages prior to babel-exp-ucast-hello-seqno were received.  Representation of a binary sequence where the most recently received Hello is expressed as a &#8220;1&#8221; placed in the left-most bit, with prior bits shifted right (and &#8220;0&#8221; bits placed between prior Hello bits and most recent Hello for any not-received Hellos). Represented as a string using utf-8 encoded hex digits ([0-9a-fA-F]). Note that this representation (supplied to a user interface or transmitted across a management interface) is a string representation of the stored binary value. See <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>, section A.1.</dd>
 <dt>babel-txcost:</dt>
-<dd style="margin-left: 8">transmission cost value from the last IHU packet received from this neighbor, or maximum value (infinity) to indicates the IHU hold timer for this neighbor has expired</dd>
+<dd style="margin-left: 8">Transmission cost value from the last IHU packet received from this neighbor, or maximum value (infinity) to indicate the IHU hold timer for this neighbor has expired. See <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>, section 3.4.2.</dd>
 <dt>babel-exp-mcast-hello-seqno:</dt>
-<dd style="margin-left: 8">expected multicast Hello sequence number of next Hello to be received from this neighbor; if multicast Hello messages are not expected, or processing of multicast messages is not enabled, this MUST be 0</dd>
+<dd style="margin-left: 8">Expected multicast Hello sequence number of next Hello to be received from this neighbor. If multicast Hello messages are not expected, or processing of multicast messages is not enabled, this MUST be 0.</dd>
 <dt>babel-exp-ucast-hello-seqno:</dt>
-<dd style="margin-left: 8">expected unicast Hello sequence number of next Hello to be received from this neighbor; if unicast Hello messages are not expected, or processing of unicast messages is not enabled, this MUST be 0</dd>
+<dd style="margin-left: 8">Expected unicast Hello sequence number of next Hello to be received from this neighbor. If unicast Hello messages are not expected, or processing of unicast messages is not enabled, this MUST be 0.</dd>
 <dt>babel-ucast-hello-seqno:</dt>
-<dd style="margin-left: 8">the current sequence number in use for unicast hellos sent to this neighbor</dd>
+<dd style="margin-left: 8">The current sequence number in use for unicast hellos sent to this neighbor.</dd>
 <dt>babel-ucast-hello-interval:</dt>
-<dd style="margin-left: 8">the current interval in use for unicast hellos sent to this neighbor</dd>
+<dd style="margin-left: 8">The current interval in use for unicast hellos sent to this neighbor.</dd>
 <dt>babel-rxcost:</dt>
-<dd style="margin-left: 8">reception cost calculated for this neighbor; this value is usually derived from the Hello history, which may be combined with other data, such as statistics maintained by the link layer; the rxcost is sent to a neighbour in each IHU</dd>
+<dd style="margin-left: 8">Reception cost calculated for this neighbor. This value is usually derived from the Hello history, which may be combined with other data, such as statistics maintained by the link layer. The rxcost is sent to a neighbor in each IHU. See <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>, section 3.4.3.</dd>
 <dt>babel-cost:</dt>
-<dd style="margin-left: 8">link cost is computed from the values maintained in the neighbour table: the statistics kept in the neighbour table about the reception of Hellos, and the txcost computed from received IHU packets</dd>
+<dd style="margin-left: 8">Link cost is computed from the values maintained in the neighbor table: the statistics kept in the neighbor table about the reception of Hellos, and the txcost computed from received IHU packets.</dd>
 </dl>
 <h1 id="rfc.section.3.5">
 <a href="#rfc.section.3.5">3.5.</a> <a href="#definition-of-babel-security-obj" id="definition-of-babel-security-obj">Definition of babel-security-obj</a>
 </h1>
 <pre>
-     object {
-          string                babel-security-mechanism
-          boolean               babel-security-enable;
-          babel-credential-obj  babel-security-self-cred&lt;0..*&gt;;
-          babel-credential-obj  babel-security-trust&lt;0..*&gt;;
-         [boolean               babel-credvalid-log-enable;]
-         [babel-log-obj         babel-credvalid-log&lt;0..*&gt;;]
-      }babel-security-obj;
+  object {
+       string                ro babel-security-mechanism
+       boolean               rw babel-security-enable;
+       babel-credential-obj  ro babel-security-self-cred&lt;0..*&gt;;
+       babel-credential-obj  ro babel-security-trust&lt;0..*&gt;;
+      [boolean               rw babel-credvalid-log-enable;]
+      [babel-log-obj         ro babel-credvalid-log&lt;0..*&gt;;]
+   } babel-security-obj;
 </pre>
 <p></p>
 
 <dl>
 <dt>babel-security-mechanism:</dt>
-<dd style="margin-left: 8">the name of the security mechanism this object instance is about; the value MUST be the same as one of the enumerations listed in the babel-security-supported parameter</dd>
+<dd style="margin-left: 8">The name of the security mechanism this object instance is about. The value MUST be the same as one of the enumerations listed in the babel-security-supported parameter.</dd>
 <dt>babel-security-enable:</dt>
-<dd style="margin-left: 8">if true, the security mechanism is running; if false, the security mechanism is not currently running; MAY be configurable to allow security mechanism to be started or stopped</dd>
+<dd style="margin-left: 8">When written, it configures whether this security mechanism should be enabled (true) or disabled (false).  A read from the running or intended datastore indicates the configured administrative value of whether this security mechanism is enabled (true) or not (false). A read from the operational datastore indicates whether this security mechanism is actually running (true) or not (i.e., it indicates the operational state).  A data model that does not replicate parameters for running and operational datastores can implement this as two separate parameters.  An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
 <dt>babel-security-self-cred:</dt>
-<dd style="margin-left: 8">credentials this router presents to participate in the enabled security mechanism; any private key component of a credential MUST NOT be readable; adding and deleting credentials MAY be allowed</dd>
+<dd style="margin-left: 8">Credentials this router presents to participate in the enabled security mechanism. Any private key component of a credential MUST NOT be readable. Adding and deleting credentials MAY be allowed.</dd>
 <dt>babel-security-trust:</dt>
-<dd style="margin-left: 8">a set of babel-credential-obj objects that identify the credentials of routers whose babel messages may be trusted or of a certificate authority (CA) whose signing of a router&#8217;s credentials implies the router credentials can be trusted, in the context of this security mechanism; how a security mechanism interacts with this list is determined by the mechanism; a security algorithm may do additional validation of credentials, such as checking validity dates or revocation lists, so presence in this list may not be sufficient to determine trust; adding and deleting credentials MAY be allowed</dd>
+<dd style="margin-left: 8">A set of babel-credential-obj objects that identify the credentials of routers whose Babel messages may be trusted or of a certificate authority (CA) whose signing of a router&#8217;s credentials implies the router credentials can be trusted, in the context of this security mechanism. How a security mechanism interacts with this list is determined by the mechanism.  A security algorithm may do additional validation of credentials, such as checking validity dates or revocation lists, so presence in this list may not be sufficient to determine trust. Adding and deleting credentials MAY be allowed.</dd>
 <dt>babel-credvalid-log-enable:</dt>
-<dd style="margin-left: 8">if true, logging of messages that include credentials used for authentication is enabled; if false, these messages are not logged; MUST be configurable, if implemented babel-credvalid-log: log entries that have the timestamp a message containing credentials used for peer authentication (e.g., DTLS Server Hello) was received on a Babel port, and the entire received message (including Ethernet frame and IP headers, if possible); an implementation must restrict the size of this log, but how and what size is implementation-specific; if this log is implemented, a mechanism to clear it SHOULD be provided</dd>
+<dd style="margin-left: 8">When written, it configures whether logging should be enabled (true) or disabled (false).  A read from the running or intended datastore indicates the configured administrative value of whether logging is enabled (true) or not (false). A read from the operational datastore indicates whether logging is actually running (true) or not (i.e., it indicates the operational state).  A data model that does not replicate parameters for running and operational datastores can implement this as two separate parameters.  An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
+<dt>babel-credvalid-log:</dt>
+<dd style="margin-left: 8">Log entries that have the timestamp a message containing credentials used for peer authentication (e.g., DTLS Server Hello) was received on a Babel port, and the entire received message (including Ethernet frame and IP headers, if possible). An implementation must restrict the size of this log, but how and what size is implementation-specific. If this log is implemented, a mechanism to clear it SHOULD be provided.</dd>
 </dl>
 <h1 id="rfc.section.3.6">
 <a href="#rfc.section.3.6">3.6.</a> <a href="#definition-of-babel-routes-obj" id="definition-of-babel-routes-obj">Definition of babel-routes-obj</a>
 </h1>
 <pre>
-     object {
-          ip-address           babel-route-prefix;
-          int                  babel-route-prefix-length;
-          base64               babel-route-router-id;
-          string               babel-route-neighbor;
-         [int                  babel-route-received-metric;]
-         [int                  babel-route-calculated-metric;]
-          int                  babel-route-seqno;
-          ip-address           babel-route-next-hop;
-          boolean              babel-route-feasible;
-          boolean              babel-route-selected;
-      }babel-routes-obj;
+  object {
+       ip-address           ro babel-route-prefix;
+       int                  ro babel-route-prefix-length;
+       base64               ro babel-route-router-id;
+       string               ro babel-route-neighbor;
+      [int                  ro babel-route-received-metric;]
+      [int                  ro babel-route-calculated-metric;]
+       int                  ro babel-route-seqno;
+       ip-address           ro babel-route-next-hop;
+       boolean              ro babel-route-feasible;
+       boolean              ro babel-route-selected;
+   } babel-routes-obj;
 </pre>
 <p></p>
 
 <dl>
 <dt>babel-route-prefix:</dt>
-<dd style="margin-left: 8">Prefix (expressed in IP address format) for which this route is advertised</dd>
+<dd style="margin-left: 8">Prefix (expressed in IP address format) for which this route is advertised.</dd>
 <dt>babel-route-prefix-length:</dt>
-<dd style="margin-left: 8">Length of the prefix for which this route is advertised babel-route-router-id: router-id of the source router for which this route is advertised</dd>
+<dd style="margin-left: 8">Length of the prefix for which this route is advertised babel-route-router-id: router-id of the source router for which this route is advertised.</dd>
 <dt>babel-route-neighbor:</dt>
-<dd style="margin-left: 8">reference to the babel-neighbors entry for the neighbor that advertised this route</dd>
+<dd style="margin-left: 8">Reference to the babel-neighbors entry for the neighbor that advertised this route.</dd>
 <dt>babel-route-received-metric:</dt>
-<dd style="margin-left: 8">the metric with which this route was advertised by the neighbor, or maximum value (infinity) to indicate a the route was recently retracted and is temporarily unreachable (see Section 3.5.5 of <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>); this metric will be 0 (zero) if the route was not received from a neighbor but was generated through other means; either babel-route-calculated-metric or babel-route-received-metric MUST be provided</dd>
+<dd style="margin-left: 8">The metric with which this route was advertised by the neighbor, or maximum value (infinity) to indicate the route was recently retracted and is temporarily unreachable (see Section 3.5.5 of <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>). This metric will be 0 (zero) if the route was not received from a neighbor but was generated through other means. Either babel-route-calculated-metric or babel-route-received-metric MUST be provided.</dd>
 <dt>babel-route-calculated-metric:</dt>
-<dd style="margin-left: 8">a calculated metric for this route; how the metric is calculated is implementation-specific; maximum value (infinity) indicates the route was recently retracted and is temporarily unreachable (see Section 3.5.5 of <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>); either babel-route-calculated-metric or babel-route-received-metric MUST be provided</dd>
+<dd style="margin-left: 8">A calculated metric for this route. How the metric is calculated is implementation-specific. Maximum value (infinity) indicates the route was recently retracted and is temporarily unreachable (see Section 3.5.5 of <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>).  Either babel-route-calculated-metric or babel-route-received-metric MUST be provided.</dd>
 <dt>babel-route-seqno:</dt>
-<dd style="margin-left: 8">the sequence number with which this route was advertised</dd>
+<dd style="margin-left: 8">The sequence number with which this route was advertised.</dd>
 <dt>babel-route-next-hop:</dt>
-<dd style="margin-left: 8">the next-hop address of this route; this will be empty if this route has no next-hop address</dd>
+<dd style="margin-left: 8">The next-hop address of this route. This will be empty if this route has no next-hop address.</dd>
 <dt>babel-route-feasible:</dt>
-<dd style="margin-left: 8">a boolean flag indicating whether this route is feasible, as defined in Section 3.5.1 of <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>)</dd>
+<dd style="margin-left: 8">A boolean flag indicating whether this route is feasible, as defined in Section 3.5.1 of <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>).</dd>
 <dt>babel-route-selected:</dt>
-<dd style="margin-left: 8">a boolean flag indicating whether this route is selected, i.e., whether it is currently being used for forwarding and is being advertised</dd>
+<dd style="margin-left: 8">A boolean flag indicating whether this route is selected (i.e., whether it is currently being used for forwarding and is being advertised).</dd>
 </dl>
 <h1 id="rfc.section.4">
 <a href="#rfc.section.4">4.</a> <a href="#common-objects" id="common-objects">Common Objects</a>
@@ -720,41 +723,41 @@ information object
 </h1>
 <pre>
      object {
-          credentials          babel-cred;
-    }babel-credential-obj;
+          credentials          ro babel-cred;
+    } babel-credential-obj;
 </pre>
 <p></p>
 
 <dl>
 <dt>babel-cred:</dt>
-<dd style="margin-left: 8">a credential, such as an X.509 certificate, a public key, etc.  used for signing and/or encrypting babel messages</dd>
+<dd style="margin-left: 8">A credential, such as an X.509 certificate, a public key, etc.  used for signing and/or encrypting Babel messages.</dd>
 </dl>
 <h1 id="rfc.section.4.2">
 <a href="#rfc.section.4.2">4.2.</a> <a href="#definition-of-babel-log-obj" id="definition-of-babel-log-obj">Definition of babel-log-obj</a>
 </h1>
 <pre>
      object {
-          datetime           babel-log-time;
-          string             babel-log-entry;
-    }babel-log-obj;
+          datetime           ro babel-log-time;
+          string             ro babel-log-entry;
+    } babel-log-obj;
 </pre>
 <p></p>
 
 <dl>
 <dt>babel-log-time:</dt>
-<dd style="margin-left: 8">the date and time (according to the device internal clock setting, which may be a time relative to boot time, acquired from NTP, configured by the user, etc.) when this log entry was created</dd>
+<dd style="margin-left: 8">The date and time (according to the device internal clock setting, which may be a time relative to boot time, acquired from NTP, configured by the user, etc.) when this log entry was created.</dd>
 <dt>babel-log-entry:</dt>
-<dd style="margin-left: 8">the logged message, as a string of utf-8 encoded hex characters</dd>
+<dd style="margin-left: 8">The logged message, as a string of utf-8 encoded hex characters.</dd>
 </dl>
 <h1 id="rfc.section.5">
 <a href="#rfc.section.5">5.</a> <a href="#extending-the-information-model" id="extending-the-information-model">Extending the Information Model</a>
 </h1>
-<p id="rfc.section.5.p.1">Implementations MAY extend this information model with other parameters or objects. For example, an implementation MAY choose to expose babel route filtering rules by adding a route filtering object with parameters appropriate to how route filtering is done in that implementation. The precise means used to extend the information model would be specific to the data model the implementation uses to expose this information.</p>
+<p id="rfc.section.5.p.1">Implementations MAY extend this information model with other parameters or objects. For example, an implementation MAY choose to expose Babel route filtering rules by adding a route filtering object with parameters appropriate to how route filtering is done in that implementation. The precise means used to extend the information model would be specific to the data model the implementation uses to expose this information.</p>
 <h1 id="rfc.section.6">
 <a href="#rfc.section.6">6.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
 </h1>
-<p id="rfc.section.6.p.1">This document defines a set of information model objects and parameters that may be exposed to be visible from other devices, and some of which may be configured. Any mechanism or protocol that is used to transmit this information or allow for its configuration is also responsible for ensuring this is done so in a secure manner.</p>
-<p id="rfc.section.6.p.2">This information model defines objects that can allow credentials (for this device, for trusted devices, and for trusted certificate authorities) to be added and deleted. Public keys and shared secrets may be exposed through this model. This model requires that private keys never be exposed. The Babel security mechanisms that make use of these credentials are not defined or identified in this model.</p>
+<p id="rfc.section.6.p.1">This document defines a set of information model objects and parameters that may be exposed to be visible from other devices, and some of which may be configured. Securing access to and ensuring the integrity of this data is in scope of and the responsibility of any data model derived from this information model. Specifically, any YANG <a href="#RFC7950" class="xref">[RFC7950]</a> data model is expected to define security exposure of the various parameters, and a <a href="#TR-181" class="xref">[TR-181]</a> data model will be secured by the mechanisms defined for the management protocol used to transport it.</p>
+<p id="rfc.section.6.p.2">This information model defines objects that can allow credentials (for this device, for trusted devices, and for trusted certificate authorities) to be added and deleted. Public keys and shared secrets may be exposed through this model. This model requires that private keys never be exposed. The Babel security mechanisms that make use of these credentials (e.g., <a href="#I-D.ietf-babel-dtls" class="xref">[I-D.ietf-babel-dtls]</a>, <a href="#I-D.ietf-babel-hmac" class="xref">[I-D.ietf-babel-hmac]</a>) are expected to define what credentials can be used with those mechanisms.</p>
 <h1 id="rfc.section.7">
 <a href="#rfc.section.7">7.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a>
 </h1>
@@ -853,14 +856,14 @@ information object
 <a href="#rfc.references.2">9.2.</a> Informative References</h1>
 <table><tbody>
 <tr>
-<td class="reference"><b id="I-D.decimo-babel-dtls">[I-D.decimo-babel-dtls]</b></td>
+<td class="reference"><b id="I-D.ietf-babel-dtls">[I-D.ietf-babel-dtls]</b></td>
 <td class="top">
-<a>Decimo, A.</a>, <a>Schinazi, D.</a> and <a>J. Chroboczek</a>, "<a href="https://tools.ietf.org/html/draft-decimo-babel-dtls-01">Babel Routing Protocol over Datagram Transport Layer Security</a>", Internet-Draft draft-decimo-babel-dtls-01, July 2018.</td>
+<a>Decimo, A.</a>, <a>Schinazi, D.</a> and <a>J. Chroboczek</a>, "<a href="https://tools.ietf.org/html/draft-ietf-babel-dtls-01">Babel Routing Protocol over Datagram Transport Layer Security</a>", Internet-Draft draft-ietf-babel-dtls-01, October 2018.</td>
 </tr>
 <tr>
-<td class="reference"><b id="I-D.do-babel-hmac">[I-D.do-babel-hmac]</b></td>
+<td class="reference"><b id="I-D.ietf-babel-hmac">[I-D.ietf-babel-hmac]</b></td>
 <td class="top">
-<a>Do, C.</a>, <a>Kolodziejak, W.</a> and <a>J. Chroboczek</a>, "<a href="https://tools.ietf.org/html/draft-do-babel-hmac-00">Babel Cryptographic Authentification</a>", Internet-Draft draft-do-babel-hmac-00, July 2018.</td>
+<a>Do, C.</a>, <a>Kolodziejak, W.</a> and <a>J. Chroboczek</a>, "<a href="https://tools.ietf.org/html/draft-ietf-babel-hmac-00">Babel Cryptographic Authentification</a>", Internet-Draft draft-ietf-babel-hmac-00, August 2018.</td>
 </tr>
 <tr>
 <td class="reference"><b id="IEEE-802.11-2016">[IEEE-802.11-2016]</b></td>
@@ -905,28 +908,45 @@ information object
 <td class="top">
 <a>Burbridge, T.</a>, <a>Eardley, P.</a>, <a>Bagnulo, M.</a> and <a>J. Schoenwaelder</a>, "<a href="https://tools.ietf.org/html/rfc8193">Information Model for Large-Scale Measurement Platforms (LMAPs)</a>", RFC 8193, DOI 10.17487/RFC8193, August 2017.</td>
 </tr>
+<tr>
+<td class="reference"><b id="TR-181">[TR-181]</b></td>
+<td class="top">
+<a>Broadband Forum</a>, "<a>Device Data Model</a>"</td>
+</tr>
 </tbody></table>
 <h1 id="rfc.appendix.A">
 <a href="#rfc.appendix.A">Appendix A.</a> <a href="#open-issues" id="open-issues">Open Issues</a>
 </h1>
 <p></p>
 
-<ol><li>Would it be useful to define some parameters for reporting statistics or logs? [2 logs are now included. If others are needed they need to be proposed.]</li></ol>
+<ol>
+<li>I want to get rid of the security log, because all Babel messages (which should be defined as all messages to/from the udp-port) are be logged by message-log. I don&#8217;t like message log as it is. I think if logging is enabled it should just write to a text file. This will mean there also needs to be a means of downloading/reading the log file.</li>
+<li>Consider the following statistics: under interface object: sent multicast Hello, sent updates, received Babel messages; under neighbor object: sent unicast Hello, sent updates, sent IHU, received Hello, received updates, received IHUs. Would also need to enable/disable stats and clear stats.</li>
+<li>Datatype of the router-id</li>
+<li>babel-neighbor-address as IPv6-only</li>
+<li>babel-inplementation-version includes the name of the implementation</li>
+<li>Security section needs furter review</li>
+<li>Commands to add and delete credentials, and parameters that allow credential to be identified without allowing access to private credential info</li>
+<li>Delete external-cost?</li>
+<li>Check description of enable parameters to make sure ok for YANG and TR-181.</li>
+<li>Distinguish signed and unsigned integers?</li>
+</ol>
 <p id="rfc.section.A.p.2">Closed Issues:</p>
 <p></p>
 
 <ol>
+<li>Would it be useful to define some parameters for reporting statistics or logs? [2 logs are now included. If others are needed they need to be proposed. See Open Issues for additional thoughts on logs and statistics.]</li>
 <li>Closed by defining base64 type and using it for all router IDs: &#8220;babel-self-router-id: Should this be an opaque 64-bit value instead of int?&#8221;</li>
 <li>Closed as &#8220;No&#8221;: Do we need a registry for the supported security mechanisms? [Given the current limited set, and unlikelihood of massive expansion, I don&#8217;t think so. But we can if someone wants it.]</li>
 <li>This draft must be reviewed against draft-ietf-babel-rfc6126bis. [I feel like this has been adequately done, but I could be wrong.]</li>
-<li>babel-interfaces-obj: Juliusz:&#8221;This needs further discussion, I fear some of these are implementation details.&#8221; [In the absence of discussion, the current model stands. Note that all but link-type and the neighbors sub-object are optional; if an implementation does not have any of the optional elements then it simply doesn&#8217;t have them and that&#8217;s fine.]</li>
+<li>babel-interfaces-obj: Juliusz:&#8221;This needs further discussion, I fear some of these are implementation details.&#8221; [In the absence of discussion, the current model stands. Note that all but link-type and the neighbors sub-object are optional. If an implementation does not have any of the optional elements then it simply doesn&#8217;t have them and that&#8217;s fine.]</li>
 <li>Would it be useful to define some parameters specifically for security anomalies? [The 2 logs should be useful in identifying security anomalies. If more is needed, someone needs to propose.]</li>
 <li>I created a basic security model. It&#8217;s useful for single (or no) active security mechanism (e.g., just HMAC, just DTLS, or neither); but not multiple active (both HMAC and DTLS &#8212; which is not the same as HMAC of DTLS and would just mean that HMAC would be used on all unencrypted messages &#8212; but right now the model doesn&#8217;t allow for configuring HMAC of unencrypted messages for routers without DTLS, while DTLS is used if possible). OK? [No-one said otherwise.]</li>
 <li>babel-external-cost may need more work. [if no comment, it will be left as is]</li>
 <li>babel-hello-[mu]cast-history: the Hello history is formated as 16 bits, per A.1 of 6126bis. Is that a too implementation specific? [We also now have an optional-to-implement log of received messages, and I made these optional.  So maybe this is ok?]</li>
 <li>rxcost, txcost, cost: is it ok to model as integers, since 6126bis 2.1 says costs and metrics need not be integers. [I have them as integers unless someone insists on something else.]</li>
 <li>For the security log, should it also log whether the credentials were considered ok? [Right now it doesn&#8217;t and I think that&#8217;s ok because if you log Hellos it was ok and if you don&#8217;t it wasn&#8217;t.]</li>
-<li>Should babel link types have an IANA registry? [Agreed to do this at IETF 102.]</li>
+<li>Should Babel link types have an IANA registry? [Agreed to do this at IETF 102.]</li>
 </ol>
 <h1 id="rfc.appendix.B">
 <a href="#rfc.appendix.B">Appendix B.</a> <a href="#change-log" id="change-log">Change Log</a>
@@ -959,7 +979,7 @@ information object
 <li>added an optional &#8220;babel-cost&#8221; field to babel-neighbors object, since the spec does not define how exactly the cost is computed from rxcost/txcost</li>
 <li>deleted babel-source-garbage-collection-time</li>
 <li>change babel-lossy-link to babel-link-type and make this an enumeration; added at top level babel-supported-link-types so which are supported by this implementation can be reported</li>
-<li>changes to babel-security-obj to allow self credentials to be one or more instances of a credential object; allowed trusted credentials to include CA credentials; made some parameter name changes</li>
+<li>changes to babel-security-obj to allow self credentials to be one or more instances of a credential object. Allowed trusted credentials to include CA credentials; made some parameter name changes</li>
 <li>updated references and Introduction</li>
 <li>added Overview section</li>
 <li>deleted babel-sources-obj</li>
@@ -982,9 +1002,9 @@ information object
 <li>babel-security-self-cred: Added &#8220;any private key component of a credential MUST NOT be readable;&#8221;</li>
 <li>hello-history parameters put recent Hello in most significant bit and length of parameter is not constrained.</li>
 <li>babel-hello-seqno in neighbors-obj changed to babel-exp-mcast-hello-seqno and babel-exp-ucast-hello-seqno</li>
-<li>added babel-route-neighbor back again; it was mistakenly deleted</li>
+<li>added babel-route-neighbor back again. It was mistakenly deleted</li>
 <li>changed babel-route-metric and babel-route-announced-metric to babel-route-received-metric and babel-route-calculated-metric</li>
-<li>changed model of security object to put list of supported mechanisms at top level and separate security object per mechanism; this caused some other changes to the security object</li>
+<li>changed model of security object to put list of supported mechanisms at top level and separate security object per mechanism. This caused some other changes to the security object</li>
 </ul>
 <p> </p>
 </dd>
@@ -998,6 +1018,8 @@ information object
 <li>babel-neighbor-ihu-interval deleted</li>
 <li>in log descriptions, included statement that there SHOULD be ability to clear logs</li>
 <li>added IANA registry for link types</li>
+<li>added &#8220;ro&#8221; and &#8220;rw&#8221; to tables for read-write and read-only</li>
+<li>added metric computation parameter to interface</li>
 </ul>
 <p> </p>
 </dd>
