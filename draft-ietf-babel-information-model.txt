@@ -4,8 +4,8 @@
 
 Babel routing protocol                                          B. Stark
 Internet-Draft                                                      AT&T
-Intended status: Informational                          October 13, 2018
-Expires: April 16, 2019
+Intended status: Informational                          October 14, 2018
+Expires: April 17, 2019
 
 
                         Babel Information Model
@@ -34,7 +34,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 16, 2019.
+   This Internet-Draft will expire on April 17, 2019.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Stark                    Expires April 16, 2019                 [Page 1]
+Stark                    Expires April 17, 2019                 [Page 1]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -83,7 +83,7 @@ Table of Contents
      9.2.  Informative References  . . . . . . . . . . . . . . . . .  16
    Appendix A.  Open Issues  . . . . . . . . . . . . . . . . . . . .  17
    Appendix B.  Change Log . . . . . . . . . . . . . . . . . . . . .  19
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  21
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  22
 
 1.  Introduction
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Stark                    Expires April 16, 2019                 [Page 2]
+Stark                    Expires April 17, 2019                 [Page 2]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -165,7 +165,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 16, 2019                 [Page 3]
+Stark                    Expires April 17, 2019                 [Page 3]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -221,7 +221,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 16, 2019                 [Page 4]
+Stark                    Expires April 17, 2019                 [Page 4]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -277,7 +277,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 16, 2019                 [Page 5]
+Stark                    Expires April 17, 2019                 [Page 5]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -333,7 +333,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 16, 2019                 [Page 6]
+Stark                    Expires April 17, 2019                 [Page 6]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -389,7 +389,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 16, 2019                 [Page 7]
+Stark                    Expires April 17, 2019                 [Page 7]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -445,7 +445,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 16, 2019                 [Page 8]
+Stark                    Expires April 17, 2019                 [Page 8]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -501,7 +501,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 16, 2019                 [Page 9]
+Stark                    Expires April 17, 2019                 [Page 9]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -557,7 +557,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 16, 2019                [Page 10]
+Stark                    Expires April 17, 2019                [Page 10]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -613,7 +613,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 16, 2019                [Page 11]
+Stark                    Expires April 17, 2019                [Page 11]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -669,7 +669,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 16, 2019                [Page 12]
+Stark                    Expires April 17, 2019                [Page 12]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -725,7 +725,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 16, 2019                [Page 13]
+Stark                    Expires April 17, 2019                [Page 13]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -781,7 +781,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 16, 2019                [Page 14]
+Stark                    Expires April 17, 2019                [Page 14]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -803,8 +803,9 @@ Internet-Draft           Babel Information Model            October 2018
 
 8.  Acknowledgements
 
-   Juliusz Chroboczek, Toke Hoeiland-Joergensen, and David Schinazi have
-   been very helpful in refining this information model.
+   Juliusz Chroboczek, Toke Hoeiland-Joergensen, David Schinazi, Mahesh
+   Jethanandani, Acee Lindem, and Carsten Bormann have been very helpful
+   in refining this information model.
 
    The language in the Notation section was mostly taken from [RFC8193].
 
@@ -831,16 +832,19 @@ Internet-Draft           Babel Information Model            October 2018
               RFC 8126, DOI 10.17487/RFC8126, June 2017,
               <https://www.rfc-editor.org/info/rfc8126>.
 
-   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
-              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
-              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
 
 
-Stark                    Expires April 16, 2019                [Page 15]
+
+
+Stark                    Expires April 17, 2019                [Page 15]
 
 Internet-Draft           Babel Information Model            October 2018
 
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
 9.2.  Informative References
 
@@ -885,18 +889,19 @@ Internet-Draft           Babel Information Model            October 2018
               DOI 10.17487/RFC5234, January 2008,
               <https://www.rfc-editor.org/info/rfc5234>.
 
+
+
+
+
+Stark                    Expires April 17, 2019                [Page 16]
+
+Internet-Draft           Babel Information Model            October 2018
+
+
    [RFC6241]  Enns, R., Ed., Bjorklund, M., Ed., Schoenwaelder, J., Ed.,
               and A. Bierman, Ed., "Network Configuration Protocol
               (NETCONF)", RFC 6241, DOI 10.17487/RFC6241, June 2011,
               <https://www.rfc-editor.org/info/rfc6241>.
-
-
-
-
-Stark                    Expires April 16, 2019                [Page 16]
-
-Internet-Draft           Babel Information Model            October 2018
-
 
    [RFC7950]  Bjorklund, M., Ed., "The YANG 1.1 Data Modeling Language",
               RFC 7950, DOI 10.17487/RFC7950, August 2016,
@@ -940,19 +945,24 @@ Appendix A.  Open Issues
 
    8.   Delete external-cost?
 
+
+
+
+
+Stark                    Expires April 17, 2019                [Page 17]
+
+Internet-Draft           Babel Information Model            October 2018
+
+
    9.   Check description of enable parameters to make sure ok for YANG
         and TR-181.
 
    10.  Distinguish signed and unsigned integers?
 
+   11.  Review new IANA Considerations section.  Should ABNF be
+        normative?
+
    Closed Issues:
-
-
-
-Stark                    Expires April 16, 2019                [Page 17]
-
-Internet-Draft           Babel Information Model            October 2018
-
 
    1.   Would it be useful to define some parameters for reporting
         statistics or logs? [2 logs are now included.  If others are
@@ -993,6 +1003,13 @@ Internet-Draft           Babel Information Model            October 2018
         for routers without DTLS, while DTLS is used if possible).  OK?
         [No-one said otherwise.]
 
+
+
+Stark                    Expires April 17, 2019                [Page 18]
+
+Internet-Draft           Babel Information Model            October 2018
+
+
    8.   babel-external-cost may need more work. [if no comment, it will
         be left as is]
 
@@ -1001,14 +1018,6 @@ Internet-Draft           Babel Information Model            October 2018
         specific?  [We also now have an optional-to-implement log of
         received messages, and I made these optional.  So maybe this is
         ok?]
-
-
-
-
-Stark                    Expires April 16, 2019                [Page 18]
-
-Internet-Draft           Babel Information Model            October 2018
-
 
    10.  rxcost, txcost, cost: is it ok to model as integers, since
         6126bis 2.1 says costs and metrics need not be integers.  [I
@@ -1049,6 +1058,14 @@ Appendix B.  Change Log
       *  replace optional babel-interface-seqno with optional babel-
          mcast-hello-seqno and babel-ucast-hello-seqno
 
+
+
+
+Stark                    Expires April 17, 2019                [Page 19]
+
+Internet-Draft           Babel Information Model            October 2018
+
+
       *  replace optional babel-interface-hello-interval with optional
          babel-mcast-hello-interval and babel-ucast-hello-interval
 
@@ -1057,14 +1074,6 @@ Appendix B.  Change Log
       *  remove "babel-router-id: router-id of the neighbor"; note that
          parameter had previously been removed but description had
          accidentally not been removed
-
-
-
-
-Stark                    Expires April 16, 2019                [Page 19]
-
-Internet-Draft           Babel Information Model            October 2018
-
 
       *  added an optional "babel-cost" field to babel-neighbors object,
          since the spec does not define how exactly the cost is computed
@@ -1105,6 +1114,14 @@ Internet-Draft           Babel Information Model            October 2018
       *  applied edits to Introduction text per Juliusz email of
          2018-04-06
 
+
+
+
+Stark                    Expires April 17, 2019                [Page 20]
+
+Internet-Draft           Babel Information Model            October 2018
+
+
       *  Deleted sentence in definition of "int" data type that said it
          was also used for enumerations.  Changed all enumerations to
          strings.  The only enumerations were for link types, which are
@@ -1113,14 +1130,6 @@ Internet-Draft           Babel Information Model            October 2018
       *  deleted [ip-address babel-mcast-group-ipv4;]
 
       *  babel-external-cost description changed
-
-
-
-
-Stark                    Expires April 16, 2019                [Page 20]
-
-Internet-Draft           Babel Information Model            October 2018
-
 
       *  babel-security-self-cred: Added "any private key component of a
          credential MUST NOT be readable;"
@@ -1142,7 +1151,7 @@ Internet-Draft           Babel Information Model            October 2018
          mechanism.  This caused some other changes to the security
          object
 
-   v03 2018-05-31:
+   v04 2018-10-15:
 
       *  changed babel-mcast-group-ipv6 to babel-mcast-group
 
@@ -1161,22 +1170,17 @@ Internet-Draft           Babel Information Model            October 2018
 
       *  added "ro" and "rw" to tables for read-write and read-only
 
-      *  added metric computation parameter to interface
-
-Author's Address
 
 
 
-
-
-
-
-
-
-Stark                    Expires April 16, 2019                [Page 21]
+Stark                    Expires April 17, 2019                [Page 21]
 
 Internet-Draft           Babel Information Model            October 2018
 
+
+      *  added metric computation parameter to interface
+
+Author's Address
 
    Barbara Stark
    AT&T
@@ -1225,8 +1229,4 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-
-
-
-
-Stark                    Expires April 16, 2019                [Page 22]
+Stark                    Expires April 17, 2019                [Page 22]
