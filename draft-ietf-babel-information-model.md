@@ -767,8 +767,7 @@ The initial values in the "Babel Link Type" registry are:
 
 # Acknowledgements {#Acknowledgements}
 
-Juliusz Chroboczek, Toke Høiland-Jørgensen, and David Schinazi have been
-very helpful in refining this information model.
+Juliusz Chroboczek, Toke Høiland-Jørgensen, David Schinazi, Mahesh Jethanandani, Acee Lindem, and Carsten Bormann have been very helpful in refining this information model.
 
 The language in the Notation section was mostly taken from {{RFC8193}}.
 
@@ -796,6 +795,8 @@ The language in the Notation section was mostly taken from {{RFC8193}}.
 1. Check description of enable parameters to make sure ok for YANG and TR-181.
 
 1. Distinguish signed and unsigned integers?
+
+1. Review new IANA Considerations section. Should ABNF be normative?
 
 
 Closed Issues:
@@ -919,7 +920,7 @@ v03 2018-05-31:
   top level and separate security object per mechanism. This caused some other
   changes to the security object
 
-v03 2018-05-31:
+v04 2018-10-15:
 : - changed babel-mcast-group-ipv6 to babel-mcast-group
   - link type parameters changed to point to newly defined registry
   - babel-ucast-hello-interval moved to neighbor object
