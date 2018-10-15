@@ -22,3 +22,10 @@ This requires that you have the necessary software installed.  See
 
 See the
 [guidelines for contributions](https://github.com/bhstark2/babel-information-model/blob/master/CONTRIBUTING.md).
+
+# TR-181 Data Model
+
+* [XML in text file](https://bhstark2.github.io/babel-information-model/cwmp-babel-diffs.html)
+* [Easy to read HTML rendition](https://bhstark2.github.io/babel-information-model/tr-181-2-babel.txt)
+
+
