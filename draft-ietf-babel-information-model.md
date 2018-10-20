@@ -69,6 +69,7 @@ informative:
     author:
     - org: Broadband Forum
     date: false
+    target: http://cwmp-data-models.broadband-forum.org/
 
 --- abstract
 
@@ -125,6 +126,9 @@ description.
 The object definitions use base types that are defined as follows:
 
 {: hangIndent='12'}
+binary
+: A binary string (sequence of octets).
+
 boolean
 : A type representing a boolean value.
 
@@ -174,7 +178,7 @@ information object
         parameters
    interfaces object
       includes interface reference, Hello seqno and intervals,
-        update interval, link type, external cost parameters
+        update interval, link type, metric computation parameters
       neighbors object
          includes neighbor IP address, Hello history, cost
            parameters
@@ -233,7 +237,7 @@ model definitions in subsequent sections, the error is in this overview.
   object {
        string               ro babel-implementation-version;
        boolean              rw babel-enable;
-       base64               ro babel-self-router-id;
+       binary               ro babel-self-router-id;
        string               ro babel-supported-link-types<1..*>;
       [int                  ro babel-self-seqno;]
        string               ro babel-metric-comp-algorithms<1..*>;
@@ -248,7 +252,7 @@ model definitions in subsequent sections, the error is in this overview.
 
 
 babel-implementation-version:
-: the version of this implementation of the Babel protocol
+: the name and version of this implementation of the Babel protocol
 
 babel-enable:
 : When written, it configures whether the protocol shoud be enabled
@@ -340,7 +344,6 @@ babel-mcast-group:
       [int                  ro babel-mcast-hello-seqno;]
       [int                  ro babel-mcast-hello-interval;]
       [int                  ro babel-update-interval;]
-      [int                  rw babel-external-cost;]
       [boolean              rw babel-message-log-enable;]
       [babel-log-obj        ro babel-message-log<0..*>;]
        babel-neighbors-obj  ro babel-neighbors<0..*>;
@@ -395,13 +398,6 @@ babel-update-interval:
 : The current interval in use for all updates (multicast
   and unicast) sent on this interface.
 
-babel-external-cost:
-: External input to cost of link of this interface. If
-  supported, this is a value that is added to the metrics of routes learned
-  over this interface.
-  How an implementation uses the value is up to the implementation,
-  which means the use may not be consistent across implementations.
-
 babel-message-log-enable:
 : When written, it configures whether logging should be enabled
   (true) or disabled (false).
@@ -439,8 +435,8 @@ babel-interface-security:
 ~~~~
   object {
        ip-address        ro babel-neighbor-address;
-      [string            ro babel-hello-mcast-history;]
-      [string            ro babel-hello-ucast-history;]
+      [binary            ro babel-hello-mcast-history;]
+      [binary            ro babel-hello-ucast-history;]
        int               ro babel-txcost;
        int               ro babel-exp-mcast-hello-seqno;
        int               ro babel-exp-ucast-hello-seqno;
@@ -460,26 +456,20 @@ babel-hello-mcast-history:
 : The multicast Hello history of whether or not
   the multicast Hello messages prior to babel-exp-mcast-hello-seqno
   were received.
-  Representation of a binary sequence where the most recently received Hello
+  A binary sequence where the most recently received Hello
   is expressed as a "1" placed in the left-most bit, with prior bits shifted
   right (and "0" bits placed between prior Hello bits and most recent Hello
-  for any not-received Hellos). Represented as a string using utf-8 encoded
-  hex digits (\[0-9a-fA-F]). Note that this representation (supplied to a user
-  interface or transmitted across a management interface)
-  is a string representation
-  of the stored binary value. See {{I-D.ietf-babel-rfc6126bis}}, section A.1.
+  for any not-received Hellos). This value should be displayed using
+  hex digits (\[0-9a-fA-F]). See {{I-D.ietf-babel-rfc6126bis}}, section A.1.
 
 babel-hello-ucast-history:
 : The unicast Hello history of whether or not the
   unicast Hello messages prior to babel-exp-ucast-hello-seqno were received.
-  Representation of a binary sequence where the most recently received Hello
+  A binary sequence where the most recently received Hello
   is expressed as a "1" placed in the left-most bit, with prior bits shifted
   right (and "0" bits placed between prior Hello bits and most recent Hello
-  for any not-received Hellos). Represented as a string using utf-8 encoded
-  hex digits (\[0-9a-fA-F]). Note that this representation (supplied to a user
-  interface or transmitted across a management interface)
-  is a string representation
-  of the stored binary value. See {{I-D.ietf-babel-rfc6126bis}}, section A.1.
+  for any not-received Hellos). This value should be displayed using
+  hex digits (\[0-9a-fA-F]). See {{I-D.ietf-babel-rfc6126bis}}, section A.1.
 
 babel-txcost:
 : Transmission cost value from the last IHU packet received from
@@ -598,7 +588,7 @@ babel-credvalid-log:
   object {
        ip-address           ro babel-route-prefix;
        int                  ro babel-route-prefix-length;
-       base64               ro babel-route-router-id;
+       binary               ro babel-route-router-id;
        string               ro babel-route-neighbor;
       [int                  ro babel-route-received-metric;]
       [int                  ro babel-route-calculated-metric;]
@@ -780,19 +770,11 @@ The language in the Notation section was mostly taken from {{RFC8193}}.
 
 1. Consider the following statistics: under interface object: sent multicast Hello, sent updates, received Babel messages; under neighbor object: sent unicast Hello, sent updates, sent IHU, received Hello, received updates, received IHUs. Would also need to enable/disable stats and clear stats.
 
-1. Datatype of the router-id
-
-1. babel-neighbor-address as IPv6-only
-
-1. babel-inplementation-version includes the name of the implementation
-
 1. Security section needs furter review
 
 1. Commands to add and delete credentials, and parameters that allow credential to be identified without allowing access to private credential info
 
-1. Delete external-cost?
-
-1. Check description of enable parameters to make sure ok for YANG and TR-181.
+1. Check description of enable parameters to make sure ok for YANG and TR-181. Closed by updating description to be useful for YANG and TR-181, using language consistent with YANG descriptions.
 
 1. Distinguish signed and unsigned integers?
 
@@ -800,6 +782,14 @@ The language in the Notation section was mostly taken from {{RFC8193}}.
 
 
 Closed Issues:
+
+1. Datatype of the router-id: Closed by introducing binary datatype and using that for router-id
+
+1. babel-neighbor-address as IPv6-only: Closed by leaving as is (IPv4 and IPv6)
+
+1. babel-implementation-version includes the name of the implementation: Closed by adding "name" to description
+
+1. Delete external-cost?: Closed by deleting.
 
 1. Would it be useful to define some parameters for reporting statistics or
   logs? \[2 logs are now included. If others are needed they need to be proposed. See Open Issues for additional thoughts on logs and statistics.]
