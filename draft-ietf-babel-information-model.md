@@ -252,7 +252,7 @@ model definitions in subsequent sections, the error is in this overview.
 
 
 babel-implementation-version:
-: the name and version of this implementation of the Babel protocol
+: The name and version of this implementation of the Babel protocol.
 
 babel-enable:
 : When written, it configures whether the protocol shoud be enabled
