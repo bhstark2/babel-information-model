@@ -4,8 +4,8 @@
 
 Babel routing protocol                                          B. Stark
 Internet-Draft                                                      AT&T
-Intended status: Informational                          October 19, 2018
-Expires: April 22, 2019
+Intended status: Informational                          October 22, 2018
+Expires: April 25, 2019
 
 
                         Babel Information Model
@@ -34,7 +34,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 22, 2019.
+   This Internet-Draft will expire on April 25, 2019.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Stark                    Expires April 22, 2019                 [Page 1]
+Stark                    Expires April 25, 2019                 [Page 1]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Stark                    Expires April 22, 2019                 [Page 2]
+Stark                    Expires April 25, 2019                 [Page 2]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -165,7 +165,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 22, 2019                 [Page 3]
+Stark                    Expires April 25, 2019                 [Page 3]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -221,7 +221,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 22, 2019                 [Page 4]
+Stark                    Expires April 25, 2019                 [Page 4]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -266,8 +266,8 @@ Internet-Draft           Babel Information Model            October 2018
           babel-security-obj   ro babel-security<0..*>;
       } babel-information-obj;
 
-   babel-implementation-version:  the name and version of this
-      implementation of the Babel protocol
+   babel-implementation-version:  The name and version of this
+      implementation of the Babel protocol.
 
    babel-enable:  When written, it configures whether the protocol shoud
       be enabled (true) or disabled (false).  A read from the running or
@@ -277,7 +277,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 22, 2019                 [Page 5]
+Stark                    Expires April 25, 2019                 [Page 5]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -333,7 +333,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 22, 2019                 [Page 6]
+Stark                    Expires April 25, 2019                 [Page 6]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -389,7 +389,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 22, 2019                 [Page 7]
+Stark                    Expires April 25, 2019                 [Page 7]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -445,7 +445,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 22, 2019                 [Page 8]
+Stark                    Expires April 25, 2019                 [Page 8]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -501,7 +501,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 22, 2019                 [Page 9]
+Stark                    Expires April 25, 2019                 [Page 9]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -557,7 +557,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 22, 2019                [Page 10]
+Stark                    Expires April 25, 2019                [Page 10]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -613,7 +613,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 22, 2019                [Page 11]
+Stark                    Expires April 25, 2019                [Page 11]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -669,7 +669,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 22, 2019                [Page 12]
+Stark                    Expires April 25, 2019                [Page 12]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -725,7 +725,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 22, 2019                [Page 13]
+Stark                    Expires April 25, 2019                [Page 13]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -781,7 +781,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 22, 2019                [Page 14]
+Stark                    Expires April 25, 2019                [Page 14]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -837,7 +837,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 22, 2019                [Page 15]
+Stark                    Expires April 25, 2019                [Page 15]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -893,7 +893,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 22, 2019                [Page 16]
+Stark                    Expires April 25, 2019                [Page 16]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -949,7 +949,7 @@ Appendix A.  Open Issues
 
 
 
-Stark                    Expires April 22, 2019                [Page 17]
+Stark                    Expires April 25, 2019                [Page 17]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -1005,7 +1005,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 22, 2019                [Page 18]
+Stark                    Expires April 25, 2019                [Page 18]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -1061,7 +1061,7 @@ Appendix B.  Change Log
 
 
 
-Stark                    Expires April 22, 2019                [Page 19]
+Stark                    Expires April 25, 2019                [Page 19]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -1117,7 +1117,7 @@ Internet-Draft           Babel Information Model            October 2018
 
 
 
-Stark                    Expires April 22, 2019                [Page 20]
+Stark                    Expires April 25, 2019                [Page 20]
 
 Internet-Draft           Babel Information Model            October 2018
 
@@ -1173,4 +1173,4 @@ Author's Address
 
 
 
-Stark                    Expires April 22, 2019                [Page 21]
+Stark                    Expires April 25, 2019                [Page 21]
