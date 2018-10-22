@@ -9,7 +9,7 @@ Expires: April 25, 2019
 
 
                         Babel Information Model
-                 draft-ietf-babel-information-model-04
+                 draft-ietf-babel-information-model-05
 
 Abstract
 
