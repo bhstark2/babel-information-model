@@ -15,7 +15,7 @@ title: Babel Information Model
 area: Routing
 wg: Babel routing protocol
 kw: Babel
-date: 2018
+date: 2019
 author:
 - ins: B. H. Stark
   name: Barbara Stark
@@ -27,6 +27,17 @@ author:
   country: US
   phone: ''
   email: barbara.stark@att.com
+author:
+- ins: M. J. Jethanandani
+  name: Mahesh Jethanandani
+  org: VMware
+  street: ''
+  city: ''
+  region: California
+  code: ''
+  country: US
+  phone: ''
+  email: mjethanandani@gmail.com
 ref: {}
 normative:
   RFC0020:
@@ -145,11 +156,6 @@ datetime
 : A type representing a date and time using the Gregorian calendar. The datetime
   format MUST conform to RFC 3339 {{RFC3339}}.
 
-int
-: A type representing signed or unsigned integer numbers. This information
-  model does not define a precision nor does it make a distinction between
-  signed and unsigned number ranges.
-
 ip-address
 : A type representing an IP address. This type supports both IPv4 and IPv6
   addresses.
@@ -157,6 +163,10 @@ ip-address
 string
 : A type representing a human-readable string consisting of a (possibly restricted)
   subset of Unicode and ISO/IEC 10646 {{ISO.10646}} characters.
+
+uint
+: A type representing an unsigned integer number. This information
+  model does not define a precision.
 
 uri
 : A type representing a Uniform Resource Identifier as defined in STD 66 {{RFC3986}}.
@@ -170,28 +180,52 @@ The Information Model is hierarchically structured as follows:
 
 
 ~~~~
-information object
-   includes implementation version, router id, this node seqno,
-     enable flag parameters, supported security mechanisms
-   constants object (exactly one per information object)
-      includes UDP port and optional multicast group
-        parameters
-   interfaces object
-      includes interface reference, Hello seqno and intervals,
-        update interval, link type, metric computation parameters
-      neighbors object
-         includes neighbor IP address, Hello history, cost
-           parameters
-      security object (per interface)
-         includes enable flag, self credentials (credential
-           object), trusted credentials (credential object)
-   security object (common to all interfaces)
-      includes enable flag, self credentials (credential
-        object), trusted credentials (credential object)
-   routes object
-      includes route prefix, source router, reference to
-        advertising neighbor, metric, sequence number, whether
-        route is feasible, whether route is selected
++-- babel-information
+   +-- babel-implementation-version
+   +-- babel-enable
+   +-- router-id
+   +-- babel-supported-link-types
+   +-- self-seqno
+   +-- babel-metric-comp-algorithms
+   +-- babel-message-log-enable
+   +-- babel-message-log
+   +-- babel-constants
+   |  +-- babel-udp-port
+   |  +-- babel-mcast-group
+   +-- babel-interfaces
+   |  +-- babel-interface-reference
+   |  +-- babel-interface-enable
+   |  +-- babel-link-type
+   |  +-- babel-interface-metric-algorithm
+   |  +-- babel-mcast-hello-seqno
+   |  +-- babel-mcast-hello-interval
+   |  +-- babel-update-interval
+   |  +-- babel-neighbors
+   |  |  +-- babel-neighbor-address
+   |  |  +-- babel-hello-mcast-history
+   |  |  +-- babel-hello-ucast-history
+   |  |  +-- babel-txcost
+   |  |  +-- babel-exp-mcast-hello-seqno
+   |  |  +-- babel-exp-ucast-hello-seqno
+   |  |  +-- babel-ucast-hello-seqno
+   |  |  +-- babel-ucast-hello-interval
+   |  |  +-- babel-rxcost
+   |  |  +-- babel-cost
+   +-- babel-routes
+   |  +-- babel-route-prefix
+   |  +-- babel-route-prefix-length
+   |  +-- babel-route-router-id
+   |  +-- babel-route-neighbor
+   |  +-- babel-route-received-metric
+   |  +-- babel-route-calculated-metric
+   |  +-- babel-route-seqno
+   |  +-- babel-route-next-hop
+   |  +-- babel-route-feasible
+   |  +-- babel-route-selected
+   +-- babel-security
+      +-- babel-security-mechanism
+      +-- babel-security-enable
+ +++++ need new stuff here
 ~~~~
 {: artwork-align="left"}
 
@@ -200,6 +234,8 @@ Most parameters are read-only. Following is a list of the parameters that are no
 
 
 * enable/disable Babel
+
+* babel-security objects
 
 * Constant: UDP port
 
@@ -220,8 +256,6 @@ Most parameters are read-only. Following is a list of the parameters that are no
 
 * Security: trusted credentials
 
-* Security: enable/disable security log
-
 
 Note that this overview is intended simply to be informative and is not normative.
 If there is any discrepancy between this overview and the detailed information
@@ -239,13 +273,13 @@ model definitions in subsequent sections, the error is in this overview.
        boolean              rw babel-enable;
        binary               ro babel-self-router-id;
        string               ro babel-supported-link-types<1..*>;
-      [int                  ro babel-self-seqno;]
+      [uint                 ro babel-self-seqno;]
        string               ro babel-metric-comp-algorithms<1..*>;
        string               ro babel-security-supported<0..*>;
        babel-constants-obj  ro babel-constants;
        babel-interfaces-obj ro babel-interfaces<0..*>;
        babel-routes-obj     ro babel-routes<0..*>;
-       babel-security-obj   ro babel-security<0..*>;
+       babel-security-obj   rw babel-security<0..*>;
    } babel-information-obj;
 ~~~~
 {: artwork-align="left"}
@@ -279,7 +313,7 @@ babel-supported-link-types:
 
 babel-self-seqno:
 : The current sequence number included in route updates for routes
-  originated by this node.
+  originated by this node. This is a 16-bit unsigned integer.
 
 babel-metric-comp-algorithms:
 : List of supported cost computation algorithms. Possible
@@ -296,15 +330,17 @@ babel-constants:
 babel-interfaces:
 : A set of babel-interface-obj objects.
 
-babel-security:
-: A babel-security-obj object that applies to all interfaces. If this
-  object is implemented, it allows a security mechanism to be enabled
-  or disabled in a manner that applies to all Babel messages on all
-  interfaces.
-
 babel-routes:
 : A set of babel-route-obj objects. Contains the routes known to this
   node.
+
+babel-security:
+: A babel-security-obj object. If this
+  object is implemented, it allows a security mechanism to be enabled
+  or disabled in a manner that applies to all Babel messages on all
+  interfaces, or to messages on specific interfaces.
+  An implementation MAY choose
+  to expose this object as read-only ("ro").
 
 
 ## Definition of babel-constants-obj
@@ -312,7 +348,7 @@ babel-routes:
 
 ~~~~
   object {
-       int          rw babel-udp-port;
+       uint         rw babel-udp-port;
       [ip-address   rw babel-mcast-group;]
    } babel-constants-obj;
 ~~~~
@@ -323,13 +359,13 @@ babel-udp-port:
 : UDP port for sending and listening for Babel messages. Default
   is 6696. An implementation MAY choose
   to expose this parameter as read-only ("ro").
+  This is a 16-bit unsigned integer.
 
 babel-mcast-group:
 : Multicast group for sending and listening to multicast
   announcements on IPv6. Default is ff02:0:0:0:0:0:1:6.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
-
 
 
 ## Definition of babel-interfaces-obj
@@ -339,15 +375,14 @@ babel-mcast-group:
   object {
        string               ro babel-interface-reference;
       [boolean              rw babel-interface-enable;]
-       int                  rw babel-link-type;
+       string               rw babel-link-type;
        string               ro babel-interface-metric-algorithm;
-      [int                  ro babel-mcast-hello-seqno;]
-      [int                  ro babel-mcast-hello-interval;]
-      [int                  ro babel-update-interval;]
+      [uint                 ro babel-mcast-hello-seqno;]
+      [uint                 ro babel-mcast-hello-interval;]
+      [uint                 ro babel-update-interval;]
       [boolean              rw babel-message-log-enable;]
-      [babel-log-obj        ro babel-message-log<0..*>;]
+      [string               ro babel-message-log;]
        babel-neighbors-obj  ro babel-neighbors<0..*>;
-      [babel-security-obj   ro babel-interface-security<0..*>;]
    } babel-interfaces-obj;
 ~~~~
 {: artwork-align="left"}
@@ -358,7 +393,7 @@ babel-interface-reference:
   the data model (e.g., YANG {{RFC7950}}, BBF {{TR-181}}). Data model is
   assumed to allow for referencing of interface objects which may be
   at any layer (physical, Ethernet MAC, IP, tunneled IP, etc.).
-  referencing syntax will be specific to the data model. If there is
+  Referencing syntax will be specific to the data model. If there is
   no set of interface objects available, this should be a string that indicates
   the interface name used by the underlying operating system.
 
@@ -389,14 +424,17 @@ babel-interface-metric-algorithm:
 babel-mcast-hello-seqno:
 : The current sequence number in use for multicast
   hellos sent on this interface.
+  This is a 16-bit unsigned integer.
 
 babel-mcast-hello-interval:
 : The current interval in use for multicast hellos
   sent on this interface.
+  This is a 16-bit unsigned integer.
 
 babel-update-interval:
 : The current interval in use for all updates (multicast
   and unicast) sent on this interface.
+  This is a 16-bit unsigned integer.
 
 babel-message-log-enable:
 : When written, it configures whether logging should be enabled
@@ -412,22 +450,14 @@ babel-message-log-enable:
   to expose this parameter as read-only ("ro").
 
 babel-message-log:
-: Log entries that have timestamp of a received Babel message
-  and the entire received Babel
-  message  (including Ethernet frame and IP headers,
-  if possible). An implementation must restrict the size of this log, but how
-  and what size is implementation-specific.
-  If this log is implemented, a mechanism
-  to clear it SHOULD be provided.
+: A reference or url link to a file that contains a timestamped log
+  of messages received and sent on babel-udp-port on all interfaces.
+  File format MUST be readable by Wireshark 1.8 or later and use the
+  applicable file format extension in the filename. Logging is
+  enabled / disabled by babel-message-log-enable.
 
 babel-neighbors:
 : A set of babel-neighbors-obj objects.
-
-babel-interface-security:
-: A babel-security-obj object that applies to this
-  interface. If implemented, this allows security to be enabled only on specific
-  interfaces or allows different security mechanisms to be enabled on different
-  interfaces.
 
 
 ## Definition of babel-neighbors-obj
@@ -437,13 +467,13 @@ babel-interface-security:
        ip-address        ro babel-neighbor-address;
       [binary            ro babel-hello-mcast-history;]
       [binary            ro babel-hello-ucast-history;]
-       int               ro babel-txcost;
-       int               ro babel-exp-mcast-hello-seqno;
-       int               ro babel-exp-ucast-hello-seqno;
-      [int               ro babel-ucast-hello-seqno;]
-      [int               ro babel-ucast-hello-interval;]
-      [int               ro babel-rxcost]
-      [int               ro babel-cost]
+       uint              ro babel-txcost;
+       uint              ro babel-exp-mcast-hello-seqno;
+       uint              ro babel-exp-ucast-hello-seqno;
+      [uint              ro babel-ucast-hello-seqno;]
+      [uint              ro babel-ucast-hello-interval;]
+      [uint              ro babel-rxcost]
+      [uint              ro babel-cost]
    } babel-neighbors-obj;
 ~~~~
 {: artwork-align="left"}
@@ -473,113 +503,47 @@ babel-hello-ucast-history:
 
 babel-txcost:
 : Transmission cost value from the last IHU packet received from
-  this neighbor, or maximum value (infinity) to indicate the IHU hold timer
+  this neighbor, or maximum value to indicate the IHU hold timer
   for this neighbor has expired. See {{I-D.ietf-babel-rfc6126bis}}, section 3.4.2.
+  This is a 16-bit unsigned integer.
 
 babel-exp-mcast-hello-seqno:
 : Expected multicast Hello sequence number of
   next Hello to be received from this neighbor. If multicast Hello messages
   are not expected, or processing of multicast messages is not enabled, this
   MUST be 0.
+  This is a 16-bit unsigned integer.
 
 babel-exp-ucast-hello-seqno:
 : Expected unicast Hello sequence number of next
   Hello to be received from this neighbor. If unicast Hello messages are not
   expected, or processing of unicast messages is not enabled, this MUST be
   0.
+  This is a 16-bit unsigned integer.
 
 babel-ucast-hello-seqno:
 : The current sequence number in use for unicast hellos
   sent to this neighbor.
+  This is a 16-bit unsigned integer.
 
 babel-ucast-hello-interval:
 : The current interval in use for unicast hellos
   sent to this neighbor.
+  This is a 16-bit unsigned integer.
 
 babel-rxcost:
 : Reception cost calculated for this neighbor. This value is
   usually derived from the Hello history, which may be combined with other
   data, such as statistics maintained by the link layer. The rxcost is sent
   to a neighbor in each IHU. See {{I-D.ietf-babel-rfc6126bis}}, section 3.4.3.
+  This is a 16-bit unsigned integer.
 
 babel-cost:
 : Link cost is computed from the values
   maintained in the neighbor table: the statistics kept in the
   neighbor table about the reception of Hellos, and the txcost
   computed from received IHU packets.
-
-
-## Definition of babel-security-obj
-
-~~~~
-  object {
-       string                ro babel-security-mechanism
-       boolean               rw babel-security-enable;
-       babel-credential-obj  ro babel-security-self-cred<0..*>;
-       babel-credential-obj  ro babel-security-trust<0..*>;
-      [boolean               rw babel-credvalid-log-enable;]
-      [babel-log-obj         ro babel-credvalid-log<0..*>;]
-   } babel-security-obj;
-~~~~
-{: artwork-align="left"}
-
-
-babel-security-mechanism:
-: The name of the security mechanism this object
-  instance is about. The value MUST be the same as one of the enumerations
-  listed in the babel-security-supported parameter.
-
-babel-security-enable:
-: When written, it configures whether this security mechanism should be enabled
-  (true) or disabled (false).
-  A read from the running or intended datastore indicates the
-  configured administrative value of whether this security mechanism is enabled
-  (true) or not (false). A read from the operational datastore indicates whether
-  this security mechanism is actually running (true) or not (i.e., it indicates the
-  operational state).
-  A data model that does not replicate parameters for running and operational
-  datastores can implement this as two separate parameters.
-  An implementation MAY choose
-  to expose this parameter as read-only ("ro").
-
-babel-security-self-cred:
-: Credentials this router presents to participate
-  in the enabled security mechanism. Any private key component of a credential
-  MUST NOT be readable. Adding and deleting credentials MAY be allowed.
-
-babel-security-trust:
-: A set of babel-credential-obj objects that identify
-  the credentials of routers whose Babel messages may be trusted
-  or of a certificate
-  authority (CA) whose signing of a router's credentials implies the router
-  credentials can be trusted, in the context of this security mechanism. How
-  a security mechanism interacts with this list is determined by the mechanism.
-  A security algorithm may do additional validation of credentials, such as
-  checking validity dates or revocation lists, so presence in this list may
-  not be sufficient to determine trust. Adding and deleting credentials MAY
-  be allowed.
-
-babel-credvalid-log-enable:
-: When written, it configures whether logging should be enabled
-  (true) or disabled (false).
-  A read from the running or intended datastore indicates the
-  configured administrative value of whether logging is enabled
-  (true) or not (false). A read from the operational datastore indicates whether
-  logging is actually running (true) or not (i.e., it indicates the
-  operational state).
-  A data model that does not replicate parameters for running and operational
-  datastores can implement this as two separate parameters.
-  An implementation MAY choose
-  to expose this parameter as read-only ("ro").
-
-babel-credvalid-log:
-: Log entries that have the timestamp a message containing
-  credentials used for peer authentication (e.g., DTLS Server Hello)
-  was received
-  on a Babel port, and the entire received message (including Ethernet frame
-  and IP headers, if possible). An implementation must restrict the size of
-  this log, but how and what size is implementation-specific. If this log is
-  implemented, a mechanism to clear it SHOULD be provided.
+  This is a 16-bit unsigned integer.
 
 
 ## Definition of babel-routes-obj
@@ -587,12 +551,12 @@ babel-credvalid-log:
 ~~~~
   object {
        ip-address           ro babel-route-prefix;
-       int                  ro babel-route-prefix-length;
+       uint                 ro babel-route-prefix-length;
        binary               ro babel-route-router-id;
        string               ro babel-route-neighbor;
-      [int                  ro babel-route-received-metric;]
-      [int                  ro babel-route-calculated-metric;]
-       int                  ro babel-route-seqno;
+      [uint                 ro babel-route-received-metric;]
+      [uint                 ro babel-route-calculated-metric;]
+       uint                 ro babel-route-seqno;
        ip-address           ro babel-route-next-hop;
        boolean              ro babel-route-feasible;
        boolean              ro babel-route-selected;
@@ -616,23 +580,26 @@ babel-route-neighbor:
 
 babel-route-received-metric:
 : The metric with which this route was advertised
-  by the neighbor, or maximum value (infinity) to indicate the route was
+  by the neighbor, or maximum value to indicate the route was
   recently retracted and is temporarily unreachable (see Section 3.5.5
   of {{I-D.ietf-babel-rfc6126bis}}). This metric will be
   0 (zero) if the route was not received from a neighbor
   but was generated through other means. Either babel-route-calculated-metric
   or babel-route-received-metric MUST be provided.
+  This is a 16-bit unsigned integer.
 
 babel-route-calculated-metric:
 : A calculated metric for this route. How the
-  metric is calculated is implementation-specific. Maximum value (infinity)
+  metric is calculated is implementation-specific. Maximum value
   indicates the route was recently retracted and is temporarily unreachable
   (see Section 3.5.5 of {{I-D.ietf-babel-rfc6126bis}}).
   Either babel-route-calculated-metric or babel-route-received-metric MUST
   be provided.
+  This is a 16-bit unsigned integer.
 
 babel-route-seqno:
 : The sequence number with which this route was advertised.
+  This is a 16-bit unsigned integer.
 
 babel-route-next-hop:
 : The next-hop address of this route. This will be empty
@@ -646,6 +613,63 @@ babel-route-selected:
 : A boolean flag indicating whether this route is selected
   (i.e., whether it is currently being used for forwarding and
   is being advertised).
+
+
+## Definition of babel-security-obj
+
+~~~~
+  object {
+       string                ro babel-security-mechanism
+       boolean               rw babel-security-enable;
+       string                rw babel-security-interfaces<0..*>;
+       babel-credential-obj  ro babel-security-self-cred<0..*>;
+       babel-credential-obj  ro babel-security-trust<0..*>;
+   } babel-security-obj;
+~~~~
+{: artwork-align="left"}
+
+
+babel-security-mechanism:
+: The name of the security mechanism this object
+  instance is about. The value MUST be the same as one of the enumerations
+  listed in the babel-security-supported parameter.
+
+babel-security-enable:
+: When written, it configures whether this security mechanism should be enabled
+  (true) or disabled (false).
+  A read from the running or intended datastore indicates the
+  configured administrative value of whether this security mechanism is enabled
+  (true) or not (false). A read from the operational datastore indicates whether
+  this security mechanism is actually running (true) or not (i.e., it indicates the
+  operational state).
+  A data model that does not replicate parameters for running and operational
+  datastores can implement this as two separate parameters.
+  An implementation MAY choose
+  to expose this parameter as read-only ("ro").
+
+babel-security-interfaces:
+: List of references to the babel-interfaces entries this babel-security
+  entry applies to.
+  If this list is empty, then it applies to all interfaces.
+  An implementation MAY choose
+  to expose this parameter as read-only ("ro").
+
+babel-security-self-cred:
+: Credentials this router presents to participate
+  in the enabled security mechanism. Any private key component of a credential
+  MUST NOT be readable. Adding and deleting credentials MAY be allowed.
+
+babel-security-trust:
+: A set of babel-credential-obj objects that identify
+  the credentials of routers whose Babel messages may be trusted
+  or of a certificate
+  authority (CA) whose signing of a router's credentials implies the router
+  credentials can be trusted, in the context of this security mechanism. How
+  a security mechanism interacts with this list is determined by the mechanism.
+  A security algorithm may do additional validation of credentials, such as
+  checking validity dates or revocation lists, so presence in this list may
+  not be sufficient to determine trust. Adding and deleting credentials MAY
+  be allowed.
 
 
 # Common Objects
@@ -663,27 +687,6 @@ babel-route-selected:
 babel-cred:
 : A credential, such as an X.509 certificate, a public key, etc.
   used for signing and/or encrypting Babel messages.
-
-
-## Definition of babel-log-obj
-
-~~~~
-     object {
-          datetime           ro babel-log-time;
-          string             ro babel-log-entry;
-    } babel-log-obj;
-~~~~
-{: artwork-align="left"}
-
-
-babel-log-time:
-: The date and time (according to the device internal clock
-  setting, which may be a time relative to boot time,
-  acquired from NTP, configured
-  by the user, etc.) when this log entry was created.
-
-babel-log-entry:
- : The logged message, as a string of utf-8 encoded hex characters.
 
 
 # Extending the Information Model
@@ -766,22 +769,26 @@ The language in the Notation section was mostly taken from {{RFC8193}}.
 
 # Open Issues
 
-1. I want to get rid of the security log, because all Babel messages (which should be defined as all messages to/from the udp-port) are be logged by message-log. I don't like message log as it is. I think if logging is enabled it should just write to a text file. This will mean there also needs to be a means of downloading/reading the log file.
-
 1. Consider the following statistics: under interface object: sent multicast Hello, sent updates, received Babel messages; under neighbor object: sent unicast Hello, sent updates, sent IHU, received Hello, received updates, received IHUs. Would also need to enable/disable stats and clear stats.
 
-1. Security section needs furter review
+1. Security section needs further review
 
-1. Commands to add and delete credentials, and parameters that allow credential to be identified without allowing access to private credential info
+1. Actions to add and delete HMAC and DTLS credentials, and parameters that allow credential to be identified without allowing access to private credential info. Will have separate sub-tables for HMAC and DTLS credentials.
 
-1. Check description of enable parameters to make sure ok for YANG and TR-181. Closed by updating description to be useful for YANG and TR-181, using language consistent with YANG descriptions.
-
-1. Distinguish signed and unsigned integers?
-
-1. Review new IANA Considerations section. Should ABNF be normative?
+1. HMAC spec adds other parameters to neighbor table. Check these to see if any need to be readable or writable.
 
 
 Closed Issues:
+
+1. Single security table with (optional) reference to interfaces that security mechanism applies to.
+
+1. Should ABNF be normative in IANA Considerations section? Decision was to leave it as is.
+
+1. I want to get rid of the security log, because all Babel messages (which should be defined as all messages to/from the udp-port) are be logged by message-log. I don't like message log as it is. I think if logging is enabled it should just write to a text file. This will mean there also needs to be a means of downloading/reading the log file. Closed by having single log for all messages to/from udp port and log is represented by a string that can be reference to filename or some other part of the overall data model (depends on data model).
+
+1. Check description of enable parameters to make sure ok for YANG and TR-181. Closed by updating description to be useful for YANG and TR-181, using language consistent with YANG descriptions. Done.
+
+1. Distinguish signed and unsigned integers? All integers are unsigned and size is mentioned in description of each uint parameter.
 
 1. Datatype of the router-id: Closed by introducing binary datatype and using that for router-id
 
@@ -922,7 +929,11 @@ v04 2018-10-15:
   - added "ro" and "rw" to tables for read-write and read-only
   - added metric computation parameter to interface
 
-
-
-
+v05 2019-01-15:
+: - security modeled with single table under information-obj and
+  references to interfaces that instance applies to
+  - changed int to uint because all integers in model were unsigned; added
+  size of integer to description of each uint parameter
+  - deleted log object and made single message log that points to file or
+  other data model object used to maintain logs
 
