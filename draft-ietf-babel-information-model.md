@@ -42,9 +42,16 @@ ref: {}
 normative:
   RFC0020:
   RFC2119:
+  RFC7468:
   RFC8126:
   RFC8174:
   I-D.ietf-babel-rfc6126bis:
+  libpcap:
+    title: Libpcap File Format
+    author:
+    - org: Wireshark
+    date: 2015
+    target: https://wiki.wireshark.org/Development/LibpcapFileFormat
 
 informative:
   RFC3339:
@@ -85,8 +92,8 @@ informative:
 --- abstract
 
 This Babel Information Model can be used to create data models under various
-data modeling regimes (e.g., YANG). It allows a Babel implementation (via
-a management protocol such as NETCONF) to report on its current state and
+data modeling regimes. It allows a Babel implementation (via
+a management protocol or interface) to report on its current state and
 may allow some limited configuration of protocol constants.
 
 --- middle
@@ -147,11 +154,6 @@ counter
 : A non-negative integer that  monotonically increases. Counters may have discontinuities
   and they are not expected to persist across restarts.
 
-credentials
-: An opaque type representing credentials needed by a cryptographic mechanism
-  to secure communication. Data models must expand this opaque type as needed
-  and required by the security protocols utilized.
-
 datetime
 : A type representing a date and time using the Gregorian calendar. The datetime
   format MUST conform to RFC 3339 {{RFC3339}}.
@@ -160,6 +162,10 @@ ip-address
 : A type representing an IP address. This type supports both IPv4 and IPv6
   addresses.
 
+operation
+: A type representing a remote procedure call or other action that can be used
+  to manipulate data elements or system behaviors.
+
 string
 : A type representing a human-readable string consisting of a (possibly restricted)
   subset of Unicode and ISO/IEC 10646 {{ISO.10646}} characters.
@@ -167,10 +173,6 @@ string
 uint
 : A type representing an unsigned integer number. This information
   model does not define a precision.
-
-uri
-: A type representing a Uniform Resource Identifier as defined in STD 66 {{RFC3986}}.
-
 
 
 
@@ -187,8 +189,11 @@ The Information Model is hierarchically structured as follows:
    +-- babel-supported-link-types
    +-- self-seqno
    +-- babel-metric-comp-algorithms
-   +-- babel-message-log-enable
-   +-- babel-message-log
+   +-- babel-security-supported
+   +-- babel-hmac-enable
+   +-- babel-hmac-algorithms
+   +-- babel-dtls-enable
+   +-- babel-dtls-cert-types
    +-- babel-constants
    |  +-- babel-udp-port
    |  +-- babel-mcast-group
@@ -200,6 +205,8 @@ The Information Model is hierarchically structured as follows:
    |  +-- babel-mcast-hello-seqno
    |  +-- babel-mcast-hello-interval
    |  +-- babel-update-interval
+   |  +-- babel-message-log-enable
+   |  +-- babel-message-log
    |  +-- babel-neighbors
    |  |  +-- babel-neighbor-address
    |  |  +-- babel-hello-mcast-history
@@ -222,20 +229,34 @@ The Information Model is hierarchically structured as follows:
    |  +-- babel-route-next-hop
    |  +-- babel-route-feasible
    |  +-- babel-route-selected
-   +-- babel-security
-      +-- babel-security-mechanism
-      +-- babel-security-enable
- +++++ need new stuff here
+   +-- babel-hmac
+   |  +-- babel-hmac-algorithm
+   |  +-- babel-hmac-verify-received
+   |  +-- babel-hmac-interfaces
+   |  | +-- babel-hmac-key-name
+   |  | +-- babel-hmac-key-use-sign
+   |  | +-- babel-hmac-key-use-verify
+   |  | +-- babel-hmac-key-value
+   +-- babel-dtls
+   |  +-- babel-dtls-interfaces
+   |  +-- babel-dtls-cached-info
+   |  +-- babel-dtls-cert-prefer
+   |  | +-- babel-cert-value
+   |  | +-- babel-cert-type
+   |  | +-- babel-cert-private-key
+   |  | +-- babel-cert-test
 ~~~~
 {: artwork-align="left"}
 
-Most parameters are read-only. Following is a list of the parameters that are not required to be read-only:
+Most parameters are read-only. Following is a descriptive list of the parameters that are not required to be read-only:
 
 
 
 * enable/disable Babel
 
-* babel-security objects
+* babel-hmac objects
+
+* babel-dtls objects
 
 * Constant: UDP port
 
@@ -250,11 +271,33 @@ Most parameters are read-only. Following is a list of the parameters that are no
 
 * Interface: enable/disable message log
 
-* Security: enable/disable this security mechanism
+* HMAC: algorithm
 
-* Security: self credentials
+* HMAC: verify received packets
 
-* Security: trusted credentials
+* HMAC: interfaces
+
+* HMAC-keys: create new entries
+
+* HMAC-keys: use to sign messages
+
+* HMAC-keys: use to verify messages
+
+* DTLS: interfaces
+
+* DTLS: use cached info extensions
+
+* DTLS: preferred order of certificate types
+
+* DTLS-certs: create new entries
+
+
+The following parameters are required to return a null value when read:
+
+
+* HMAC key values
+
+* DTLS certificate values
 
 
 Note that this overview is intended simply to be informative and is not normative.
@@ -276,10 +319,15 @@ model definitions in subsequent sections, the error is in this overview.
       [uint                 ro babel-self-seqno;]
        string               ro babel-metric-comp-algorithms<1..*>;
        string               ro babel-security-supported<0..*>;
+      [boolean              ro babel-hmac-enable;]
+      [string               ro babel-hmac-algorithms<1..*>;]
+      [boolean              ro babel-dtls-enable;]
+      [string               ro babel-dtls-cert-types<1..*>;]
        babel-constants-obj  ro babel-constants;
        babel-interfaces-obj ro babel-interfaces<0..*>;
        babel-routes-obj     ro babel-routes<0..*>;
-       babel-security-obj   rw babel-security<0..*>;
+      [babel-hmac-obj       rw babel-hmac<0..*>;]
+      [babel-dtls-obj       rw babel-dtls<0..*>;]
    } babel-information-obj;
 ~~~~
 {: artwork-align="left"}
@@ -289,7 +337,7 @@ babel-implementation-version:
 : The name and version of this implementation of the Babel protocol.
 
 babel-enable:
-: When written, it configures whether the protocol shoud be enabled
+: When written, it configures whether the protocol should be enabled
   (true) or disabled (false).
   A read from the running or intended datastore indicates the
   configured administrative value of whether the protocol is enabled
@@ -320,9 +368,42 @@ babel-metric-comp-algorithms:
   values include "k-out-of-j", and "ETX".
 
 babel-security-supported:
-: List of supported security mechanisms. As Babel security mechanisms
-  are defined, they will need to indicate what enumeration value is to
-  be used to represent them in this parameter.
+: List of supported security mechanisms. Possible values include
+  "HMAC" and "DTLS".
+
+babel-hmac-enable:
+: When written, it configures whether HMAC should be enabled
+  (true) or disabled (false).
+  A read from the running or intended datastore indicates the
+  configured administrative value of whether HMAC is enabled
+  (true) or not (false). A read from the operational datastore indicates whether
+  the protocol is actually running (true) or not (i.e., it indicates the
+  operational state of HMAC).
+  A data model that does not replicate parameters for running and operational
+  datastores can implement this as two separate parameters.
+  An implementation MAY choose
+  to expose this parameter as read-only ("ro").
+
+babel-hmac-algorithms:
+: List of supported HMAC computation algorithms. Possible values
+  include "SHA256", "Blake2B", "Blake2S".
+
+babel-dtls-enable:
+: When written, it configures whether DTLS should be enabled
+  (true) or disabled (false).
+  A read from the running or intended datastore indicates the
+  configured administrative value of whether DTLS is enabled
+  (true) or not (false). A read from the operational datastore indicates whether
+  the protocol is actually running (true) or not (i.e., it indicates the
+  operational state of DTLS).
+  A data model that does not replicate parameters for running and operational
+  datastores can implement this as two separate parameters.
+  An implementation MAY choose
+  to expose this parameter as read-only ("ro").
+
+babel-dtls-cert-types:
+: List of supported DTLS certificate types. Possible values include
+  "X.509" and "RawPublicKey".
 
 babel-constants:
 : A babel-constants-obj object.
@@ -411,7 +492,8 @@ babel-interface-enable:
   to expose this parameter as read-only ("ro").
 
 babel-link-type:
-: Indicates the type of link. Valid enumeration values are
+: Indicates the type of link. The value MUST be one of those listed in the
+  babel-supported-link-types parameter. Valid enumeration values are
   identified in Babel Link Types registry.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
@@ -452,8 +534,8 @@ babel-message-log-enable:
 babel-message-log:
 : A reference or url link to a file that contains a timestamped log
   of messages received and sent on babel-udp-port on all interfaces.
-  File format MUST be readable by Wireshark 1.8 or later and use the
-  applicable file format extension in the filename. Logging is
+  The {{libpcap}} file format with .pcap file extension SHOULD be supported for
+  message log files. Logging is
   enabled / disabled by babel-message-log-enable.
 
 babel-neighbors:
@@ -615,78 +697,178 @@ babel-route-selected:
   is being advertised).
 
 
-## Definition of babel-security-obj
+## Definition of babel-hmac-obj
 
 ~~~~
   object {
-       string                ro babel-security-mechanism
-       boolean               rw babel-security-enable;
-       string                rw babel-security-interfaces<0..*>;
-       babel-credential-obj  ro babel-security-self-cred<0..*>;
-       babel-credential-obj  ro babel-security-trust<0..*>;
-   } babel-security-obj;
+       string                rw babel-hmac-algorithm;
+       boolean               rw babel-hmac-verify-received;
+       string                rw babel-hmac-interfaces<0..*>;
+       babel-hmac-keys-obj   rw babel-hmac-keys<0..*>;
+   } babel-hmac-obj;
 ~~~~
 {: artwork-align="left"}
 
 
-babel-security-mechanism:
-: The name of the security mechanism this object
-  instance is about. The value MUST be the same as one of the enumerations
-  listed in the babel-security-supported parameter.
-
-babel-security-enable:
-: When written, it configures whether this security mechanism should be enabled
-  (true) or disabled (false).
-  A read from the running or intended datastore indicates the
-  configured administrative value of whether this security mechanism is enabled
-  (true) or not (false). A read from the operational datastore indicates whether
-  this security mechanism is actually running (true) or not (i.e., it indicates the
-  operational state).
-  A data model that does not replicate parameters for running and operational
-  datastores can implement this as two separate parameters.
+babel-hmac-algorithm
+: The name of the HMAC algorithm this object
+  instance uses. The value MUST be the same as one of the enumerations
+  listed in the babel-hmac-algorithms parameter.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
-babel-security-interfaces:
-: List of references to the babel-interfaces entries this babel-security
+babel-hmac-verify-received
+: A boolean flag indicating whether HMAC hashes in received Babel messages
+  are required to be present and are verified. If this parameter is "true",
+  received messages are required to have a valid HMAC hash.
+  An implementation MAY choose
+  to expose this parameter as read-only ("ro").
+
+babel-hmac-interfaces:
+: List of references to the babel-interfaces entries this babel-hmac
   entry applies to.
   If this list is empty, then it applies to all interfaces.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
-babel-security-self-cred:
-: Credentials this router presents to participate
-  in the enabled security mechanism. Any private key component of a credential
-  MUST NOT be readable. Adding and deleting credentials MAY be allowed.
+babel-hmac-keys:
+: A set of babel-hmac-keys-obj objects.
 
-babel-security-trust:
-: A set of babel-credential-obj objects that identify
-  the credentials of routers whose Babel messages may be trusted
-  or of a certificate
-  authority (CA) whose signing of a router's credentials implies the router
-  credentials can be trusted, in the context of this security mechanism. How
-  a security mechanism interacts with this list is determined by the mechanism.
-  A security algorithm may do additional validation of credentials, such as
-  checking validity dates or revocation lists, so presence in this list may
-  not be sufficient to determine trust. Adding and deleting credentials MAY
-  be allowed.
-
-
-# Common Objects
-
-## Definition of babel-credential-obj
+## Definition of babel-hmac-keys-obj
 
 ~~~~
-     object {
-          credentials          ro babel-cred;
-    } babel-credential-obj;
+  object {
+       string                ro babel-hmac-key-name;
+       boolean               rw babel-hmac-key-use-sign;
+       boolean               rw babel-hmac-key-use-verify;
+       binary                -- babel-hmac-key-value;
+      [operation                babel-hmac-key-test;]
+   } babel-hmac-obj;
+~~~~
+{: artwork-align="left"}
+
+babel-hmac-key-name:
+: A unique name for this HMAC key that can be used to identify
+  the key in this object instance, since the key value is not
+  allowed to be read. This value can only be provided when this
+  instance is created, and is not subsequently writable.
+
+babel-key-use-sign:
+: Indicates whether this key value is used to sign Babel
+  messages. Messages are signed using this key if the value
+  is "true".
+  An implementation MAY choose
+  to expose this parameter as read-only ("ro").
+
+babel-key-use-verify:
+: Indicates whether this key value is used to verify Babel
+  messages. This key is used to verify messages if the value
+  is "true".
+  An implementation MAY choose
+  to expose this parameter as read-only ("ro").
+
+babel-key-value:
+: The value of the HMAC key. An implementation MUST NOT allow
+  this parameter to be read. This can be done by always providing
+  an empty string, or through permissions, or other means.
+  This value can only be provided when this
+  instance is created, and is not subsequently writable.
+
+babel-hmac-test:
+: An operation that allows the HMAC key and hash algorithm to
+  be tested to see if they produce an expected outcome. Input
+  to this operation is a binary string. The implementation is
+  expected to create a hash of this string using the
+  babel-hmac-key-value and the babel-hmac-algorithm. The
+  output of this operation is the resulting hash,
+  as a binary string.
+
+
+## Definition of babel-dtls-obj
+
+~~~~
+  object {
+       string                rw babel-dtls-interfaces<0..*>;
+      [boolean               rw babel-dtls-cached-info;]
+      [string                rw babel-dtls-cert-prefer<0..*>;]
+       babel-dtls-certs-obj  rw babel-dtls-certs<0..*>;
+   } babel-hmac-obj;
 ~~~~
 {: artwork-align="left"}
 
 
-babel-cred:
-: A credential, such as an X.509 certificate, a public key, etc.
-  used for signing and/or encrypting Babel messages.
+babel-dtls-interfaces:
+: List of references to the babel-interfaces entries this babel-dtls
+  entry applies to.
+  If this list is empty, then it applies to all interfaces.
+  An implementation MAY choose
+  to expose this parameter as read-only ("ro").
+
+babel-dtls-cached-info:
+: Indicates whether the cached_info extension is included in ClientHello
+  and ServerHello messages. The extension is included if the value
+  is "true".
+  An implementation MAY choose
+  to expose this parameter as read-only ("ro").
+
+babel-dtls-cert-prefer:
+: List of supported certificate types, in order of preference.
+  The values MUST be among those
+  listed in the babel-dtls-cert-types parameter.
+  This list is used to populate the server_certificate_type
+  extension in a Client Hello. Values that are present in
+  at least one instance in the babel-dtls-certs object with
+  a non-empty babel-cert-private-key will be used to populate
+  the client_certificate_type extension in a Client Hello.
+
+babel-dtls-certs:
+: A set of babel-dtls-keys-obj objects. This contains both certificates
+  for this implementation to present for authentication, and to accept
+  from others. Certificates with a non-empty babel-cert-private-key can
+  be presented by this implementation for authentication.
+
+
+## Definition of babel-dtls-certs-obj
+
+~~~~
+  object {
+       string                ro babel-cert-value;
+       string                ro babel-cert-type;
+       binary                -- babel-cert-private-key;
+      [operation                babel-cert-test;]
+   } babel-hmac-obj;
+~~~~
+{: artwork-align="left"}
+
+babel-cert-value:
+: The DTLS certificate in PEM format {{RFC7468}}.
+  This value can only be provided when this
+  instance is created, and is not subsequently writable.
+
+babel-cert-type:
+: The name of the certificate type of this object
+  instance. The value MUST be the same as one of the enumerations
+  listed in the babel-dtls-cert-types parameter.
+  This value can only be provided when this
+  instance is created, and is not subsequently writable.
+
+babel-cert-private-key:
+: The value of the private key. If this is non-empty, this
+  certificate can be used by this implementation
+  to provide a certificate during DTLS handshaking.
+  An implementation MUST NOT allow
+  this parameter to be read. This can be done by always providing
+  an empty string, or through permissions, or other means.
+  This value can only be provided when this
+  instance is created, and is not subsequently writable.
+
+babel-cert-test:
+: An operation that allows a hash of the provided input string
+  to be created using the certificate public key and the
+  SHA-256 hash algorithm. Input
+  to this operation is a binary string. The
+  output of this operation is the resulting hash, as a
+  binary string.
 
 
 # Extending the Information Model
@@ -760,7 +942,7 @@ The initial values in the "Babel Link Type" registry are:
 
 # Acknowledgements {#Acknowledgements}
 
-Juliusz Chroboczek, Toke Høiland-Jørgensen, David Schinazi, Mahesh Jethanandani, Acee Lindem, and Carsten Bormann have been very helpful in refining this information model.
+Juliusz Chroboczek, Toke Høiland-Jørgensen, David Schinazi, Acee Lindem, and Carsten Bormann have been very helpful in refining this information model.
 
 The language in the Notation section was mostly taken from {{RFC8193}}.
 
@@ -768,6 +950,8 @@ The language in the Notation section was mostly taken from {{RFC8193}}.
 --- back
 
 # Open Issues
+
+1. Message log (optional to implement) is still in. Support for the libpcap file format is "SHOULD". I'd like it t obe "MUST", but there were suggestions that this might not pass muster with IETF, since IETF couldn't guarantee that Wireshark would never change the libpcap format. I'm not willing to copy libpcap into this draft, or use a different format, or leave the format wide open (no mention of format). If "SHOULD (or "MUST") for libpcap isn't ok, then I'll just remove the message log completely.
 
 1. Consider the following statistics: under interface object: sent multicast Hello, sent updates, received Babel messages; under neighbor object: sent unicast Hello, sent updates, sent IHU, received Hello, received updates, received IHUs. Would also need to enable/disable stats and clear stats.
 
@@ -936,4 +1120,6 @@ v05 2019-01-15:
   size of integer to description of each uint parameter
   - deleted log object and made single message log that points to file or
   other data model object used to maintain logs
-
+  - deleted babel-credentials; there are no more "common" objects; hmac keys
+  and DTLS certificates are more explicitly modeled
+  - changed definition of babel-security-supported
