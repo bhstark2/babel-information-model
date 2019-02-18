@@ -387,15 +387,8 @@ babel-security-supported:
   "HMAC" and "DTLS".
 
 babel-hmac-enable:
-: When written, it configures whether HMAC should be enabled
+: Indicates whether the HMAC security mechanism is enabled
   (true) or disabled (false).
-  A read from the running or intended datastore indicates the
-  configured administrative value of whether HMAC is enabled
-  (true) or not (false). A read from the operational datastore indicates whether
-  the protocol is actually running (true) or not (i.e., it indicates the
-  operational state of HMAC).
-  A data model that does not replicate parameters for running and operational
-  datastores can implement this as two separate parameters.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
@@ -404,15 +397,8 @@ babel-hmac-algorithms:
   include "SHA256", "Blake2B", "Blake2S".
 
 babel-dtls-enable:
-: When written, it configures whether DTLS should be enabled
+: Indicates whether the DTLS security mechanism is enabled
   (true) or disabled (false).
-  A read from the running or intended datastore indicates the
-  configured administrative value of whether DTLS is enabled
-  (true) or not (false). A read from the operational datastore indicates whether
-  the protocol is actually running (true) or not (i.e., it indicates the
-  operational state of DTLS).
-  A data model that does not replicate parameters for running and operational
-  datastores can implement this as two separate parameters.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
