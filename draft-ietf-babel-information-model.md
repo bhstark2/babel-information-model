@@ -207,6 +207,12 @@ The Information Model is hierarchically structured as follows:
    |  +-- babel-update-interval
    |  +-- babel-message-log-enable
    |  +-- babel-message-log
+   |  +-- babel-stats-enable
+   |  +-- babel-stats-reset
+   |  +-- babel-if-stats
+   |  |  +-- babel-sent-mcast-hello
+   |  |  +-- babel-sent-mcast-update
+   |  |  +-- babel-received-messages
    |  +-- babel-neighbors
    |  |  +-- babel-neighbor-address
    |  |  +-- babel-hello-mcast-history
@@ -218,6 +224,13 @@ The Information Model is hierarchically structured as follows:
    |  |  +-- babel-ucast-hello-interval
    |  |  +-- babel-rxcost
    |  |  +-- babel-cost
+   |  |  +-- babel-nbr-stats
+   |  |  |  +-- babel-sent-ucast-hello
+   |  |  |  +-- babel-sent-ucast-update
+   |  |  |  +-- babel-sent-IHU
+   |  |  |  +-- babel-received-hello
+   |  |  |  +-- babel-received-update
+   |  |  |  +-- babel-received-IHU
    +-- babel-routes
    |  +-- babel-route-prefix
    |  +-- babel-route-prefix-length
@@ -233,18 +246,18 @@ The Information Model is hierarchically structured as follows:
    |  +-- babel-hmac-algorithm
    |  +-- babel-hmac-verify-received
    |  +-- babel-hmac-interfaces
-   |  | +-- babel-hmac-key-name
-   |  | +-- babel-hmac-key-use-sign
-   |  | +-- babel-hmac-key-use-verify
-   |  | +-- babel-hmac-key-value
+   |  |  +-- babel-hmac-key-name
+   |  |  +-- babel-hmac-key-use-sign
+   |  |  +-- babel-hmac-key-use-verify
+   |  |  +-- babel-hmac-key-value
    +-- babel-dtls
    |  +-- babel-dtls-interfaces
    |  +-- babel-dtls-cached-info
    |  +-- babel-dtls-cert-prefer
-   |  | +-- babel-cert-value
-   |  | +-- babel-cert-type
-   |  | +-- babel-cert-private-key
-   |  | +-- babel-cert-test
+   |  |  +-- babel-cert-value
+   |  |  +-- babel-cert-type
+   |  |  +-- babel-cert-private-key
+   |  |  +-- babel-cert-test
 ~~~~
 {: artwork-align="left"}
 
@@ -270,6 +283,8 @@ Most parameters are read-only. Following is a descriptive list of the parameters
 * Interface: enable/disable Babel on this interface
 
 * Interface: enable/disable message log
+
+* Interface: enable/disable statistics collection
 
 * HMAC: algorithm
 
@@ -415,11 +430,17 @@ babel-routes:
 : A set of babel-route-obj objects. Contains the routes known to this
   node.
 
-babel-security:
-: A babel-security-obj object. If this
-  object is implemented, it allows a security mechanism to be enabled
-  or disabled in a manner that applies to all Babel messages on all
-  interfaces, or to messages on specific interfaces.
+babel-hmac:
+: A babel-hmac-obj object. If this
+  object is implemented, it
+  provides access to parameters related to the HMAC security mechanism.
+  An implementation MAY choose
+  to expose this object as read-only ("ro").
+
+babel-dtls:
+: A babel-dtls-obj object. If this
+  object is implemented, it
+  provides access to parameters related to the DTLS security mechanism.
   An implementation MAY choose
   to expose this object as read-only ("ro").
 
@@ -463,6 +484,9 @@ babel-mcast-group:
       [uint                 ro babel-update-interval;]
       [boolean              rw babel-message-log-enable;]
       [string               ro babel-message-log;]
+      [boolean              rw babel-stats-enable;]
+      [operation               babel-stats-reset;]
+      [babel-if-stats-obj   ro babel-if-stats;]
        babel-neighbors-obj  ro babel-neighbors<0..*>;
    } babel-interfaces-obj;
 ~~~~
@@ -519,43 +543,76 @@ babel-update-interval:
   This is a 16-bit unsigned integer.
 
 babel-message-log-enable:
-: When written, it configures whether logging should be enabled
-  (true) or disabled (false).
-  A read from the running or intended datastore indicates the
-  configured administrative value of whether logging is enabled
-  (true) or not (false). A read from the operational datastore indicates whether
-  logging is actually running (true) or not (i.e., it indicates the
-  operational state).
-  A data model that does not replicate parameters for running and operational
-  datastores can implement this as two separate parameters.
-  An implementation MAY choose
-  to expose this parameter as read-only ("ro").
+: Indicates whether message logging is enabled
+  (true) or disabled (false) on this interface.
 
 babel-message-log:
 : A reference or url link to a file that contains a timestamped log
-  of messages received and sent on babel-udp-port on all interfaces.
+  of messages received and sent on babel-udp-port on this interface.
   The {{libpcap}} file format with .pcap file extension SHOULD be supported for
   message log files. Logging is
   enabled / disabled by babel-message-log-enable.
 
+babel-stats-enable:
+: Indicates whether statistics collection is enabled
+  (true) or disabled (false) on this interface, including
+  neighbor-specific statistics (babel-nbr-stats).
+
+babel-stats-reset:
+: An operation that resets all babel-if-stats and babel-nbr-stats
+  parameters to zero. This
+  operation has no input or output parameters.
+
+babel-if-stats:
+: Statistics collection object for this interface.
+
 babel-neighbors:
 : A set of babel-neighbors-obj objects.
+
+
+## Definition of babel-if-stats-obj
+
+~~~~
+  object {
+       uint                 ro babel-sent-mcast-hello;
+       uint                 ro babel-sent-mcast-update;
+       uint                 ro babel-received-messages;
+   } babel-if-stats-obj;
+~~~~
+{: artwork-align="left"}
+
+
+babel-sent-mcast-hello:
+: A count of the number of multicast Hello messages sent on this interface
+  since the statistics were last enabled (babel-stats-enable)
+  or reset (babel-stats-reset).
+
+babel-sent-mcast-update:
+: A count of the number of multicast update messages sent on this interface
+  since the statistics were last enabled (babel-stats-enable)
+  or reset (babel-stats-reset).
+
+babel-received-messages:
+: A count of the number of Babel messages received on this interface
+  since the statistics were last enabled (babel-stats-enable)
+  or reset (babel-stats-reset).
 
 
 ## Definition of babel-neighbors-obj
 
 ~~~~
   object {
-       ip-address        ro babel-neighbor-address;
-      [binary            ro babel-hello-mcast-history;]
-      [binary            ro babel-hello-ucast-history;]
-       uint              ro babel-txcost;
-       uint              ro babel-exp-mcast-hello-seqno;
-       uint              ro babel-exp-ucast-hello-seqno;
-      [uint              ro babel-ucast-hello-seqno;]
-      [uint              ro babel-ucast-hello-interval;]
-      [uint              ro babel-rxcost]
-      [uint              ro babel-cost]
+       ip-address          ro babel-neighbor-address;
+      [binary              ro babel-hello-mcast-history;]
+      [binary              ro babel-hello-ucast-history;]
+       uint                ro babel-txcost;
+       uint                ro babel-exp-mcast-hello-seqno;
+       uint                ro babel-exp-ucast-hello-seqno;
+      [uint                ro babel-ucast-hello-seqno;]
+      [uint                ro babel-ucast-hello-interval;]
+      [uint                ro babel-rxcost;]
+      [uint                ro babel-cost;]
+      [babel-nbr-stats-obj ro babel-nbr-stats;]
    } babel-neighbors-obj;
 ~~~~
 {: artwork-align="left"}
@@ -626,6 +683,55 @@ babel-cost:
   neighbor table about the reception of Hellos, and the txcost
   computed from received IHU packets.
   This is a 16-bit unsigned integer.
+
+babel-nbr-stats:
+: Statistics collection object for this neighbor.
+
+
+## Definition of babel-nbr-stats-obj
+
+~~~~
+  object {
+       uint                 ro babel-sent-ucast-hello;
+       uint                 ro babel-sent-ucast-update;
+       uint                 ro babel-sent-IHU;
+       uint                 ro babel-received-hello;
+       uint                 ro babel-received-update;
+       uint                 ro babel-received-IHU;
+   } babel-nbr-stats-obj;
+~~~~
+{: artwork-align="left"}
+
+
+babel-sent-ucast-hello:
+: A count of the number of unicast Hello messages sent to this neighbor
+  since the statistics were last enabled (babel-stats-enable)
+  or reset (babel-stats-reset).
+
+babel-sent-ucast-update:
+: A count of the number of unicast update messages sent to this neighbor
+  since the statistics were last enabled (babel-stats-enable)
+  or reset (babel-stats-reset).
+
+babel-sent-IHU:
+: A count of the number of IHU messages sent to this neighbor
+  since the statistics were last enabled (babel-stats-enable)
+  or reset (babel-stats-reset).
+
+babel-received-hello:
+: A count of the number of Hello messages received from this neighbor
+  since the statistics were last enabled (babel-stats-enable)
+  or reset (babel-stats-reset).
+
+babel-received-update:
+: A count of the number of update messages received from this neighbor
+  since the statistics were last enabled (babel-stats-enable)
+  or reset (babel-stats-reset).
+
+babel-received-IHU:
+: A count of the number of IHU messages received from this neighbor
+  since the statistics were last enabled (babel-stats-enable)
+  or reset (babel-stats-reset).
 
 
 ## Definition of babel-routes-obj
@@ -951,20 +1057,19 @@ The language in the Notation section was mostly taken from {{RFC8193}}.
 
 # Open Issues
 
-1. Message log (optional to implement) is still in. Support for the libpcap file format is "SHOULD". I'd like it t obe "MUST", but there were suggestions that this might not pass muster with IETF, since IETF couldn't guarantee that Wireshark would never change the libpcap format. I'm not willing to copy libpcap into this draft, or use a different format, or leave the format wide open (no mention of format). If "SHOULD (or "MUST") for libpcap isn't ok, then I'll just remove the message log completely.
-
-1. Consider the following statistics: under interface object: sent multicast Hello, sent updates, received Babel messages; under neighbor object: sent unicast Hello, sent updates, sent IHU, received Hello, received updates, received IHUs. Would also need to enable/disable stats and clear stats.
-
-1. Security section needs further review
-
-1. Actions to add and delete HMAC and DTLS credentials, and parameters that allow credential to be identified without allowing access to private credential info. Will have separate sub-tables for HMAC and DTLS credentials.
-
-1. HMAC spec adds other parameters to neighbor table. Check these to see if any need to be readable or writable.
-
+All open issues have been closed.
 
 Closed Issues:
 
-1. Single security table with (optional) reference to interfaces that security mechanism applies to.
+1. HMAC spec adds other parameters to neighbor table. Check these to see if any need to be readable or writable. / None were identified.
+
+1. Actions to add and delete HMAC and DTLS credentials, and parameters that allow credential to be identified without allowing access to private credential info. Will have separate sub-tables for HMAC and DTLS credentials. / Instead, there is a normative statement that the parameter values must never be supplied when read.
+
+1. Consider the following statistics: under interface object: sent multicast Hello, sent updates, received Babel messages; under neighbor object: sent unicast Hello, sent updates, sent IHU, received Hello, received updates, received IHUs. Would also need to enable/disable stats and clear stats.
+
+1. Message log (optional to implement) is still in. Support for the libpcap file format is "SHOULD".
+
+1. Single security table with (optional) reference to interfaces that security mechanism applies to. / This actually became separate objects for DTLS and HMAC.
 
 1. Should ABNF be normative in IANA Considerations section? Decision was to leave it as is.
 
@@ -1123,3 +1228,5 @@ v05 2019-01-15:
   - deleted babel-credentials; there are no more "common" objects; hmac keys
   and DTLS certificates are more explicitly modeled
   - changed definition of babel-security-supported
+  - added parameters for HMAC and DTLS
+  - added statistics
