@@ -27,7 +27,6 @@ author:
   country: US
   phone: ''
   email: barbara.stark@att.com
-author:
 - ins: M. J. Jethanandani
   name: Mahesh Jethanandani
   org: VMware
