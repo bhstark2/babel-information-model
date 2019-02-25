@@ -275,6 +275,8 @@ Most parameters are read-only. Following is a descriptive list of the parameters
 
 * babel-dtls objects
 
+* enable/disable statistics collection
+
 * Constant: UDP port
 
 * Constant: IPv6 multicast group
@@ -287,8 +289,6 @@ Most parameters are read-only. Following is a descriptive list of the parameters
 * Interface: enable/disable Babel on this interface
 
 * Interface: enable/disable message log
-
-* Interface: enable/disable statistics collection
 
 * HMAC: algorithm
 
@@ -311,7 +311,7 @@ Most parameters are read-only. Following is a descriptive list of the parameters
 * DTLS-certs: create new entries
 
 
-The following parameters are required to return a null value when read:
+The following parameters are required to return no value when read:
 
 
 * HMAC key values
