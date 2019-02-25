@@ -2,9 +2,9 @@
 
 This is the working area for the IETF [BABEL Working Group](https://datatracker.ietf.org/wg/babel/documents/) Internet-Draft, "Babel Information Model".
 
-* [Editor's Copy](https://bhstark2.github.io/babel-information-model/draft-ietf-babel-information-model.html)
+* [Editor's Copy](https://bhstark2.github.io/babel-information-model/#go.draft-ietf-babel-information-model.html)
 * [Working Group Draft](https://tools.ietf.org/html/draft-ietf-babel-information-model)
-* [Compare Editor's Copy to Working Group Draft](https://tools.ietf.org//rfcdiff?url1=https://tools.ietf.org/id/draft-ietf-babel-information-model-04.txt&url2=https://bhstark2.github.io/babel-information-model/draft-ietf-babel-information-model.txt)
+* [Compare Editor's Copy to Working Group Draft](https://bhstark2.github.io/babel-information-model/#go.draft-ietf-babel-information-model.diff)
 
 ## Building the Draft
 
@@ -22,9 +22,3 @@ This requires that you have the necessary software installed.  See
 
 See the
 [guidelines for contributions](https://github.com/bhstark2/babel-information-model/blob/master/CONTRIBUTING.md).
-
-# TR-181 Data Model
-
-* [XML in text file](https://bhstark2.github.io/babel-information-model/tr-181-2-babel.txt)
-* [Easy to read HTML rendition](https://bhstark2.github.io/babel-information-model/cwmp-babel-diffs.html)
-
