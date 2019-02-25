@@ -100,8 +100,8 @@ may allow some limited configuration of protocol constants.
 
 # Introduction
 
-Babel is a loop-avoiding distance-vector routing protocol defined in {{I-D.ietf-babel-rfc6126bis}}. {{I-D.ietf-babel-hmac}} defines a security mechanism that allows Babel messages to be cryptographically
-authenticated, and {{I-D.ietf-babel-dtls}} defines a security mechanism that allows Babel messages to be encrypted.
+Babel is a loop-avoiding distance-vector routing protocol defined in {{I-D.ietf-babel-rfc6126bis}}. {{I-D.ietf-babel-hmac}} defines a security mechanism that allows Babel packets to be cryptographically
+authenticated, and {{I-D.ietf-babel-dtls}} defines a security mechanism that allows Babel packets to be encrypted.
 This document describes an information model for Babel (including implementations
 using one of these security mechanisms) that can be used to create management
 protocol data models (such as a NETCONF {{RFC6241}} YANG {{RFC7950}} data model).
@@ -148,7 +148,7 @@ binary
 : A binary string (sequence of octets).
 
 boolean
-: A type representing a boolean value.
+: A type representing a Boolean value.
 
 counter
 : A non-negative integer that  monotonically increases. Counters may have discontinuities
@@ -165,6 +165,10 @@ ip-address
 operation
 : A type representing a remote procedure call or other action that can be used
   to manipulate data elements or system behaviors.
+
+reference
+: A type representing a reference to another information or data model element
+  or to some other device resource.
 
 string
 : A type representing a human-readable string consisting of a (possibly restricted)
@@ -194,6 +198,8 @@ The Information Model is hierarchically structured as follows:
    +-- babel-hmac-algorithms
    +-- babel-dtls-enable
    +-- babel-dtls-cert-types
+   +-- babel-stats-enable
+   +-- babel-stats-reset
    +-- babel-constants
    |  +-- babel-udp-port
    |  +-- babel-mcast-group
@@ -207,12 +213,10 @@ The Information Model is hierarchically structured as follows:
    |  +-- babel-update-interval
    |  +-- babel-message-log-enable
    |  +-- babel-message-log
-   |  +-- babel-stats-enable
-   |  +-- babel-stats-reset
    |  +-- babel-if-stats
    |  |  +-- babel-sent-mcast-hello
    |  |  +-- babel-sent-mcast-update
-   |  |  +-- babel-received-messages
+   |  |  +-- babel-received-packets
    |  +-- babel-neighbors
    |  |  +-- babel-neighbor-address
    |  |  +-- babel-hello-mcast-history
@@ -244,7 +248,7 @@ The Information Model is hierarchically structured as follows:
    |  +-- babel-route-selected
    +-- babel-hmac
    |  +-- babel-hmac-algorithm
-   |  +-- babel-hmac-verify-received
+   |  +-- babel-hmac-verify
    |  +-- babel-hmac-interfaces
    |  |  +-- babel-hmac-key-name
    |  |  +-- babel-hmac-key-use-sign
@@ -294,9 +298,9 @@ Most parameters are read-only. Following is a descriptive list of the parameters
 
 * HMAC-keys: create new entries
 
-* HMAC-keys: use to sign messages
+* HMAC-keys: use to sign packets
 
-* HMAC-keys: use to verify messages
+* HMAC-keys: use to verify packets
 
 * DTLS: interfaces
 
@@ -338,6 +342,8 @@ model definitions in subsequent sections, the error is in this overview.
       [string               ro babel-hmac-algorithms<1..*>;]
       [boolean              ro babel-dtls-enable;]
       [string               ro babel-dtls-cert-types<1..*>;]
+      [boolean              rw babel-stats-enable;]
+      [operation               babel-stats-reset;]
        babel-constants-obj  ro babel-constants;
        babel-interfaces-obj ro babel-interfaces<0..*>;
        babel-routes-obj     ro babel-routes<0..*>;
@@ -394,7 +400,7 @@ babel-hmac-enable:
 
 babel-hmac-algorithms:
 : List of supported HMAC computation algorithms. Possible values
-  include "SHA256", "Blake2B", "Blake2S".
+  include "HMAC-SHA256", "BLAKE2s".
 
 babel-dtls-enable:
 : Indicates whether the DTLS security mechanism is enabled
@@ -405,6 +411,16 @@ babel-dtls-enable:
 babel-dtls-cert-types:
 : List of supported DTLS certificate types. Possible values include
   "X.509" and "RawPublicKey".
+
+babel-stats-enable:
+: Indicates whether statistics collection is enabled
+  (true) or disabled (false) on all interfaces, including
+  neighbor-specific statistics (babel-nbr-stats).
+
+babel-stats-reset:
+: An operation that resets all babel-if-stats and babel-nbr-stats
+  parameters to zero. This
+  operation has no input or output parameters.
 
 babel-constants:
 : A babel-constants-obj object.
@@ -444,7 +460,7 @@ babel-dtls:
 
 
 babel-udp-port:
-: UDP port for sending and listening for Babel messages. Default
+: UDP port for sending and listening for Babel packets. Default
   is 6696. An implementation MAY choose
   to expose this parameter as read-only ("ro").
   This is a 16-bit unsigned integer.
@@ -461,7 +477,7 @@ babel-mcast-group:
 
 ~~~~
   object {
-       string               ro babel-interface-reference;
+       reference            ro babel-interface-reference;
       [boolean              rw babel-interface-enable;]
        string               rw babel-link-type;
        string               ro babel-interface-metric-algorithm;
@@ -469,9 +485,7 @@ babel-mcast-group:
       [uint                 ro babel-mcast-hello-interval;]
       [uint                 ro babel-update-interval;]
       [boolean              rw babel-message-log-enable;]
-      [string               ro babel-message-log;]
-      [boolean              rw babel-stats-enable;]
-      [operation               babel-stats-reset;]
+      [reference            ro babel-message-log;]
       [babel-if-stats-obj   ro babel-if-stats;]
        babel-neighbors-obj  ro babel-neighbors<0..*>;
    } babel-interfaces-obj;
@@ -539,16 +553,6 @@ babel-message-log:
   message log files. Logging is
   enabled / disabled by babel-message-log-enable.
 
-babel-stats-enable:
-: Indicates whether statistics collection is enabled
-  (true) or disabled (false) on this interface, including
-  neighbor-specific statistics (babel-nbr-stats).
-
-babel-stats-reset:
-: An operation that resets all babel-if-stats and babel-nbr-stats
-  parameters to zero. This
-  operation has no input or output parameters.
-
 babel-if-stats:
 : Statistics collection object for this interface.
 
@@ -562,24 +566,24 @@ babel-neighbors:
   object {
        uint                 ro babel-sent-mcast-hello;
        uint                 ro babel-sent-mcast-update;
-       uint                 ro babel-received-messages;
+       uint                 ro babel-received-packets;
    } babel-if-stats-obj;
 ~~~~
 {: artwork-align="left"}
 
 
 babel-sent-mcast-hello:
-: A count of the number of multicast Hello messages sent on this interface
+: A count of the number of multicast Hello packets sent on this interface
   since the statistics were last enabled (babel-stats-enable)
   or reset (babel-stats-reset).
 
 babel-sent-mcast-update:
-: A count of the number of multicast update messages sent on this interface
+: A count of the number of multicast update packets sent on this interface
   since the statistics were last enabled (babel-stats-enable)
   or reset (babel-stats-reset).
 
-babel-received-messages:
-: A count of the number of Babel messages received on this interface
+babel-received-packets:
+: A count of the number of Babel packets received on this interface
   since the statistics were last enabled (babel-stats-enable)
   or reset (babel-stats-reset).
 
@@ -605,11 +609,11 @@ babel-received-messages:
 
 
 babel-neighbor-address:
-: IPv4 or IPv6 address the neighbor sends messages from
+: IPv4 or IPv6 address the neighbor sends packets from
 
 babel-hello-mcast-history:
 : The multicast Hello history of whether or not
-  the multicast Hello messages prior to babel-exp-mcast-hello-seqno
+  the multicast Hello packets prior to babel-exp-mcast-hello-seqno
   were received.
   A binary sequence where the most recently received Hello
   is expressed as a "1" placed in the left-most bit, with prior bits shifted
@@ -619,7 +623,7 @@ babel-hello-mcast-history:
 
 babel-hello-ucast-history:
 : The unicast Hello history of whether or not the
-  unicast Hello messages prior to babel-exp-ucast-hello-seqno were received.
+  unicast Hello packets prior to babel-exp-ucast-hello-seqno were received.
   A binary sequence where the most recently received Hello
   is expressed as a "1" placed in the left-most bit, with prior bits shifted
   right (and "0" bits placed between prior Hello bits and most recent Hello
@@ -634,15 +638,15 @@ babel-txcost:
 
 babel-exp-mcast-hello-seqno:
 : Expected multicast Hello sequence number of
-  next Hello to be received from this neighbor. If multicast Hello messages
-  are not expected, or processing of multicast messages is not enabled, this
+  next Hello to be received from this neighbor. If multicast Hello packets
+  are not expected, or processing of multicast packets is not enabled, this
   MUST be 0.
   This is a 16-bit unsigned integer.
 
 babel-exp-ucast-hello-seqno:
 : Expected unicast Hello sequence number of next
-  Hello to be received from this neighbor. If unicast Hello messages are not
-  expected, or processing of unicast messages is not enabled, this MUST be
+  Hello to be received from this neighbor. If unicast Hello packets are not
+  expected, or processing of unicast packets is not enabled, this MUST be
   0.
   This is a 16-bit unsigned integer.
 
@@ -690,32 +694,32 @@ babel-nbr-stats:
 
 
 babel-sent-ucast-hello:
-: A count of the number of unicast Hello messages sent to this neighbor
+: A count of the number of unicast Hello packets sent to this neighbor
   since the statistics were last enabled (babel-stats-enable)
   or reset (babel-stats-reset).
 
 babel-sent-ucast-update:
-: A count of the number of unicast update messages sent to this neighbor
+: A count of the number of unicast update packets sent to this neighbor
   since the statistics were last enabled (babel-stats-enable)
   or reset (babel-stats-reset).
 
 babel-sent-IHU:
-: A count of the number of IHU messages sent to this neighbor
+: A count of the number of IHU packets sent to this neighbor
   since the statistics were last enabled (babel-stats-enable)
   or reset (babel-stats-reset).
 
 babel-received-hello:
-: A count of the number of Hello messages received from this neighbor
+: A count of the number of Hello packets received from this neighbor
   since the statistics were last enabled (babel-stats-enable)
   or reset (babel-stats-reset).
 
 babel-received-update:
-: A count of the number of update messages received from this neighbor
+: A count of the number of update packets received from this neighbor
   since the statistics were last enabled (babel-stats-enable)
   or reset (babel-stats-reset).
 
 babel-received-IHU:
-: A count of the number of IHU messages received from this neighbor
+: A count of the number of IHU packets received from this neighbor
   since the statistics were last enabled (babel-stats-enable)
   or reset (babel-stats-reset).
 
@@ -780,11 +784,11 @@ babel-route-next-hop:
   if this route has no next-hop address.
 
 babel-route-feasible:
-: A boolean flag indicating whether this route is feasible,
+: A Boolean flag indicating whether this route is feasible,
   as defined in Section 3.5.1 of {{I-D.ietf-babel-rfc6126bis}}).
 
 babel-route-selected:
-: A boolean flag indicating whether this route is selected
+: A Boolean flag indicating whether this route is selected
   (i.e., whether it is currently being used for forwarding and
   is being advertised).
 
@@ -794,8 +798,9 @@ babel-route-selected:
 ~~~~
   object {
        string                rw babel-hmac-algorithm;
-       boolean               rw babel-hmac-verify-received;
-       string                rw babel-hmac-interfaces<0..*>;
+       boolean               rw babel-hmac-verify;
+       boolean               rw babel-hmac-apply-all;
+       reference             rw babel-hmac-interfaces<0..*>;
        babel-hmac-keys-obj   rw babel-hmac-keys<0..*>;
    } babel-hmac-obj;
 ~~~~
@@ -809,17 +814,30 @@ babel-hmac-algorithm
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
-babel-hmac-verify-received
-: A boolean flag indicating whether HMAC hashes in received Babel messages
+babel-hmac-verify
+: A Boolean flag indicating whether HMAC hashes in incoming Babel packets
   are required to be present and are verified. If this parameter is "true",
-  received messages are required to have a valid HMAC hash.
+  incoming packets are required to have a valid HMAC hash.
+  An implementation MAY choose
+  to expose this parameter as read-only ("ro").
+
+babel-hmac-apply-all:
+: A Boolean flag indicating whether this babel-hmac instance is to
+  be used for all interfaces. If "true", this instance applies to
+  all interfaces and the babel-hmac-interfaces parameter is ignored.
+  If babel-hmac-apply-all is "true", there MUST NOT be other instances
+  of the babel-hmac object.
+  If "false", the babel-hmac-interfaces parameter determines which
+  interfaces this instance applies to.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
 babel-hmac-interfaces:
 : List of references to the babel-interfaces entries this babel-hmac
-  entry applies to.
-  If this list is empty, then it applies to all interfaces.
+  entry applies to. This parameter is ignored if babel-hmac-apply-all
+  is "true".
+  An interface MUST NOT be listed in multiple
+  instances of the babel-hmac object.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
@@ -835,7 +853,7 @@ babel-hmac-keys:
        boolean               rw babel-hmac-key-use-verify;
        binary                -- babel-hmac-key-value;
       [operation                babel-hmac-key-test;]
-   } babel-hmac-obj;
+   } babel-hmac-keys-obj;
 ~~~~
 {: artwork-align="left"}
 
@@ -846,16 +864,19 @@ babel-hmac-key-name:
   instance is created, and is not subsequently writable.
 
 babel-key-use-sign:
-: Indicates whether this key value is used to sign Babel
-  messages. Messages are signed using this key if the value
-  is "true".
+: Indicates whether this key value is used to sign sent Babel
+  packets. Sent packets are signed using this key if the value
+  is "true". If the value is "false", this key is not used to
+  sign sent Babel packets.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
 babel-key-use-verify:
-: Indicates whether this key value is used to verify Babel
-  messages. This key is used to verify messages if the value
-  is "true".
+: Indicates whether this key value is used to verify
+  incoming Babel packets. This key is used to verify
+  incoming packets if the value is "true". If the value
+  is "false", no HMAC is computed from this key for
+  comparing an incoming packet.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
@@ -880,25 +901,40 @@ babel-hmac-test:
 
 ~~~~
   object {
-       string                rw babel-dtls-interfaces<0..*>;
+       boolean               rw babel-dtls-apply-all;
+       reference             rw babel-dtls-interfaces<0..*>;
       [boolean               rw babel-dtls-cached-info;]
       [string                rw babel-dtls-cert-prefer<0..*>;]
        babel-dtls-certs-obj  rw babel-dtls-certs<0..*>;
-   } babel-hmac-obj;
+   } babel-dtls-obj;
 ~~~~
 {: artwork-align="left"}
 
 
+babel-dtls-apply-all:
+: A Boolean flag indicating whether this babel-dtls instance is to
+  be used for all interfaces. If "true", this instance applies to
+  all interfaces and the babel-dtls-interfaces parameter is ignored.
+  If babel-dtls-apply-all is "true", there MUST NOT be other instances
+  of the babel-dtls object.
+  If "false", the babel-dtls-interfaces parameter determines which
+  interfaces this instance applies to.
+  An implementation MAY choose
+  to expose this parameter as read-only ("ro").
+
 babel-dtls-interfaces:
 : List of references to the babel-interfaces entries this babel-dtls
-  entry applies to.
+  entry applies to. This parameter is ignored if babel-dtls-apply-all
+  is "true".
+  An interface MUST NOT be listed in multiple
+  instances of the babel-dtls object.
   If this list is empty, then it applies to all interfaces.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
 babel-dtls-cached-info:
 : Indicates whether the cached_info extension is included in ClientHello
-  and ServerHello messages. The extension is included if the value
+  and ServerHello packets. The extension is included if the value
   is "true".
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
@@ -928,7 +964,7 @@ babel-dtls-certs:
        string                ro babel-cert-type;
        binary                -- babel-cert-private-key;
       [operation                babel-cert-test;]
-   } babel-hmac-obj;
+   } babel-dtls-certs-obj;
 ~~~~
 {: artwork-align="left"}
 
