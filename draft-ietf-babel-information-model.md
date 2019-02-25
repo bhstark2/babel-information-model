@@ -573,19 +573,13 @@ babel-neighbors:
 
 
 babel-sent-mcast-hello:
-: A count of the number of multicast Hello packets sent on this interface
-  since the statistics were last enabled (babel-stats-enable)
-  or reset (babel-stats-reset).
+: A count of the number of multicast Hello packets sent on this interface.
 
 babel-sent-mcast-update:
-: A count of the number of multicast update packets sent on this interface
-  since the statistics were last enabled (babel-stats-enable)
-  or reset (babel-stats-reset).
+: A count of the number of multicast update packets sent on this interface.
 
 babel-received-packets:
-: A count of the number of Babel packets received on this interface
-  since the statistics were last enabled (babel-stats-enable)
-  or reset (babel-stats-reset).
+: A count of the number of Babel packets received on this interface.
 
 
 ## Definition of babel-neighbors-obj
@@ -694,34 +688,22 @@ babel-nbr-stats:
 
 
 babel-sent-ucast-hello:
-: A count of the number of unicast Hello packets sent to this neighbor
-  since the statistics were last enabled (babel-stats-enable)
-  or reset (babel-stats-reset).
+: A count of the number of unicast Hello packets sent to this neighbor.
 
 babel-sent-ucast-update:
-: A count of the number of unicast update packets sent to this neighbor
-  since the statistics were last enabled (babel-stats-enable)
-  or reset (babel-stats-reset).
+: A count of the number of unicast update packets sent to this neighbor.
 
 babel-sent-IHU:
-: A count of the number of IHU packets sent to this neighbor
-  since the statistics were last enabled (babel-stats-enable)
-  or reset (babel-stats-reset).
+: A count of the number of IHU packets sent to this neighbor.
 
 babel-received-hello:
-: A count of the number of Hello packets received from this neighbor
-  since the statistics were last enabled (babel-stats-enable)
-  or reset (babel-stats-reset).
+: A count of the number of Hello packets received from this neighbor.
 
 babel-received-update:
-: A count of the number of update packets received from this neighbor
-  since the statistics were last enabled (babel-stats-enable)
-  or reset (babel-stats-reset).
+: A count of the number of update packets received from this neighbor.
 
 babel-received-IHU:
-: A count of the number of IHU packets received from this neighbor
-  since the statistics were last enabled (babel-stats-enable)
-  or reset (babel-stats-reset).
+: A count of the number of IHU packets received from this neighbor.
 
 
 ## Definition of babel-routes-obj
