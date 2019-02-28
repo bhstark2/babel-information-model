@@ -210,8 +210,8 @@ The Information Model is hierarchically structured as follows:
    |  +-- babel-mcast-hello-seqno
    |  +-- babel-mcast-hello-interval
    |  +-- babel-update-interval
-   |  +-- babel-message-log-enable
-   |  +-- babel-message-log
+   |  +-- babel-packet-log-enable
+   |  +-- babel-packet-log
    |  +-- babel-if-stats
    |  |  +-- babel-sent-mcast-hello
    |  |  +-- babel-sent-mcast-update
@@ -287,7 +287,7 @@ Most parameters are read-only. Following is a descriptive list of the parameters
 
 * Interface: enable/disable Babel on this interface
 
-* Interface: enable/disable message log
+* Interface: enable/disable packet log
 
 * HMAC: algorithm
 
@@ -483,8 +483,8 @@ babel-mcast-group:
       [uint                 ro babel-mcast-hello-seqno;]
       [uint                 ro babel-mcast-hello-interval;]
       [uint                 ro babel-update-interval;]
-      [boolean              rw babel-message-log-enable;]
-      [reference            ro babel-message-log;]
+      [boolean              rw babel-packet-log-enable;]
+      [reference            ro babel-packet-log;]
       [babel-if-stats-obj   ro babel-if-stats;]
        babel-neighbors-obj  ro babel-neighbors<0..*>;
    } babel-interfaces-obj;
@@ -528,29 +528,29 @@ babel-interface-metric-algorithm:
 
 babel-mcast-hello-seqno:
 : The current sequence number in use for multicast
-  hellos sent on this interface.
+  Hellos sent on this interface.
   This is a 16-bit unsigned integer.
 
 babel-mcast-hello-interval:
-: The current interval in use for multicast hellos
-  sent on this interface.
+: The current interval in use for multicast Hellos
+  sent on this interface. Units are centiseconds.
   This is a 16-bit unsigned integer.
 
 babel-update-interval:
 : The current interval in use for all updates (multicast
-  and unicast) sent on this interface.
+  and unicast) sent on this interface. Units are centiseconds.
   This is a 16-bit unsigned integer.
 
-babel-message-log-enable:
-: Indicates whether message logging is enabled
+babel-packet-log-enable:
+: Indicates whether packet logging is enabled
   (true) or disabled (false) on this interface.
 
-babel-message-log:
+babel-packet-log:
 : A reference or url link to a file that contains a timestamped log
-  of messages received and sent on babel-udp-port on this interface.
+  of packets received and sent on babel-udp-port on this interface.
   The {{libpcap}} file format with .pcap file extension SHOULD be supported for
-  message log files. Logging is
-  enabled / disabled by babel-message-log-enable.
+  packet log files. Logging is
+  enabled / disabled by babel-packet-log-enable.
 
 babel-if-stats:
 : Statistics collection object for this interface.
@@ -602,7 +602,7 @@ babel-received-packets:
 
 
 babel-neighbor-address:
-: IPv4 or IPv6 address the neighbor sends packets from
+: IPv4 or IPv6 address the neighbor sends packets from.
 
 babel-hello-mcast-history:
 : The multicast Hello history of whether or not
@@ -650,7 +650,7 @@ babel-ucast-hello-seqno:
 
 babel-ucast-hello-interval:
 : The current interval in use for unicast hellos
-  sent to this neighbor.
+  sent to this neighbor. Units are centiseconds.
   This is a 16-bit unsigned integer.
 
 babel-rxcost:
@@ -730,7 +730,9 @@ babel-route-prefix:
 
 babel-route-prefix-length:
 : Length of the prefix for which this route is advertised
-  babel-route-router-id: router-id of the source router for which this route
+
+babel-route-router-id:
+: router-id of the source router for which this route
   is advertised.
 
 babel-route-neighbor:
@@ -1233,3 +1235,4 @@ v05 2019-01-15:
   - changed definition of babel-security-supported
   - added parameters for HMAC and DTLS
   - added statistics
+  - changed all instances of "message" to "packet"
