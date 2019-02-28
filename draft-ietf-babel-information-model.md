@@ -729,7 +729,7 @@ babel-route-prefix:
   route is advertised.
 
 babel-route-prefix-length:
-: Length of the prefix for which this route is advertised
+: Length of the prefix for which this route is advertised.
 
 babel-route-router-id:
 : router-id of the source router for which this route
