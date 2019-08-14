@@ -1,7 +1,7 @@
 ---
 stand_alone: true
 ipr: trust200902
-docname: draft-ietf-babel-information-model-05
+docname: draft-ietf-babel-information-model-09
 cat: info
 pi:
   strict: 'yes'
@@ -88,13 +88,13 @@ may allow some limited configuration of protocol constants.
 Babel is a loop-avoiding distance-vector routing protocol defined in {{I-D.ietf-babel-rfc6126bis}}. {{I-D.ietf-babel-hmac}} defines a security mechanism that allows Babel packets to be cryptographically
 authenticated, and {{I-D.ietf-babel-dtls}} defines a security mechanism that allows Babel packets to be encrypted.
 This document describes an information model for Babel (including implementations
-using one of these security mechanisms) that can be used to create management
+using one or both of these security mechanisms) that can be used to create management
 protocol data models (such as a NETCONF {{RFC6241}} YANG {{RFC7950}} data model).
 
 Due to the simplicity of the Babel protocol, most of the information model
 is focused on reporting Babel protocol operational state, and very little of
-that is considered mandatory to implement (contingent on a management protocol
-with Babel support being implemented). Some parameters may be configurable.
+that is considered mandatory to implement (for an implementation attempting
+to comply with this information model). Some parameters may be configurable.
 However, it is up to the Babel implementation whether to allow any of these
 to be configured within its implementation. Where the implementation does
 not allow configuration of these parameters, it may still choose to expose
@@ -175,13 +175,10 @@ The Information Model is hierarchically structured as follows:
    +-- babel-implementation-version
    +-- babel-enable
    +-- router-id
-   +-- babel-supported-link-properties
    +-- self-seqno
    +-- babel-metric-comp-algorithms
    +-- babel-security-supported
-   +-- babel-hmac-enable
-   +-- babel-hmac-algorithms
-   +-- babel-dtls-enable
+   +-- babel-mac-algorithms
    +-- babel-dtls-cert-types
    +-- babel-stats-enable
    +-- babel-stats-reset
@@ -191,15 +188,16 @@ The Information Model is hierarchically structured as follows:
    +-- babel-interfaces
    |  +-- babel-interface-reference
    |  +-- babel-interface-enable
-   |  +-- babel-link-properties
    |  +-- babel-interface-metric-algorithm
+   |  +-- babel-interface-split-horizon
    |  +-- babel-mcast-hello-seqno
    |  +-- babel-mcast-hello-interval
    |  +-- babel-update-interval
-   |  +-- babel-interfaces-hmac-keys
-   |  +-- babel-hmac-algorithm
-   |  +-- babel-hmac-verify
-   |  +-- babel-interfaces-dtls-certs
+   |  +-- babel-mac-enable
+   |  +-- babel-if-mac-key-sets
+   |  +-- babel-mac-verify
+   |  +-- babel-dtls-enable
+   |  +-- babel-if-dtls-cert-sets
    |  +-- babel-dtls-cached-info
    |  +-- babel-dtls-cert-prefer
    |  +-- babel-packet-log-enable
@@ -207,6 +205,9 @@ The Information Model is hierarchically structured as follows:
    |  +-- babel-if-stats
    |  |  +-- babel-sent-mcast-hello
    |  |  +-- babel-sent-mcast-update
+   |  |  +-- babel-sent-ucast-hello
+   |  |  +-- babel-sent-ucast-update
+   |  |  +-- babel-sent-IHU
    |  |  +-- babel-received-packets
    |  +-- babel-neighbors
    |  |  +-- babel-neighbor-address
@@ -219,13 +220,6 @@ The Information Model is hierarchically structured as follows:
    |  |  +-- babel-ucast-hello-interval
    |  |  +-- babel-rxcost
    |  |  +-- babel-cost
-   |  |  +-- babel-nbr-stats
-   |  |  |  +-- babel-sent-ucast-hello
-   |  |  |  +-- babel-sent-ucast-update
-   |  |  |  +-- babel-sent-IHU
-   |  |  |  +-- babel-received-hello
-   |  |  |  +-- babel-received-update
-   |  |  |  +-- babel-received-IHU
    +-- babel-routes
    |  +-- babel-route-prefix
    |  +-- babel-route-prefix-length
@@ -237,14 +231,19 @@ The Information Model is hierarchically structured as follows:
    |  +-- babel-route-next-hop
    |  +-- babel-route-feasible
    |  +-- babel-route-selected
-   +-- babel-hmac
-   |  +-- babel-hmac-default-apply
-   |  |  +-- babel-hmac-key-name
-   |  |  +-- babel-hmac-key-use-sign
-   |  |  +-- babel-hmac-key-use-verify
-   |  |  +-- babel-hmac-key-value
-   +-- babel-dtls
+   +-- babel-mac-key-sets
+   |  +-- babel-mac-default-apply
+   |  +-- babel-mac-keys
+   |  |  +-- babel-mac-key-name
+   |  |  +-- babel-mac-key-use-sign
+   |  |  +-- babel-mac-key-use-verify
+   |  |  +-- babel-mac-key-value
+   |  |  +-- babel-mac-key-algorithm
+   |  |  +-- babel-mac-key-test
+   +-- babel-dtls-cert-sets
    |  +-- babel-dtls-default-apply
+   |  +-- babel-dtls-certs
+   |  |  +-- babel-cert-name
    |  |  +-- babel-cert-value
    |  |  +-- babel-cert-type
    |  |  +-- babel-cert-private-key
@@ -258,9 +257,9 @@ Most parameters are read-only. Following is a descriptive list of the parameters
 
 * enable/disable Babel
 
-* create/delete babel-hmac objects
+* create/delete Babel MAC Key sets
 
-* create/delete babel-dtls objects
+* create/delete Babel DTLS Certificate sets
 
 * enable/disable statistics collection
 
@@ -268,15 +267,17 @@ Most parameters are read-only. Following is a descriptive list of the parameters
 
 * Constant: IPv6 multicast group
 
-* Interface: Link type
+* Interface: Metric algorithm
+
+* Interface: Split horizon
 
 * Interface: enable/disable Babel on this interface
 
-* Interface: sets of HMAC keys
+* Interface: sets of MAC keys
 
-* Interface: HMAC algorithm
+* Interface: MAC algorithm
 
-* Interface: verify received HMAC packets
+* Interface: verify received MAC packets
 
 * Interface: set of DTLS certificates
 
@@ -286,11 +287,11 @@ Most parameters are read-only. Following is a descriptive list of the parameters
 
 * Interface: enable/disable packet log
 
-* HMAC-keys: create/delete entries
+* MAC-keys: create/delete entries
 
-* HMAC-keys: use to sign packets
+* MAC-keys: use to sign packets
 
-* HMAC-keys: use to verify packets
+* MAC-keys: use to verify packets
 
 * DTLS-certs: create/delete entries
 
@@ -298,7 +299,7 @@ Most parameters are read-only. Following is a descriptive list of the parameters
 The following parameters are required to return no value when read:
 
 
-* HMAC key values
+* MAC key values
 
 * DTLS certificate values
 
@@ -315,24 +316,21 @@ model definitions in subsequent sections, the error is in this overview.
 
 ~~~~
   object {
-       string               ro babel-implementation-version;
-       boolean              rw babel-enable;
-       binary               ro babel-self-router-id;
-       string               ro babel-supported-link-properties<1..*>;
-      [uint                 ro babel-self-seqno;]
-       string               ro babel-metric-comp-algorithms<1..*>;
-       string               ro babel-security-supported<0..*>;
-      [boolean              ro babel-hmac-enable;]
-      [string               ro babel-hmac-algorithms<1..*>;]
-      [boolean              ro babel-dtls-enable;]
-      [string               ro babel-dtls-cert-types<1..*>;]
-      [boolean              rw babel-stats-enable;]
-      [operation               babel-stats-reset;]
-       babel-constants-obj  ro babel-constants;
-       babel-interfaces-obj ro babel-interfaces<0..*>;
-       babel-routes-obj     ro babel-routes<0..*>;
-      [babel-hmac-obj       rw babel-hmac<0..*>;]
-      [babel-dtls-obj       rw babel-dtls<0..*>;]
+       string                   ro babel-implementation-version;
+       boolean                  rw babel-enable;
+       binary                   ro babel-self-router-id;
+      [uint                     ro babel-self-seqno;]
+       string                   ro babel-metric-comp-algorithms<1..*>;
+       string                   ro babel-security-supported<0..*>;
+      [string                   ro babel-mac-algorithms<1..*>;]
+      [string                   ro babel-dtls-cert-types<1..*>;]
+      [boolean                  rw babel-stats-enable;]
+      [operation                   babel-stats-reset;]
+       babel-constants-obj      ro babel-constants;
+       babel-interfaces-obj     ro babel-interfaces<0..*>;
+       babel-routes-obj         ro babel-routes<0..*>;
+      [babel-mac-key-sets-obj   rw babel-mac-key-sets<0..*>;]
+      [babel-dtls-cert-sets-obj rw babel-dtls-cert-sets<0..*>;]
    } babel-information-obj;
 ~~~~
 {: artwork-align="left"}
@@ -358,11 +356,7 @@ babel-self-router-id:
 : The router-id used by this instance of the Babel protocol
   to identify itself. {{I-D.ietf-babel-rfc6126bis}}
   describes this as an arbitrary string of 8 octets.
-
-babel-supported-link-properties:
-: Lists the collections of link properties supported by this instance of Babel.
-  Valid enumeration values are
-  defined in the Babel Link Properties registry (see {{iana-considerations}}).
+  The router-id value MUST NOT consist of all zeroes or all ones.
 
 babel-self-seqno:
 : The current sequence number included in route updates for routes
@@ -370,27 +364,15 @@ babel-self-seqno:
 
 babel-metric-comp-algorithms:
 : List of supported cost computation algorithms. Possible
-  values include "k-out-of-j", and "ETX".
+  values include "2-out-of-3", and "ETX".
 
 babel-security-supported:
 : List of supported security mechanisms. Possible values include
-  "HMAC" and "DTLS".
+  "MAC" and "DTLS".
 
-babel-hmac-enable:
-: Indicates whether the HMAC security mechanism is enabled
-  (true) or disabled (false).
-  An implementation MAY choose
-  to expose this parameter as read-only ("ro").
-
-babel-hmac-algorithms:
-: List of supported HMAC computation algorithms. Possible values
+babel-mac-algorithms:
+: List of supported MAC computation algorithms. Possible values
   include "HMAC-SHA256", "BLAKE2s".
-
-babel-dtls-enable:
-: Indicates whether the DTLS security mechanism is enabled
-  (true) or disabled (false).
-  An implementation MAY choose
-  to expose this parameter as read-only ("ro").
 
 babel-dtls-cert-types:
 : List of supported DTLS certificate types. Possible values include
@@ -398,8 +380,7 @@ babel-dtls-cert-types:
 
 babel-stats-enable:
 : Indicates whether statistics collection is enabled
-  (true) or disabled (false) on all interfaces, including
-  neighbor-specific statistics (babel-nbr-stats).
+  (true) or disabled (false) on all interfaces.
 
 babel-stats-reset:
 : An operation that resets all babel-if-stats and babel-nbr-stats
@@ -416,15 +397,15 @@ babel-routes:
 : A set of babel-route-obj objects. Contains the routes known to this
   node.
 
-babel-hmac:
-: A babel-hmac-obj object. If this
+babel-mac-key-sets:
+: A babel-mac-key-sets-obj object. If this
   object is implemented, it
-  provides access to parameters related to the HMAC security mechanism.
+  provides access to parameters related to the MAC security mechanism.
   An implementation MAY choose
   to expose this object as read-only ("ro").
 
-babel-dtls:
-: A babel-dtls-obj object. If this
+babel-dtls-cert-sets:
+: A babel-dtls-cert-sets-obj object. If this
   object is implemented, it
   provides access to parameters related to the DTLS security mechanism.
   An implementation MAY choose
@@ -451,7 +432,7 @@ babel-udp-port:
 
 babel-mcast-group:
 : Multicast group for sending and listening to multicast
-  announcements on IPv6. Default is ff02:0:0:0:0:0:1:6.
+  announcements on IPv6. Default is ff02::1:6.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
@@ -463,15 +444,17 @@ babel-mcast-group:
   object {
        reference            ro babel-interface-reference;
       [boolean              rw babel-interface-enable;]
-       string               rw babel-link-properties;
-       string               ro babel-interface-metric-algorithm;
+       string               rw babel-interface-metric-algorithm;
+      [boolean              rw babel-interface-split-horizon;]
       [uint                 ro babel-mcast-hello-seqno;]
       [uint                 ro babel-mcast-hello-interval;]
       [uint                 ro babel-update-interval;]
-      [reference            rw babel-interface-hmac-keys<0..*>;]
-      [string               rw babel-hmac-algorithm;]
-      [boolean              rw babel-hmac-verify;]
-      [reference            rw babel-interface-dtls-certs<0..*>;]
+      [boolean              rw babel-mac-enable;]
+      [reference            rw babel-if-mac-key-sets<0..*>;]
+      [string               rw babel-mac-algorithm;]
+      [boolean              rw babel-mac-verify;]
+      [boolean              rw babel-dtls-enable;]
+      [reference            rw babel-if-dtls-cert-sets<0..*>;]
       [boolean              rw babel-dtls-cached-info;]
       [string               rw babel-dtls-cert-prefer<0..*>;]
       [boolean              rw babel-packet-log-enable;]
@@ -503,17 +486,17 @@ babel-interface-enable:
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
-babel-link-properties:
-: Indicates the properties of the link. The value MUST be one of those listed in the
-  babel-supported-link-properties parameter. Valid enumeration values are
-  identified in Babel Link Properties registry.
+babel-interface-metric-algorithm:
+: Indicates the metric computation algorithm used on this interface.
+  The value MUST be one of those listed in the babel-information-obj
+  babel-metric-comp-algorithms parameter.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
-babel-interface-metric-algorithm:
-: Indicates the metric computation algorithm used on this interface.
-  The value MUST be one of those listed in the babel-information-obj babel-metric-comp-algorithms
-  parameter.
+babel-interface-split-horizon:
+: Indicates whether or not the split horizon optimization is used
+  when calculating metrics on this interface. A value of true
+  indicates split horizon optimization is used.
 
 babel-mcast-hello-seqno:
 : The current sequence number in use for multicast
@@ -530,31 +513,36 @@ babel-update-interval:
   and unicast) sent on this interface. Units are centiseconds.
   This is a 16-bit unsigned integer.
 
-babel-interface-hmac-keys:
-: List of references to the babel-hmac entries that apply to this
-  interface. When an interface instance is created, all babel-hmac
-  instances with babel-hmac-default-apply "true" will be included
+babel-mac-enable:
+: Indicates whether the MAC security mechanism is enabled
+  (true) or disabled (false).
+  An implementation MAY choose
+  to expose this parameter as read-only ("ro").
+
+babel-if-mac-keys-sets:
+: List of references to the babel-mac entries that apply to this
+  interface. When an interface instance is created, all babel-mac-key-sets
+  instances with babel-mac-default-apply "true" will be included
   in this list.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
-babel-hmac-algorithm
-: The name of the HMAC algorithm used on this interface.
-  The value MUST be the same as one of the enumerations
-  listed in the babel-hmac-algorithms parameter.
-  An implementation MAY choose
-  to expose this parameter as read-only ("ro").
-
-babel-hmac-verify
-: A Boolean flag indicating whether HMAC hashes in incoming Babel packets
+babel-mac-verify
+: A Boolean flag indicating whether MAC hashes in incoming Babel packets
   are required to be present and are verified. If this parameter is "true",
-  incoming packets are required to have a valid HMAC hash.
+  incoming packets are required to have a valid MAC hash.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
-babel-interface-dtls-certs:
-: List of references to the babel-dtls entries that apply to this
-  interface. When an interface instance is created, all babel-dtls
+babel-dtls-enable:
+: Indicates whether the DTLS security mechanism is enabled
+  (true) or disabled (false).
+  An implementation MAY choose
+  to expose this parameter as read-only ("ro").
+
+babel-if-dtls-cert-sets:
+: List of references to the babel-dtls-cert-sets entries that apply to this
+  interface. When an interface instance is created, all babel-dtls-cert-sets
   instances with babel-dtls-default-apply "true" will be included
   in this list.
   An implementation MAY choose
@@ -602,6 +590,9 @@ babel-neighbors:
   object {
        uint                 ro babel-sent-mcast-hello;
        uint                 ro babel-sent-mcast-update;
+       uint                 ro babel-sent-ucast-hello;
+       uint                 ro babel-sent-ucast-update;
+       uint                 ro babel-sent-IHU;
        uint                 ro babel-received-packets;
    } babel-if-stats-obj;
 ~~~~
@@ -613,6 +604,15 @@ babel-sent-mcast-hello:
 
 babel-sent-mcast-update:
 : A count of the number of multicast update packets sent on this interface.
+
+babel-sent-ucast-hello:
+: A count of the number of unicast Hello packets sent on this interface.
+
+babel-sent-ucast-update:
+: A count of the number of unicast update packets sent on this interface.
+
+babel-sent-IHU:
+: A count of the number of IHU packets sent on this interface.
 
 babel-received-packets:
 : A count of the number of Babel packets received on this interface.
@@ -632,7 +632,6 @@ babel-received-packets:
       [uint                ro babel-ucast-hello-interval;]
       [uint                ro babel-rxcost;]
       [uint                ro babel-cost;]
-      [babel-nbr-stats-obj ro babel-nbr-stats;]
    } babel-neighbors-obj;
 ~~~~
 {: artwork-align="left"}
@@ -670,20 +669,30 @@ babel-exp-mcast-hello-seqno:
 : Expected multicast Hello sequence number of
   next Hello to be received from this neighbor. If multicast Hello packets
   are not expected, or processing of multicast packets is not enabled, this
-  MUST be 0.
-  This is a 16-bit unsigned integer.
+  MUST be NULL.
+  This is a 16-bit unsigned integer; if the data model uses
+  zero (0) to represent NULL values for unsigned integers,
+  the data model may use a different data type that allows
+  differentiation between zero (0) and NULL.
 
 babel-exp-ucast-hello-seqno:
 : Expected unicast Hello sequence number of next
   Hello to be received from this neighbor. If unicast Hello packets are not
   expected, or processing of unicast packets is not enabled, this MUST be
-  0.
-  This is a 16-bit unsigned integer.
+  NULL.
+  This is a 16-bit unsigned integer; if the data model uses
+  zero (0) to represent NULL values for unsigned integers,
+  the data model may use a different data type that allows
+  differentiation between zero (0) and NULL.
 
 babel-ucast-hello-seqno:
 : The current sequence number in use for unicast Hellos
-  sent to this neighbor.
-  This is a 16-bit unsigned integer.
+  sent to this neighbor. If unicast Hellos are not being sent,
+  this MUST be NULL.
+  This is a 16-bit unsigned integer; if the data model uses
+  zero (0) to represent NULL values for unsigned integers,
+  the data model may use a different data type that allows
+  differentiation between zero (0) and NULL.
 
 babel-ucast-hello-interval:
 : The current interval in use for unicast Hellos
@@ -698,48 +707,11 @@ babel-rxcost:
   This is a 16-bit unsigned integer.
 
 babel-cost:
-: Link cost is computed from the values
+: The link cost, as computed from the values
   maintained in the neighbor table: the statistics kept in the
   neighbor table about the reception of Hellos, and the txcost
   computed from received IHU packets.
   This is a 16-bit unsigned integer.
-
-babel-nbr-stats:
-: Statistics collection object for this neighbor.
-
-
-## Definition of babel-nbr-stats-obj
-
-~~~~
-  object {
-       uint                 ro babel-sent-ucast-hello;
-       uint                 ro babel-sent-ucast-update;
-       uint                 ro babel-sent-IHU;
-       uint                 ro babel-received-hello;
-       uint                 ro babel-received-update;
-       uint                 ro babel-received-IHU;
-   } babel-nbr-stats-obj;
-~~~~
-{: artwork-align="left"}
-
-
-babel-sent-ucast-hello:
-: A count of the number of unicast Hello packets sent to this neighbor.
-
-babel-sent-ucast-update:
-: A count of the number of unicast update packets sent to this neighbor.
-
-babel-sent-IHU:
-: A count of the number of IHU packets sent to this neighbor.
-
-babel-received-hello:
-: A count of the number of Hello packets received from this neighbor.
-
-babel-received-update:
-: A count of the number of update packets received from this neighbor.
-
-babel-received-IHU:
-: A count of the number of IHU packets received from this neighbor.
 
 
 ## Definition of babel-routes-obj
@@ -769,8 +741,7 @@ babel-route-prefix-length:
 : Length of the prefix for which this route is advertised.
 
 babel-route-router-id:
-: router-id of the source router for which this route
-  is advertised.
+: The router-id of the router that originated this route.
 
 babel-route-neighbor:
 : Reference to the babel-neighbors entry for the neighbor
@@ -787,7 +758,10 @@ babel-route-received-metric:
   and babel-route-received-metric MUST be non-zero.
   Having both be non-zero is expected for a route that is received and
   subsequently advertised.
-  This is a 16-bit unsigned integer.
+  This is a 16-bit unsigned integer; if the data model uses
+  zero (0) to represent NULL values for unsigned integers,
+  the data model may use a different data type that allows
+  differentiation between zero (0) and NULL.
 
 babel-route-calculated-metric:
 : A calculated metric for this route. How the
@@ -798,7 +772,10 @@ babel-route-calculated-metric:
   babel-route-received-metric MUST be non-zero.
   Having both be non-zero is expected for a route that is received and
   subsequently advertised.
-  This is a 16-bit unsigned integer.
+  This is a 16-bit unsigned integer; if the data model uses
+  zero (0) to represent NULL values for unsigned integers,
+  the data model may use a different data type that allows
+  differentiation between zero (0) and NULL.
 
 babel-route-seqno:
 : The sequence number with which this route was advertised.
@@ -818,49 +795,51 @@ babel-route-selected:
   is being advertised).
 
 
-## Definition of babel-hmac-obj
+## Definition of babel-mac-key-sets-obj
 
 ~~~~
   object {
-       boolean               rw babel-hmac-default-apply;
-       babel-hmac-keys-obj   rw babel-hmac-keys<0..*>;
-   } babel-hmac-obj;
+       boolean               rw babel-mac-default-apply;
+       babel-mac-keys-obj    rw babel-mac-keys<0..*>;
+   } babel-mac-obj;
 ~~~~
 {: artwork-align="left"}
 
 
-babel-hmac-default-apply:
-: A Boolean flag indicating whether this babel-dtls instance is
-  applied to all interfaces, by default.
+babel-mac-default-apply:
+: A Boolean flag indicating whether this babel-mac instance is
+  applied to all new babel-interface instances, by default.
   If "true", this instance is applied to
   new babel-interfaces instances at the time they are created, by including
-  it in the babel-interface-dtls-certs list.
+  it in the babel-interface-mac-keys list.
   If "false", this instance is not applied to new babel-interfaces
   instances when they are created.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
-babel-hmac-keys:
-: A set of babel-hmac-keys-obj objects.
+babel-mac-keys:
+: A set of babel-mac-keys-obj objects.
 
-## Definition of babel-hmac-keys-obj
+## Definition of babel-mac-keys-obj
 
 ~~~~
   object {
-       string                ro babel-hmac-key-name;
-       boolean               rw babel-hmac-key-use-sign;
-       boolean               rw babel-hmac-key-use-verify;
-       binary                -- babel-hmac-key-value;
-      [operation                babel-hmac-key-test;]
-   } babel-hmac-keys-obj;
+       string                rw babel-mac-key-name;
+       boolean               rw babel-mac-key-use-sign;
+       boolean               rw babel-mac-key-use-verify;
+       binary                -- babel-mac-key-value;
+       string                rw babel-mac-key-algorithm;
+      [operation                babel-mac-key-test;]
+   } babel-mac-keys-obj;
 ~~~~
 {: artwork-align="left"}
 
-babel-hmac-key-name:
-: A unique name for this HMAC key that can be used to identify
+babel-mac-key-name:
+: A unique name for this MAC key that can be used to identify
   the key in this object instance, since the key value is not
-  allowed to be read. This value can only be provided when this
-  instance is created, and is not subsequently writable.
+  allowed to be read. This value MUST NOT be empty and can only be provided when this
+  instance is created (i.e., it is not subsequently writable).
+  The value MAY be auto-generated if not explicitly supplied when the instance is created.
 
 babel-key-use-sign:
 : Indicates whether this key value is used to sign sent Babel
@@ -874,29 +853,36 @@ babel-key-use-verify:
 : Indicates whether this key value is used to verify
   incoming Babel packets. This key is used to verify
   incoming packets if the value is "true". If the value
-  is "false", no HMAC is computed from this key for
+  is "false", no MAC is computed from this key for
   comparing an incoming packet.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
 babel-key-value:
-: The value of the HMAC key. An implementation MUST NOT allow
+: The value of the MAC key. An implementation MUST NOT allow
   this parameter to be read. This can be done by always providing
-  an empty string, or through permissions, or other means.
-  This value can only be provided when this
+  an empty string when read, or through permissions, or other means.
+  This value MUST be provided when this
   instance is created, and is not subsequently writable.
 
-babel-hmac-test:
-: An operation that allows the HMAC key and hash algorithm to
+babel-mac-key-algorithm
+: The name of the MAC algorithm used with this key.
+  The value MUST be the same as one of the enumerations
+  listed in the babel-mac-algorithms parameter.
+  An implementation MAY choose
+  to expose this parameter as read-only ("ro").
+
+babel-mac-test:
+: An operation that allows the MAC key and hash algorithm to
   be tested to see if they produce an expected outcome. Input
   to this operation is a binary string. The implementation is
   expected to create a hash of this string using the
-  babel-hmac-key-value and the babel-hmac-algorithm. The
+  babel-mac-key-value and the babel-mac-algorithm. The
   output of this operation is the resulting hash,
   as a binary string.
 
 
-## Definition of babel-dtls-obj
+## Definition of babel-dtls-cert-sets-obj
 
 ~~~~
   object {
@@ -909,7 +895,7 @@ babel-hmac-test:
 
 babel-dtls-default-apply:
 : A Boolean flag indicating whether this babel-dtls instance is
-  applied to all interfaces, by default.
+  applied to all new babel-interface instances, by default.
   If "true", this instance is applied to
   new babel-interfaces instances at the time they are created, by including
   it in the babel-interface-dtls-certs list.
@@ -929,9 +915,9 @@ babel-dtls-certs:
 
 ~~~~
   object {
-       string                ro babel-cert-name;
-       string                ro babel-cert-value;
-       string                ro babel-cert-type;
+       string                rw babel-cert-name;
+       string                rw babel-cert-value;
+       string                rw babel-cert-type;
        binary                -- babel-cert-private-key;
       [operation                babel-cert-test;]
    } babel-dtls-certs-obj;
@@ -941,12 +927,14 @@ babel-dtls-certs:
 babel-cert-name:
 : A unique name for this DTLS certificate that can be used to identify
   the certificate in this object instance, since the value is too long
-  to be useful for identification. This value can only be provided when this
-  instance is created, and is not subsequently writable.
+  to be useful for identification. This value MUST NOT be empty and can
+  only be provided when this instance is created (i.e., it is not
+  subsequently writable). The value MAY be auto-generated if not
+  explicitly supplied when the instance is created.
 
 babel-cert-value:
 : The DTLS certificate in PEM format {{RFC7468}}.
-  This value can only be provided when this
+  This value MUST be provided when this
   instance is created, and is not subsequently writable.
 
 babel-cert-type:
@@ -962,7 +950,7 @@ babel-cert-private-key:
   to provide a certificate during DTLS handshaking.
   An implementation MUST NOT allow
   this parameter to be read. This can be done by always providing
-  an empty string, or through permissions, or other means.
+  an empty string when read, or through permissions, or other means.
   This value can only be provided when this
   instance is created, and is not subsequently writable.
 
@@ -1005,227 +993,8 @@ security mechanisms that make use of these credentials
 define what credentials can be used with those mechanisms.
 
 
-# IANA Considerations
-
-This document defines a Babel Link Properties registry for the values of the babel-link-properties
-and babel-supported-link-properties parameters to be listed under the Babel Routing
-Protocol registry.
-
-Valid Babel Link Properties names are normatively defined as
-
-- MUST be at least 1 character and no more than 20 characters long
-- MUST contain only US-ASCII {{RFC0020}} letters 'A' - 'Z' and 'a' -
-'z', digits '0' - '9', and hyphens ('-', ASCII 0x2D or decimal 45)
-- MUST contain at least one letter ('A' - 'Z' or 'a' - 'z')
-- MUST NOT begin or end with a hyphen
-- hyphens MUST NOT be adjacent to other hyphens
-
-The rules for Link Properties names, excepting the limit of 20 characters maximum,
-are also expressed below (as a non-normative convenience) using ABNF {{RFC5234}}.
-
-~~~~
-      SRVNAME = *(1*DIGIT [HYPHEN]) ALPHA *([HYPHEN] ALNUM)
-      ALNUM   = ALPHA / DIGIT     ; A-Z, a-z, 0-9
-      HYPHEN  = %x2D              ; "-"
-      ALPHA   = %x41-5A / %x61-7A ; A-Z / a-z [RFC5234]
-      DIGIT   = %x30-39           ; 0-9       [RFC5234]
-~~~~
-{: artwork-align="left"}
-
-The allocation policy of this registry is Specification Required {{RFC8126}}.
-
-The initial values in the "Babel Link Properties" registry are:
-
-| Name     | Describes Links with Properties                 | Reference       |
-| other    | no link property information available          | (this document) |
-| tunnel   | a tunneled interface over unknown physical link | (this document) |
-| wired    |                                                 | (this document) |
-| wireless |                                                 | (this document) |
-| exp-\*   | Reserved for Experimental Use                   | (this document) |
-
-
 # Acknowledgements {#Acknowledgements}
 
 Juliusz Chroboczek, Toke Høiland-Jørgensen, David Schinazi, Acee Lindem, and Carsten Bormann have been very helpful in refining this information model.
 
 The language in the Notation section was mostly taken from {{RFC8193}}.
-
-
---- back
-
-# Open Issues
-
-All open issues have been closed.
-
-Closed Issues:
-
-1. HMAC spec adds other parameters to neighbor table. Check these to see if any need to be readable or writable. / None were identified.
-
-1. Actions to add and delete HMAC and DTLS credentials, and parameters that allow credential to be identified without allowing access to private credential info. Will have separate sub-tables for HMAC and DTLS credentials. / Instead, there is a normative statement that the parameter values must never be supplied when read.
-
-1. Consider the following statistics: under interface object: sent multicast Hello, sent updates, received Babel messages; under neighbor object: sent unicast Hello, sent updates, sent IHU, received Hello, received updates, received IHUs. Would also need to enable/disable stats and clear stats.
-
-1. Message log (optional to implement) is still in. Support for the libpcap file format is "SHOULD".
-
-1. Single security table with (optional) reference to interfaces that security mechanism applies to. / This actually became separate objects for DTLS and HMAC.
-
-1. Should ABNF be normative in IANA Considerations section? Decision was to leave it as is.
-
-1. I want to get rid of the security log, because all Babel messages (which should be defined as all messages to/from the udp-port) are be logged by message-log. I don't like message log as it is. I think if logging is enabled it should just write to a text file. This will mean there also needs to be a means of downloading/reading the log file. Closed by having single log for all messages to/from udp port and log is represented by a string that can be reference to filename or some other part of the overall data model (depends on data model).
-
-1. Check description of enable parameters to make sure ok for YANG and TR-181. Closed by updating description to be useful for YANG and TR-181, using language consistent with YANG descriptions. Done.
-
-1. Distinguish signed and unsigned integers? All integers are unsigned and size is mentioned in description of each uint parameter.
-
-1. Datatype of the router-id: Closed by introducing binary datatype and using that for router-id
-
-1. babel-neighbor-address as IPv6-only: Closed by leaving as is (IPv4 and IPv6)
-
-1. babel-implementation-version includes the name of the implementation: Closed by adding "name" to description
-
-1. Delete external-cost?: Closed by deleting.
-
-1. Would it be useful to define some parameters for reporting statistics or
-  logs? \[2 logs are now included. If others are needed they need to be proposed. See Open Issues for additional thoughts on logs and statistics.]
-
-1. Closed by defining base64 type and using it for all router IDs: "babel-self-router-id:
-  Should this be an opaque 64-bit value instead of int?"
-
-1. Closed as "No": Do we need a registry for the supported security mechanisms?
-  \[Given the current limited set, and unlikelihood of massive expansion, I
-  don't think so. But we can if someone wants it.]
-
-1. This draft must be reviewed against draft-ietf-babel-rfc6126bis. \[I feel
-  like this has been adequately done, but I could be wrong.]
-
-1. babel-interfaces-obj: Juliusz:"This needs further discussion, I fear some
-  of these are implementation details." \[In the absence of discussion, the
-  current model stands. Note that all but link-type and the neighbors sub-object
-  are optional. If an implementation does not have any of the optional elements
-  then it simply doesn't have them and that's fine.]
-
-1. Would it be useful to define some parameters specifically for security anomalies?
-  \[The 2 logs should be useful in identifying security anomalies. If more is
-  needed, someone needs to propose.]
-
-1. I created a basic security model. It's useful for single (or no) active security
-  mechanism (e.g., just HMAC, just DTLS, or neither); but not multiple active
-  (both HMAC and DTLS --- which is not the same as HMAC of DTLS and would just
-  mean that HMAC would be used on all unencrypted messages --- but right now
-  the model doesn't allow for configuring HMAC of unencrypted messages for
-  routers without DTLS, while DTLS is used if possible). OK? \[No-one said otherwise.]
-
-1. babel-external-cost may need more work. \[if no comment, it will be left as
-  is]
-
-1. babel-hello-\[mu]cast-history: the Hello history is formated as 16 bits, per
-  A.1 of 6126bis. Is that a too implementation specific? \[We also now have
-  an optional-to-implement log of received messages, and I made these optional.
-  So maybe this is ok?]
-
-1. rxcost, txcost, cost: is it ok to model as integers, since 6126bis 2.1 says
-  costs and metrics need not be integers. \[I have them as integers unless someone
-  insists on something else.]
-
-1. For the security log, should it also log whether the credentials were considered
-  ok? \[Right now it doesn't and I think that's ok because if you log Hellos
-  it was ok and if you don't it wasn't.]
-
-1. Should Babel link types have an IANA registry? \[Agreed to do this at IETF
-  102.]
-
-# Change Log
-
-Individual Drafts:
-
-v00 2016-07-07  EBD:
-: Initial individual draft version
-
-v01 2017-03-13:
-: Addressed comments received in 2016-07-15 email from J. Chroboczek
-
-
-Working group drafts:
-
-v00 2017-07-03:
-: Addressed points noted with "oops" in   https://www.ietf.org/proceedings/98/slides/slides-98-babel-babel-information-model-00.pdf
-
-v01 2018-01-02:
-: Removed item from issue list that was agreed (in Prague)
-  not to be an issue. Added description of data types under Notation section,
-  and used these in all data types. Added babel-security and babel-trust.
-
-v02 2018-04-05:
-: - changed babel-version description to babel-implementation-version
-  - replace optional babel-interface-seqno with optional babel-mcast-hello-seqno
-  and babel-ucast-hello-seqno
-  - replace optional babel-interface-hello-interval with optional babel-mcast-hello-interval
-  and babel-ucast-hello-interval
-  - remove babel-request-trigger-ack
-  - remove "babel-router-id: router-id of the neighbor"; note that parameter
-  had previously been removed but description had accidentally not been removed
-  - added an optional "babel-cost" field to babel-neighbors object, since the
-  spec does not define how exactly the cost is computed from rxcost/txcost
-  - deleted babel-source-garbage-collection-time
-  - change babel-lossy-link to babel-link-type and make this an enumeration;
-  added at top level babel-supported-link-types so which are supported by this
-  implementation can be reported
-  - changes to babel-security-obj to allow self credentials to be one or more
-  instances of a credential object. Allowed trusted credentials to include
-  CA credentials; made some parameter name changes
-  - updated references and Introduction
-  - added Overview section
-  - deleted babel-sources-obj
-  - added feasible Boolean to routes
-  - added section to briefly describe extending the information model.
-  - deleted babel-route-neighbor
-  - tried to make definition of babel-interface-reference clearer
-- added security and message logs
-
-v03 2018-05-31:
-: - added reference to RFC 8174 (update to RFC 2119 on key words)
-  - applied edits to Introduction text per Juliusz email of 2018-04-06
-  - Deleted sentence in definition of "int" data type that said it was also
-  used for enumerations. Changed all enumerations to strings. The only enumerations
-  were for link types, which are now "ethernet", "wireless", "tunnel", and
-  "other".
-  - deleted \[ip-address   babel-mcast-group-ipv4;]
-  - babel-external-cost description changed
-  - babel-security-self-cred: Added "any private key component of a credential
-  MUST NOT be readable;"
-  - hello-history parameters put recent Hello in most significant bit and length
-  of parameter is not constrained.
-  - babel-hello-seqno in neighbors-obj changed to babel-exp-mcast-hello-seqno
-  and babel-exp-ucast-hello-seqno
-  - added babel-route-neighbor back again. It was mistakenly deleted
-  - changed babel-route-metric and babel-route-announced-metric to babel-route-received-metric
-  and babel-route-calculated-metric
-  - changed model of security object to put list of supported mechanisms at
-  top level and separate security object per mechanism. This caused some other
-  changes to the security object
-
-v04 2018-10-15:
-: - changed babel-mcast-group-ipv6 to babel-mcast-group
-  - link type parameters changed to point to newly defined registry
-  - babel-ucast-hello-interval moved to neighbor object
-  - babel-ucast-hello-seqno moved to neighbor object
-  - babel-neighbor-ihu-interval deleted
-  - in log descriptions, included statement that there SHOULD be ability to
-  clear logs
-  - added IANA registry for link types
-  - added "ro" and "rw" to tables for read-write and read-only
-  - added metric computation parameter to interface
-
-v05 2019-01-15:
-: - security modeled with single table under information-obj and
-  references to interfaces that instance applies to
-  - changed int to uint because all integers in model were unsigned; added
-  size of integer to description of each uint parameter
-  - deleted log object and made single message log that points to file or
-  other data model object used to maintain logs
-  - deleted babel-credentials; there are no more "common" objects; hmac keys
-  and DTLS certificates are more explicitly modeled
-  - changed definition of babel-security-supported
-  - added parameters for HMAC and DTLS
-  - added statistics
-  - changed all instances of "message" to "packet"
