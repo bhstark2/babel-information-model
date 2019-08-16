@@ -53,9 +53,12 @@ normative:
     target: https://wiki.wireshark.org/Development/LibpcapFileFormat
 
 informative:
+  RFC2104:
   RFC3339:
+  RFC4868:
   RFC5234:
   RFC6241:
+  RFC7693:
   RFC7950:
   RFC8193:
   I-D.ietf-babel-dtls:
@@ -93,8 +96,7 @@ protocol data models (such as a NETCONF {{RFC6241}} YANG {{RFC7950}} data model)
 
 Due to the simplicity of the Babel protocol, most of the information model
 is focused on reporting Babel protocol operational state, and very little of
-that is considered mandatory to implement (for an implementation attempting
-to comply with this information model). Some parameters may be configurable.
+that is considered mandatory to implement (for an implementation claiming compliance with this information model). Some parameters may be configurable.
 However, it is up to the Babel implementation whether to allow any of these
 to be configured within its implementation. Where the implementation does
 not allow configuration of these parameters, it may still choose to expose
@@ -365,6 +367,10 @@ babel-self-seqno:
 babel-metric-comp-algorithms:
 : List of supported cost computation algorithms. Possible
   values include "2-out-of-3", and "ETX".
+  "2-out-of-3" is described in
+  {{I-D.ietf-babel-rfc6126bis}}, section A.2.1.
+  "ETX" is described in
+  {{I-D.ietf-babel-rfc6126bis}}, section A.2.2.
 
 babel-security-supported:
 : List of supported security mechanisms. Possible values include
@@ -451,7 +457,6 @@ babel-mcast-group:
       [uint                 ro babel-update-interval;]
       [boolean              rw babel-mac-enable;]
       [reference            rw babel-if-mac-key-sets<0..*>;]
-      [string               rw babel-mac-algorithm;]
       [boolean              rw babel-mac-verify;]
       [boolean              rw babel-dtls-enable;]
       [reference            rw babel-if-dtls-cert-sets<0..*>;]
@@ -497,6 +502,10 @@ babel-interface-split-horizon:
 : Indicates whether or not the split horizon optimization is used
   when calculating metrics on this interface. A value of true
   indicates split horizon optimization is used.
+  Split horizon optimization is described in
+  {{I-D.ietf-babel-rfc6126bis}}, section 3.7.4.
+  An implementation MAY choose
+  to expose this parameter as read-only ("ro").
 
 babel-mcast-hello-seqno:
 : The current sequence number in use for multicast
@@ -672,7 +681,7 @@ babel-exp-mcast-hello-seqno:
   MUST be NULL.
   This is a 16-bit unsigned integer; if the data model uses
   zero (0) to represent NULL values for unsigned integers,
-  the data model may use a different data type that allows
+  the data model MAY use a different data type that allows
   differentiation between zero (0) and NULL.
 
 babel-exp-ucast-hello-seqno:
@@ -682,7 +691,7 @@ babel-exp-ucast-hello-seqno:
   NULL.
   This is a 16-bit unsigned integer; if the data model uses
   zero (0) to represent NULL values for unsigned integers,
-  the data model may use a different data type that allows
+  the data model MAY use a different data type that allows
   differentiation between zero (0) and NULL.
 
 babel-ucast-hello-seqno:
@@ -691,7 +700,7 @@ babel-ucast-hello-seqno:
   this MUST be NULL.
   This is a 16-bit unsigned integer; if the data model uses
   zero (0) to represent NULL values for unsigned integers,
-  the data model may use a different data type that allows
+  the data model MAY use a different data type that allows
   differentiation between zero (0) and NULL.
 
 babel-ucast-hello-interval:
@@ -760,7 +769,7 @@ babel-route-received-metric:
   subsequently advertised.
   This is a 16-bit unsigned integer; if the data model uses
   zero (0) to represent NULL values for unsigned integers,
-  the data model may use a different data type that allows
+  the data model MAY use a different data type that allows
   differentiation between zero (0) and NULL.
 
 babel-route-calculated-metric:
@@ -774,7 +783,7 @@ babel-route-calculated-metric:
   subsequently advertised.
   This is a 16-bit unsigned integer; if the data model uses
   zero (0) to represent NULL values for unsigned integers,
-  the data model may use a different data type that allows
+  the data model MAY use a different data type that allows
   differentiation between zero (0) and NULL.
 
 babel-route-seqno:
@@ -864,6 +873,13 @@ babel-key-value:
   an empty string when read, or through permissions, or other means.
   This value MUST be provided when this
   instance is created, and is not subsequently writable.
+  This value is of a length suitable for the associated
+  babel-mac-key-algorithm. If the algorithm is based on the HMAC
+  construction {{RFC2104}}, the length MUST be between 0 and the
+  block size of the underlying hash inclusive (where "HMAC-SHA256"
+  block size is 64 bytes as described in {{RFC4868}}). If the
+  algorithm is "BLAKE2s", the length MUST be between 0 and 32 bytes
+  inclusive, as described in {{RFC7693}}.
 
 babel-mac-key-algorithm
 : The name of the MAC algorithm used with this key.
