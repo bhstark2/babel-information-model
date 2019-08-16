@@ -311,7 +311,7 @@ ul.toc li {
 
   <meta name="dct.creator" content="Stark, B. and M. Jethanandani" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-babel-information-model-09" />
-  <meta name="dct.issued" scheme="ISO8601" content="2019-14" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-16" />
   <meta name="dct.abstract" content="This Babel Information Model can be used to create data models under various data modeling regimes. It allows a Babel implementation (via a management protocol or interface) to report on its current state and may allow some limited configuration of protocol constants." />
   <meta name="description" content="This Babel Information Model can be used to create data models under various data modeling regimes. It allows a Babel implementation (via a management protocol or interface) to report on its current state and may allow some limited configuration of protocol constants." />
 
@@ -335,12 +335,12 @@ ul.toc li {
 <td class="right">M. Jethanandani</td>
 </tr>
 <tr>
-<td class="left">Expires: February 15, 2020</td>
+<td class="left">Expires: February 17, 2020</td>
 <td class="right">VMware</td>
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">August 14, 2019</td>
+<td class="right">August 16, 2019</td>
 </tr>
 
     	
@@ -356,7 +356,7 @@ ul.toc li {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on February 15, 2020.</p>
+<p>This Internet-Draft will expire on February 17, 2020.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -418,7 +418,7 @@ ul.toc li {
 <a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a>
 </h1>
 <p id="rfc.section.1.p.1">Babel is a loop-avoiding distance-vector routing protocol defined in <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>. <a href="#I-D.ietf-babel-hmac" class="xref">[I-D.ietf-babel-hmac]</a> defines a security mechanism that allows Babel packets to be cryptographically authenticated, and <a href="#I-D.ietf-babel-dtls" class="xref">[I-D.ietf-babel-dtls]</a> defines a security mechanism that allows Babel packets to be encrypted.  This document describes an information model for Babel (including implementations using one or both of these security mechanisms) that can be used to create management protocol data models (such as a NETCONF <a href="#RFC6241" class="xref">[RFC6241]</a> YANG <a href="#RFC7950" class="xref">[RFC7950]</a> data model).</p>
-<p id="rfc.section.1.p.2">Due to the simplicity of the Babel protocol, most of the information model is focused on reporting Babel protocol operational state, and very little of that is considered mandatory to implement (for an implementation attempting to comply with this information model). Some parameters may be configurable.  However, it is up to the Babel implementation whether to allow any of these to be configured within its implementation. Where the implementation does not allow configuration of these parameters, it may still choose to expose them as read-only.</p>
+<p id="rfc.section.1.p.2">Due to the simplicity of the Babel protocol, most of the information model is focused on reporting Babel protocol operational state, and very little of that is considered mandatory to implement (for an implementation claiming compliance with this information model). Some parameters may be configurable.  However, it is up to the Babel implementation whether to allow any of these to be configured within its implementation. Where the implementation does not allow configuration of these parameters, it may still choose to expose them as read-only.</p>
 <p id="rfc.section.1.p.3">The Information Model is presented using a hierarchical structure. This does not preclude a data model based on this Information Model from using a referential or other structure.</p>
 <h1 id="rfc.section.1.1">
 <a href="#rfc.section.1.1">1.1.</a> <a href="#requirements-language" id="requirements-language">Requirements Language</a>
@@ -604,7 +604,7 @@ ul.toc li {
 <dt>babel-self-seqno:</dt>
 <dd style="margin-left: 8">The current sequence number included in route updates for routes originated by this node. This is a 16-bit unsigned integer.</dd>
 <dt>babel-metric-comp-algorithms:</dt>
-<dd style="margin-left: 8">List of supported cost computation algorithms. Possible values include &#8220;2-out-of-3&#8221;, and &#8220;ETX&#8221;.</dd>
+<dd style="margin-left: 8">List of supported cost computation algorithms. Possible values include &#8220;2-out-of-3&#8221;, and &#8220;ETX&#8221;.  &#8220;2-out-of-3&#8221; is described in <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>, section A.2.1.  &#8220;ETX&#8221; is described in <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>, section A.2.2.</dd>
 <dt>babel-security-supported:</dt>
 <dd style="margin-left: 8">List of supported security mechanisms. Possible values include &#8220;MAC&#8221; and &#8220;DTLS&#8221;.</dd>
 <dt>babel-mac-algorithms:</dt>
@@ -657,7 +657,6 @@ ul.toc li {
       [uint                 ro babel-update-interval;]
       [boolean              rw babel-mac-enable;]
       [reference            rw babel-if-mac-key-sets&lt;0..*&gt;;]
-      [string               rw babel-mac-algorithm;]
       [boolean              rw babel-mac-verify;]
       [boolean              rw babel-dtls-enable;]
       [reference            rw babel-if-dtls-cert-sets&lt;0..*&gt;;]
@@ -679,7 +678,7 @@ ul.toc li {
 <dt>babel-interface-metric-algorithm:</dt>
 <dd style="margin-left: 8">Indicates the metric computation algorithm used on this interface.  The value MUST be one of those listed in the babel-information-obj babel-metric-comp-algorithms parameter.  An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
 <dt>babel-interface-split-horizon:</dt>
-<dd style="margin-left: 8">Indicates whether or not the split horizon optimization is used when calculating metrics on this interface. A value of true indicates split horizon optimization is used.</dd>
+<dd style="margin-left: 8">Indicates whether or not the split horizon optimization is used when calculating metrics on this interface. A value of true indicates split horizon optimization is used.  Split horizon optimization is described in <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>, section 3.7.4.  An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
 <dt>babel-mcast-hello-seqno:</dt>
 <dd style="margin-left: 8">The current sequence number in use for multicast Hellos sent on this interface.  This is a 16-bit unsigned integer.</dd>
 <dt>babel-mcast-hello-interval:</dt>
@@ -767,11 +766,11 @@ ul.toc li {
 <dt>babel-txcost:</dt>
 <dd style="margin-left: 8">Transmission cost value from the last IHU packet received from this neighbor, or maximum value to indicate the IHU hold timer for this neighbor has expired. See <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>, section 3.4.2.  This is a 16-bit unsigned integer.</dd>
 <dt>babel-exp-mcast-hello-seqno:</dt>
-<dd style="margin-left: 8">Expected multicast Hello sequence number of next Hello to be received from this neighbor. If multicast Hello packets are not expected, or processing of multicast packets is not enabled, this MUST be NULL.  This is a 16-bit unsigned integer; if the data model uses zero (0) to represent NULL values for unsigned integers, the data model may use a different data type that allows differentiation between zero (0) and NULL.</dd>
+<dd style="margin-left: 8">Expected multicast Hello sequence number of next Hello to be received from this neighbor. If multicast Hello packets are not expected, or processing of multicast packets is not enabled, this MUST be NULL.  This is a 16-bit unsigned integer; if the data model uses zero (0) to represent NULL values for unsigned integers, the data model MAY use a different data type that allows differentiation between zero (0) and NULL.</dd>
 <dt>babel-exp-ucast-hello-seqno:</dt>
-<dd style="margin-left: 8">Expected unicast Hello sequence number of next Hello to be received from this neighbor. If unicast Hello packets are not expected, or processing of unicast packets is not enabled, this MUST be NULL.  This is a 16-bit unsigned integer; if the data model uses zero (0) to represent NULL values for unsigned integers, the data model may use a different data type that allows differentiation between zero (0) and NULL.</dd>
+<dd style="margin-left: 8">Expected unicast Hello sequence number of next Hello to be received from this neighbor. If unicast Hello packets are not expected, or processing of unicast packets is not enabled, this MUST be NULL.  This is a 16-bit unsigned integer; if the data model uses zero (0) to represent NULL values for unsigned integers, the data model MAY use a different data type that allows differentiation between zero (0) and NULL.</dd>
 <dt>babel-ucast-hello-seqno:</dt>
-<dd style="margin-left: 8">The current sequence number in use for unicast Hellos sent to this neighbor. If unicast Hellos are not being sent, this MUST be NULL.  This is a 16-bit unsigned integer; if the data model uses zero (0) to represent NULL values for unsigned integers, the data model may use a different data type that allows differentiation between zero (0) and NULL.</dd>
+<dd style="margin-left: 8">The current sequence number in use for unicast Hellos sent to this neighbor. If unicast Hellos are not being sent, this MUST be NULL.  This is a 16-bit unsigned integer; if the data model uses zero (0) to represent NULL values for unsigned integers, the data model MAY use a different data type that allows differentiation between zero (0) and NULL.</dd>
 <dt>babel-ucast-hello-interval:</dt>
 <dd style="margin-left: 8">The current interval in use for unicast Hellos sent to this neighbor. Units are centiseconds.  This is a 16-bit unsigned integer.</dd>
 <dt>babel-rxcost:</dt>
@@ -808,9 +807,9 @@ ul.toc li {
 <dt>babel-route-neighbor:</dt>
 <dd style="margin-left: 8">Reference to the babel-neighbors entry for the neighbor that advertised this route.</dd>
 <dt>babel-route-received-metric:</dt>
-<dd style="margin-left: 8">The metric with which this route was advertised by the neighbor, or maximum value to indicate the route was recently retracted and is temporarily unreachable (see Section 3.5.5 of <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>). This metric will be 0 (zero) if the route was not received from a neighbor but was generated through other means. At least one of babel-route-calculated-metric and babel-route-received-metric MUST be non-zero.  Having both be non-zero is expected for a route that is received and subsequently advertised.  This is a 16-bit unsigned integer; if the data model uses zero (0) to represent NULL values for unsigned integers, the data model may use a different data type that allows differentiation between zero (0) and NULL.</dd>
+<dd style="margin-left: 8">The metric with which this route was advertised by the neighbor, or maximum value to indicate the route was recently retracted and is temporarily unreachable (see Section 3.5.5 of <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>). This metric will be 0 (zero) if the route was not received from a neighbor but was generated through other means. At least one of babel-route-calculated-metric and babel-route-received-metric MUST be non-zero.  Having both be non-zero is expected for a route that is received and subsequently advertised.  This is a 16-bit unsigned integer; if the data model uses zero (0) to represent NULL values for unsigned integers, the data model MAY use a different data type that allows differentiation between zero (0) and NULL.</dd>
 <dt>babel-route-calculated-metric:</dt>
-<dd style="margin-left: 8">A calculated metric for this route. How the metric is calculated is implementation-specific. Maximum value indicates the route was recently retracted and is temporarily unreachable (see Section 3.5.5 of <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>).  At least one of babel-route-calculated-metric and babel-route-received-metric MUST be non-zero.  Having both be non-zero is expected for a route that is received and subsequently advertised.  This is a 16-bit unsigned integer; if the data model uses zero (0) to represent NULL values for unsigned integers, the data model may use a different data type that allows differentiation between zero (0) and NULL.</dd>
+<dd style="margin-left: 8">A calculated metric for this route. How the metric is calculated is implementation-specific. Maximum value indicates the route was recently retracted and is temporarily unreachable (see Section 3.5.5 of <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>).  At least one of babel-route-calculated-metric and babel-route-received-metric MUST be non-zero.  Having both be non-zero is expected for a route that is received and subsequently advertised.  This is a 16-bit unsigned integer; if the data model uses zero (0) to represent NULL values for unsigned integers, the data model MAY use a different data type that allows differentiation between zero (0) and NULL.</dd>
 <dt>babel-route-seqno:</dt>
 <dd style="margin-left: 8">The sequence number with which this route was advertised.  This is a 16-bit unsigned integer.</dd>
 <dt>babel-route-next-hop:</dt>
@@ -860,7 +859,7 @@ ul.toc li {
 <dt>babel-key-use-verify:</dt>
 <dd style="margin-left: 8">Indicates whether this key value is used to verify incoming Babel packets. This key is used to verify incoming packets if the value is &#8220;true&#8221;. If the value is &#8220;false&#8221;, no MAC is computed from this key for comparing an incoming packet.  An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
 <dt>babel-key-value:</dt>
-<dd style="margin-left: 8">The value of the MAC key. An implementation MUST NOT allow this parameter to be read. This can be done by always providing an empty string when read, or through permissions, or other means.  This value MUST be provided when this instance is created, and is not subsequently writable.</dd>
+<dd style="margin-left: 8">The value of the MAC key. An implementation MUST NOT allow this parameter to be read. This can be done by always providing an empty string when read, or through permissions, or other means.  This value MUST be provided when this instance is created, and is not subsequently writable.  This value is of a length suitable for the associated babel-mac-key-algorithm. If the algorithm is based on the HMAC construction <a href="#RFC2104" class="xref">[RFC2104]</a>, the length MUST be between 0 and the block size of the underlying hash inclusive (where &#8220;HMAC-SHA256&#8221; block size is 64 bytes as described in <a href="#RFC4868" class="xref">[RFC4868]</a>). If the algorithm is &#8220;BLAKE2s&#8221;, the length MUST be between 0 and 32 bytes inclusive, as described in <a href="#RFC7693" class="xref">[RFC7693]</a>.</dd>
 <dt>babel-mac-key-algorithm</dt>
 <dd style="margin-left: 8">The name of the MAC algorithm used with this key.  The value MUST be the same as one of the enumerations listed in the babel-mac-algorithms parameter.  An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
 <dt>babel-mac-test:</dt>
@@ -983,9 +982,19 @@ ul.toc li {
 <a>International Organization for Standardization</a>, "<a>Information Technology - Universal Multiple-Octet Coded Character Set (UCS)</a>", ISO Standard 10646:2014, 2014.</td>
 </tr>
 <tr>
+<td class="reference"><b id="RFC2104">[RFC2104]</b></td>
+<td class="top">
+<a>Krawczyk, H.</a>, <a>Bellare, M.</a> and <a>R. Canetti</a>, "<a href="https://tools.ietf.org/html/rfc2104">HMAC: Keyed-Hashing for Message Authentication</a>", RFC 2104, DOI 10.17487/RFC2104, February 1997.</td>
+</tr>
+<tr>
 <td class="reference"><b id="RFC3339">[RFC3339]</b></td>
 <td class="top">
 <a>Klyne, G.</a> and <a>C. Newman</a>, "<a href="https://tools.ietf.org/html/rfc3339">Date and Time on the Internet: Timestamps</a>", RFC 3339, DOI 10.17487/RFC3339, July 2002.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC4868">[RFC4868]</b></td>
+<td class="top">
+<a>Kelly, S.</a> and <a>S. Frankel</a>, "<a href="https://tools.ietf.org/html/rfc4868">Using HMAC-SHA-256, HMAC-SHA-384, and HMAC-SHA-512 with IPsec</a>", RFC 4868, DOI 10.17487/RFC4868, May 2007.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC5234">[RFC5234]</b></td>
@@ -996,6 +1005,11 @@ ul.toc li {
 <td class="reference"><b id="RFC6241">[RFC6241]</b></td>
 <td class="top">
 <a>Enns, R.</a>, <a>Bjorklund, M.</a>, <a>Schoenwaelder, J.</a> and <a>A. Bierman</a>, "<a href="https://tools.ietf.org/html/rfc6241">Network Configuration Protocol (NETCONF)</a>", RFC 6241, DOI 10.17487/RFC6241, June 2011.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC7693">[RFC7693]</b></td>
+<td class="top">
+<a>Saarinen, M-J.</a> and <a>J-P. Aumasson</a>, "<a href="https://tools.ietf.org/html/rfc7693">The BLAKE2 Cryptographic Hash and Message Authentication Code (MAC)</a>", RFC 7693, DOI 10.17487/RFC7693, November 2015.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC7950">[RFC7950]</b></td>
