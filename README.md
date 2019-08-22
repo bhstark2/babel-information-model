@@ -8,7 +8,7 @@ This is the working area for the IETF [BABEL Working Group](https://datatracker.
 
 ## Building the Draft
 
-Formatted text and HTML versions of the draft can be built using `make`
+Formatted text and HTML versions of the draft can be built using `make`.
 
 ```sh
 $ make

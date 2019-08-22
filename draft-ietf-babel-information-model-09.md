@@ -39,10 +39,8 @@ author:
   email: mjethanandani@gmail.com
 ref: {}
 normative:
-  RFC0020:
   RFC2119:
   RFC7468:
-  RFC8126:
   RFC8174:
   I-D.ietf-babel-rfc6126bis:
   libpcap:
@@ -56,7 +54,6 @@ informative:
   RFC2104:
   RFC3339:
   RFC4868:
-  RFC5234:
   RFC6241:
   RFC7693:
   RFC7950:
@@ -88,15 +85,19 @@ may allow some limited configuration of protocol constants.
 
 # Introduction
 
-Babel is a loop-avoiding distance-vector routing protocol defined in {{I-D.ietf-babel-rfc6126bis}}. {{I-D.ietf-babel-hmac}} defines a security mechanism that allows Babel packets to be cryptographically
-authenticated, and {{I-D.ietf-babel-dtls}} defines a security mechanism that allows Babel packets to be encrypted.
+Babel is a loop-avoiding distance-vector routing protocol defined in
+{{I-D.ietf-babel-rfc6126bis}}. {{I-D.ietf-babel-hmac}} defines a security
+mechanism that allows Babel packets to be cryptographically
+authenticated, and {{I-D.ietf-babel-dtls}} defines a security mechanism
+that allows Babel packets to be encrypted.
 This document describes an information model for Babel (including implementations
 using one or both of these security mechanisms) that can be used to create management
 protocol data models (such as a NETCONF {{RFC6241}} YANG {{RFC7950}} data model).
 
 Due to the simplicity of the Babel protocol, most of the information model
 is focused on reporting Babel protocol operational state, and very little of
-that is considered mandatory to implement (for an implementation claiming compliance with this information model). Some parameters may be configurable.
+that is considered mandatory to implement (for an implementation claiming
+compliance with this information model). Some parameters may be configurable.
 However, it is up to the Babel implementation whether to allow any of these
 to be configured within its implementation. Where the implementation does
 not allow configuration of these parameters, it may still choose to expose
@@ -120,7 +121,8 @@ of the objects of the information model. An optional property is enclosed
 by square brackets, \[ ], and a list property is indicated by two numbers
 in angle brackets, \<m..n>, where m indicates the minimal number
 of list elements,
-and n indicates the maximum number of list elements.  The symbol \* for n means there are no defined limits on the number of list elements. Each parameter
+and n indicates the maximum number of list elements.  The symbol \* for n
+means there are no defined limits on the number of list elements. Each parameter
 and object includes an indication of "ro" or "rw". "ro" means the parameter
 or object is read-only. "rw" means it is read-write. For an object, read-write
 means instances of the object can be created or deleted.
@@ -389,7 +391,7 @@ babel-stats-enable:
   (true) or disabled (false) on all interfaces.
 
 babel-stats-reset:
-: An operation that resets all babel-if-stats and babel-nbr-stats
+: An operation that resets all babel-if-stats
   parameters to zero. This
   operation has no input or output parameters.
 
@@ -472,7 +474,8 @@ babel-mcast-group:
 
 
 babel-interface-reference:
-: Reference to an IPv6 interface object as defined by
+: Reference to an interface object that can be used to send and
+  receive IPv6 packets, as defined by
   the data model (e.g., YANG {{RFC7950}}, BBF {{TR-181}}).
   Referencing syntax will be specific to the data model. If there is
   no set of interface objects available, this should be a string that indicates
@@ -761,11 +764,11 @@ babel-route-received-metric:
   by the neighbor, or maximum value to indicate the route was
   recently retracted and is temporarily unreachable (see Section 3.5.5
   of {{I-D.ietf-babel-rfc6126bis}}). This metric will be
-  0 (zero) if the route was not received from a neighbor
+  NULL if the route was not received from a neighbor
   but was generated through other means. At least one of
   babel-route-calculated-metric
-  and babel-route-received-metric MUST be non-zero.
-  Having both be non-zero is expected for a route that is received and
+  and babel-route-received-metric MUST be non-NULL.
+  Having both be non-NULL is expected for a route that is received and
   subsequently advertised.
   This is a 16-bit unsigned integer; if the data model uses
   zero (0) to represent NULL values for unsigned integers,
@@ -778,8 +781,8 @@ babel-route-calculated-metric:
   indicates the route was recently retracted and is temporarily unreachable
   (see Section 3.5.5 of {{I-D.ietf-babel-rfc6126bis}}).
   At least one of babel-route-calculated-metric and
-  babel-route-received-metric MUST be non-zero.
-  Having both be non-zero is expected for a route that is received and
+  babel-route-received-metric MUST be non-NULL.
+  Having both be non-NULL is expected for a route that is received and
   subsequently advertised.
   This is a 16-bit unsigned integer; if the data model uses
   zero (0) to represent NULL values for unsigned integers,
@@ -1000,17 +1003,31 @@ to define security exposure of the various parameters, and a {{TR-181}} data mod
 will be secured by the mechanisms defined for the management protocol used to
 transport it.
 
+Misconfiguration (whether unintentional or malicious) can prevent reachability
+or cause poor network performance (increased latency, jitter, etc.).
+The information in this model discloses network topology, which can be used
+to mount subsequent attacks on traffic traversing the network.
+
 This information model defines objects that can allow credentials (for this
 device, for trusted devices, and for trusted certificate authorities) to
-be added and deleted. Public keys and shared secrets may be exposed through
+be added and deleted. Public keys may be exposed through
 this model. This model requires that private keys never be exposed. The Babel
 security mechanisms that make use of these credentials
-(e.g., {{I-D.ietf-babel-dtls}}, {{I-D.ietf-babel-hmac}}) are expected to
-define what credentials can be used with those mechanisms.
+(e.g., {{I-D.ietf-babel-dtls}}, {{I-D.ietf-babel-hmac}}) identify
+what credentials can be used with those mechanisms.
+
+MAC keys are allowed to be as short as zero-length. This is
+useful for testing. Network operators are advised to follow
+current best practices for key length and generation of
+keys related to the MAC algorithm associated with the key.
+Short (and zero-length) keys and keys that make use of only
+alphanumeric characters are highly susceptible to brute force attacks.
 
 
 # Acknowledgements {#Acknowledgements}
 
-Juliusz Chroboczek, Toke Høiland-Jørgensen, David Schinazi, Acee Lindem, and Carsten Bormann have been very helpful in refining this information model.
+Juliusz Chroboczek, Toke Høiland-Jørgensen, David Schinazi,
+Acee Lindem, and Carsten Bormann have been very helpful in
+refining this information model.
 
 The language in the Notation section was mostly taken from {{RFC8193}}.
