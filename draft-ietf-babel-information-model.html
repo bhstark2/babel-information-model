@@ -311,7 +311,7 @@ ul.toc li {
 
   <meta name="dct.creator" content="Stark, B. and M. Jethanandani" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-babel-information-model-09" />
-  <meta name="dct.issued" scheme="ISO8601" content="2019-16" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-22" />
   <meta name="dct.abstract" content="This Babel Information Model can be used to create data models under various data modeling regimes. It allows a Babel implementation (via a management protocol or interface) to report on its current state and may allow some limited configuration of protocol constants." />
   <meta name="description" content="This Babel Information Model can be used to create data models under various data modeling regimes. It allows a Babel implementation (via a management protocol or interface) to report on its current state and may allow some limited configuration of protocol constants." />
 
@@ -335,12 +335,12 @@ ul.toc li {
 <td class="right">M. Jethanandani</td>
 </tr>
 <tr>
-<td class="left">Expires: February 17, 2020</td>
+<td class="left">Expires: February 23, 2020</td>
 <td class="right">VMware</td>
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">August 16, 2019</td>
+<td class="right">August 22, 2019</td>
 </tr>
 
     	
@@ -356,7 +356,7 @@ ul.toc li {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on February 17, 2020.</p>
+<p>This Internet-Draft will expire on February 23, 2020.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -614,7 +614,7 @@ ul.toc li {
 <dt>babel-stats-enable:</dt>
 <dd style="margin-left: 8">Indicates whether statistics collection is enabled (true) or disabled (false) on all interfaces.</dd>
 <dt>babel-stats-reset:</dt>
-<dd style="margin-left: 8">An operation that resets all babel-if-stats and babel-nbr-stats parameters to zero. This operation has no input or output parameters.</dd>
+<dd style="margin-left: 8">An operation that resets all babel-if-stats parameters to zero. This operation has no input or output parameters.</dd>
 <dt>babel-constants:</dt>
 <dd style="margin-left: 8">A babel-constants-obj object.</dd>
 <dt>babel-interfaces:</dt>
@@ -672,7 +672,7 @@ ul.toc li {
 
 <dl>
 <dt>babel-interface-reference:</dt>
-<dd style="margin-left: 8">Reference to an IPv6 interface object as defined by the data model (e.g., YANG <a href="#RFC7950" class="xref">[RFC7950]</a>, BBF <a href="#TR-181" class="xref">[TR-181]</a>).  Referencing syntax will be specific to the data model. If there is no set of interface objects available, this should be a string that indicates the interface name used by the underlying operating system.</dd>
+<dd style="margin-left: 8">Reference to an interface object that can be used to send and receive IPv6 packets, as defined by the data model (e.g., YANG <a href="#RFC7950" class="xref">[RFC7950]</a>, BBF <a href="#TR-181" class="xref">[TR-181]</a>).  Referencing syntax will be specific to the data model. If there is no set of interface objects available, this should be a string that indicates the interface name used by the underlying operating system.</dd>
 <dt>babel-interface-enable:</dt>
 <dd style="margin-left: 8">When written, it configures whether the protocol should be enabled (true) or disabled (false) on this interface.  A read from the running or intended datastore indicates the configured administrative value of whether the protocol is enabled (true) or not (false). A read from the operational datastore indicates whether the protocol is actually running (true) or not (i.e., it indicates the operational state of the protocol).  A data model that does not replicate parameters for running and operational datastores can implement this as two separate parameters.  An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
 <dt>babel-interface-metric-algorithm:</dt>
@@ -807,9 +807,9 @@ ul.toc li {
 <dt>babel-route-neighbor:</dt>
 <dd style="margin-left: 8">Reference to the babel-neighbors entry for the neighbor that advertised this route.</dd>
 <dt>babel-route-received-metric:</dt>
-<dd style="margin-left: 8">The metric with which this route was advertised by the neighbor, or maximum value to indicate the route was recently retracted and is temporarily unreachable (see Section 3.5.5 of <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>). This metric will be 0 (zero) if the route was not received from a neighbor but was generated through other means. At least one of babel-route-calculated-metric and babel-route-received-metric MUST be non-zero.  Having both be non-zero is expected for a route that is received and subsequently advertised.  This is a 16-bit unsigned integer; if the data model uses zero (0) to represent NULL values for unsigned integers, the data model MAY use a different data type that allows differentiation between zero (0) and NULL.</dd>
+<dd style="margin-left: 8">The metric with which this route was advertised by the neighbor, or maximum value to indicate the route was recently retracted and is temporarily unreachable (see Section 3.5.5 of <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>). This metric will be NULL if the route was not received from a neighbor but was generated through other means. At least one of babel-route-calculated-metric and babel-route-received-metric MUST be non-NULL.  Having both be non-NULL is expected for a route that is received and subsequently advertised.  This is a 16-bit unsigned integer; if the data model uses zero (0) to represent NULL values for unsigned integers, the data model MAY use a different data type that allows differentiation between zero (0) and NULL.</dd>
 <dt>babel-route-calculated-metric:</dt>
-<dd style="margin-left: 8">A calculated metric for this route. How the metric is calculated is implementation-specific. Maximum value indicates the route was recently retracted and is temporarily unreachable (see Section 3.5.5 of <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>).  At least one of babel-route-calculated-metric and babel-route-received-metric MUST be non-zero.  Having both be non-zero is expected for a route that is received and subsequently advertised.  This is a 16-bit unsigned integer; if the data model uses zero (0) to represent NULL values for unsigned integers, the data model MAY use a different data type that allows differentiation between zero (0) and NULL.</dd>
+<dd style="margin-left: 8">A calculated metric for this route. How the metric is calculated is implementation-specific. Maximum value indicates the route was recently retracted and is temporarily unreachable (see Section 3.5.5 of <a href="#I-D.ietf-babel-rfc6126bis" class="xref">[I-D.ietf-babel-rfc6126bis]</a>).  At least one of babel-route-calculated-metric and babel-route-received-metric MUST be non-NULL.  Having both be non-NULL is expected for a route that is received and subsequently advertised.  This is a 16-bit unsigned integer; if the data model uses zero (0) to represent NULL values for unsigned integers, the data model MAY use a different data type that allows differentiation between zero (0) and NULL.</dd>
 <dt>babel-route-seqno:</dt>
 <dd style="margin-left: 8">The sequence number with which this route was advertised.  This is a 16-bit unsigned integer.</dd>
 <dt>babel-route-next-hop:</dt>
@@ -916,7 +916,9 @@ ul.toc li {
 <a href="#rfc.section.5">5.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
 </h1>
 <p id="rfc.section.5.p.1">This document defines a set of information model objects and parameters that may be exposed to be visible from other devices, and some of which may be configured. Securing access to and ensuring the integrity of this data is in scope of and the responsibility of any data model derived from this information model. Specifically, any YANG <a href="#RFC7950" class="xref">[RFC7950]</a> data model is expected to define security exposure of the various parameters, and a <a href="#TR-181" class="xref">[TR-181]</a> data model will be secured by the mechanisms defined for the management protocol used to transport it.</p>
-<p id="rfc.section.5.p.2">This information model defines objects that can allow credentials (for this device, for trusted devices, and for trusted certificate authorities) to be added and deleted. Public keys and shared secrets may be exposed through this model. This model requires that private keys never be exposed. The Babel security mechanisms that make use of these credentials (e.g., <a href="#I-D.ietf-babel-dtls" class="xref">[I-D.ietf-babel-dtls]</a>, <a href="#I-D.ietf-babel-hmac" class="xref">[I-D.ietf-babel-hmac]</a>) are expected to define what credentials can be used with those mechanisms.</p>
+<p id="rfc.section.5.p.2">Misconfiguration (whether unintentional or malicious) can prevent reachability or cause poor network performance (increased latency, jitter, etc.).  The information in this model discloses network topology, which can be used to mount subsequent attacks on traffic traversing the network.</p>
+<p id="rfc.section.5.p.3">This information model defines objects that can allow credentials (for this device, for trusted devices, and for trusted certificate authorities) to be added and deleted. Public keys may be exposed through this model. This model requires that private keys never be exposed. The Babel security mechanisms that make use of these credentials (e.g., <a href="#I-D.ietf-babel-dtls" class="xref">[I-D.ietf-babel-dtls]</a>, <a href="#I-D.ietf-babel-hmac" class="xref">[I-D.ietf-babel-hmac]</a>) identify what credentials can be used with those mechanisms.</p>
+<p id="rfc.section.5.p.4">MAC keys are allowed to be as short as zero-length. This is useful for testing. Network operators are advised to follow current best practices for key length and generation of keys related to the MAC algorithm associated with the key.  Short (and zero-length) keys and keys that make use of only alphanumeric characters are highly susceptible to brute force attacks.</p>
 <h1 id="rfc.section.6">
 <a href="#rfc.section.6">6.</a> <a href="#Acknowledgements" id="Acknowledgements">Acknowledgements</a>
 </h1>
@@ -930,17 +932,12 @@ ul.toc li {
 <tr>
 <td class="reference"><b id="I-D.ietf-babel-rfc6126bis">[I-D.ietf-babel-rfc6126bis]</b></td>
 <td class="top">
-<a>Chroboczek, J.</a> and <a>D. Schinazi</a>, "<a href="https://tools.ietf.org/html/draft-ietf-babel-rfc6126bis-13">The Babel Routing Protocol</a>", Internet-Draft draft-ietf-babel-rfc6126bis-13, August 2019.</td>
+<a>Chroboczek, J.</a> and <a>D. Schinazi</a>, "<a href="https://tools.ietf.org/html/draft-ietf-babel-rfc6126bis-14">The Babel Routing Protocol</a>", Internet-Draft draft-ietf-babel-rfc6126bis-14, August 2019.</td>
 </tr>
 <tr>
 <td class="reference"><b id="libpcap">[libpcap]</b></td>
 <td class="top">
 <a>Wireshark</a>, "<a href="https://wiki.wireshark.org/Development/LibpcapFileFormat">Libpcap File Format</a>", 2015.</td>
-</tr>
-<tr>
-<td class="reference"><b id="RFC0020">[RFC0020]</b></td>
-<td class="top">
-<a>Cerf, V.</a>, "<a href="https://tools.ietf.org/html/rfc20">ASCII format for network interchange</a>", STD 80, RFC 20, DOI 10.17487/RFC0020, October 1969.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC2119">[RFC2119]</b></td>
@@ -951,11 +948,6 @@ ul.toc li {
 <td class="reference"><b id="RFC7468">[RFC7468]</b></td>
 <td class="top">
 <a>Josefsson, S.</a> and <a>S. Leonard</a>, "<a href="https://tools.ietf.org/html/rfc7468">Textual Encodings of PKIX, PKCS, and CMS Structures</a>", RFC 7468, DOI 10.17487/RFC7468, April 2015.</td>
-</tr>
-<tr>
-<td class="reference"><b id="RFC8126">[RFC8126]</b></td>
-<td class="top">
-<a>Cotton, M.</a>, <a>Leiba, B.</a> and <a>T. Narten</a>, "<a href="https://tools.ietf.org/html/rfc8126">Guidelines for Writing an IANA Considerations Section in RFCs</a>", BCP 26, RFC 8126, DOI 10.17487/RFC8126, June 2017.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC8174">[RFC8174]</b></td>
@@ -974,7 +966,7 @@ ul.toc li {
 <tr>
 <td class="reference"><b id="I-D.ietf-babel-hmac">[I-D.ietf-babel-hmac]</b></td>
 <td class="top">
-<a>Do, C.</a>, <a>Kolodziejak, W.</a> and <a>J. Chroboczek</a>, "<a href="https://tools.ietf.org/html/draft-ietf-babel-hmac-09">HMAC authentication for the Babel routing protocol</a>", Internet-Draft draft-ietf-babel-hmac-09, August 2019.</td>
+<a>Do, C.</a>, <a>Kolodziejak, W.</a> and <a>J. Chroboczek</a>, "<a href="https://tools.ietf.org/html/draft-ietf-babel-hmac-10">MAC authentication for the Babel routing protocol</a>", Internet-Draft draft-ietf-babel-hmac-10, August 2019.</td>
 </tr>
 <tr>
 <td class="reference"><b id="ISO.10646">[ISO.10646]</b></td>
@@ -995,11 +987,6 @@ ul.toc li {
 <td class="reference"><b id="RFC4868">[RFC4868]</b></td>
 <td class="top">
 <a>Kelly, S.</a> and <a>S. Frankel</a>, "<a href="https://tools.ietf.org/html/rfc4868">Using HMAC-SHA-256, HMAC-SHA-384, and HMAC-SHA-512 with IPsec</a>", RFC 4868, DOI 10.17487/RFC4868, May 2007.</td>
-</tr>
-<tr>
-<td class="reference"><b id="RFC5234">[RFC5234]</b></td>
-<td class="top">
-<a>Crocker, D.</a> and <a>P. Overell</a>, "<a href="https://tools.ietf.org/html/rfc5234">Augmented BNF for Syntax Specifications: ABNF</a>", STD 68, RFC 5234, DOI 10.17487/RFC5234, January 2008.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC6241">[RFC6241]</b></td>
