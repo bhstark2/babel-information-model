@@ -1,7 +1,7 @@
 ---
 stand_alone: true
 ipr: trust200902
-docname: draft-ietf-babel-information-model-09
+docname: draft-ietf-babel-information-model-10
 cat: info
 pi:
   strict: 'yes'
@@ -76,10 +76,11 @@ informative:
 
 --- abstract
 
-This Babel Information Model can be used to create data models under various
-data modeling regimes. It allows a Babel implementation (via
-a management protocol or interface) to report on its current state and
-may allow some limited configuration of protocol constants.
+This Babel Information Model provides structured data elements
+for a Babel implementation reporting its current state and may
+allow limited configuration of some such data elements.
+This information model can be used as a basis for creating data
+models under various data modeling regimes.
 
 --- middle
 
@@ -92,15 +93,15 @@ authenticated, and {{I-D.ietf-babel-dtls}} defines a security mechanism
 that allows Babel packets to be encrypted.
 This document describes an information model for Babel (including implementations
 using one or both of these security mechanisms) that can be used to create management
-protocol data models (such as a NETCONF {{RFC6241}} YANG {{RFC7950}} data model).
+protocol data models (such as a NETCONF {{RFC6241}} YANG {{RFC7950}} data model.
 
 Due to the simplicity of the Babel protocol, most of the information model
 is focused on reporting Babel protocol operational state, and very little of
-that is considered mandatory to implement (for an implementation claiming
-compliance with this information model). Some parameters may be configurable.
+that is considered mandatory to implement for an implementation claiming
+compliance with this information model. Some parameters may be configurable.
 However, it is up to the Babel implementation whether to allow any of these
 to be configured within its implementation. Where the implementation does
-not allow configuration of these parameters, it may still choose to expose
+not allow configuration of these parameters, it MAY still choose to expose
 them as read-only.
 
 The Information Model is presented using a hierarchical structure. This does
@@ -137,7 +138,7 @@ binary
 : A binary string (sequence of octets).
 
 boolean
-: A type representing a Boolean value.
+: A type representing a Boolean (true or false) value.
 
 counter
 : A non-negative integer that  monotonically increases. Counters may have discontinuities
@@ -293,9 +294,9 @@ Most parameters are read-only. Following is a descriptive list of the parameters
 
 * MAC-keys: create/delete entries
 
-* MAC-keys: use to sign packets
+* MAC-keys: key used to sign packets
 
-* MAC-keys: use to verify packets
+* MAC-keys: key used to verify packets
 
 * DTLS-certs: create/delete entries
 
@@ -866,7 +867,7 @@ babel-key-use-verify:
   incoming Babel packets. This key is used to verify
   incoming packets if the value is "true". If the value
   is "false", no MAC is computed from this key for
-  comparing an incoming packet.
+  comparing with the MAC in an incoming packet.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
@@ -1022,6 +1023,11 @@ current best practices for key length and generation of
 keys related to the MAC algorithm associated with the key.
 Short (and zero-length) keys and keys that make use of only
 alphanumeric characters are highly susceptible to brute force attacks.
+
+
+# IANA Considerations
+
+This document has no IANA actions.
 
 
 # Acknowledgements {#Acknowledgements}
