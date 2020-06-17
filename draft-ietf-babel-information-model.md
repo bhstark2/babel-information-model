@@ -15,7 +15,7 @@ title: Babel Information Model
 area: Routing
 wg: Babel routing protocol
 kw: Babel
-date: 2019
+date: 2020
 author:
 - ins: B. H. Stark
   name: Barbara Stark
