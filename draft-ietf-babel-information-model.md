@@ -332,10 +332,10 @@ model definitions in subsequent sections, the error is in this overview.
       [boolean                  rw babel-stats-enable;]
       [operation                   babel-stats-reset;]
        babel-constants-obj      ro babel-constants;
-       babel-interfaces-obj     ro babel-interfaces<0..*>;
-       babel-routes-obj         ro babel-routes<0..*>;
-      [babel-mac-key-sets-obj   rw babel-mac-key-sets<0..*>;]
-      [babel-dtls-cert-sets-obj rw babel-dtls-cert-sets<0..*>;]
+       babel-interface-obj      ro babel-interfaces<0..*>;
+       babel-route-obj          ro babel-routes<0..*>;
+      [babel-mac-key-set-obj    rw babel-mac-key-sets<0..*>;]
+      [babel-dtls-cert-set-obj  rw babel-dtls-cert-sets<0..*>;]
    } babel-information-obj;
 ~~~~
 {: artwork-align="left"}
@@ -407,14 +407,14 @@ babel-routes:
   node.
 
 babel-mac-key-sets:
-: A babel-mac-key-sets-obj object. If this
+: A set of babel-mac-key-set-obj objects. If this
   object is implemented, it
   provides access to parameters related to the MAC security mechanism.
   An implementation MAY choose
   to expose this object as read-only ("ro").
 
 babel-dtls-cert-sets:
-: A babel-dtls-cert-sets-obj object. If this
+: A set of babel-dtls-cert-set-obj objects. If this
   object is implemented, it
   provides access to parameters related to the DTLS security mechanism.
   An implementation MAY choose
@@ -446,7 +446,7 @@ babel-mcast-group:
   to expose this parameter as read-only ("ro").
 
 
-## Definition of babel-interfaces-obj
+## Definition of babel-interface-obj
 
 
 ~~~~
@@ -468,8 +468,8 @@ babel-mcast-group:
       [boolean              rw babel-packet-log-enable;]
       [reference            ro babel-packet-log;]
       [babel-if-stats-obj   ro babel-if-stats;]
-       babel-neighbors-obj  ro babel-neighbors<0..*>;
-   } babel-interfaces-obj;
+       babel-neighbor-obj   ro babel-neighbors<0..*>;
+   } babel-interface-obj;
 ~~~~
 {: artwork-align="left"}
 
@@ -594,7 +594,7 @@ babel-if-stats:
 : Statistics collection object for this interface.
 
 babel-neighbors:
-: A set of babel-neighbors-obj objects.
+: A set of babel-neighbor-obj objects.
 
 
 ## Definition of babel-if-stats-obj
@@ -631,7 +631,7 @@ babel-received-packets:
 : A count of the number of Babel packets received on this interface.
 
 
-## Definition of babel-neighbors-obj
+## Definition of babel-neighbor-obj
 
 ~~~~
   object {
@@ -645,7 +645,7 @@ babel-received-packets:
       [uint                ro babel-ucast-hello-interval;]
       [uint                ro babel-rxcost;]
       [uint                ro babel-cost;]
-   } babel-neighbors-obj;
+   } babel-neighbor-obj;
 ~~~~
 {: artwork-align="left"}
 
@@ -727,7 +727,7 @@ babel-cost:
   This is a 16-bit unsigned integer.
 
 
-## Definition of babel-routes-obj
+## Definition of babel-route-obj
 
 ~~~~
   object {
@@ -741,7 +741,7 @@ babel-cost:
        ip-address           ro babel-route-next-hop;
        boolean              ro babel-route-feasible;
        boolean              ro babel-route-selected;
-   } babel-routes-obj;
+   } babel-route-obj;
 ~~~~
 {: artwork-align="left"}
 
@@ -808,12 +808,12 @@ babel-route-selected:
   is being advertised).
 
 
-## Definition of babel-mac-key-sets-obj
+## Definition of babel-mac-key-set-obj
 
 ~~~~
   object {
        boolean               rw babel-mac-default-apply;
-       babel-mac-keys-obj    rw babel-mac-keys<0..*>;
+       babel-mac-key-obj     rw babel-mac-keys<0..*>;
    } babel-mac-obj;
 ~~~~
 {: artwork-align="left"}
@@ -831,9 +831,9 @@ babel-mac-default-apply:
   to expose this parameter as read-only ("ro").
 
 babel-mac-keys:
-: A set of babel-mac-keys-obj objects.
+: A set of babel-mac-key-obj objects.
 
-## Definition of babel-mac-keys-obj
+## Definition of babel-mac-key-obj
 
 ~~~~
   object {
@@ -843,7 +843,7 @@ babel-mac-keys:
        binary                -- babel-mac-key-value;
        string                rw babel-mac-key-algorithm;
       [operation                babel-mac-key-test;]
-   } babel-mac-keys-obj;
+   } babel-mac-key-obj;
 ~~~~
 {: artwork-align="left"}
 
@@ -902,12 +902,12 @@ babel-mac-test:
   as a binary string.
 
 
-## Definition of babel-dtls-cert-sets-obj
+## Definition of babel-dtls-cert-set-obj
 
 ~~~~
   object {
        boolean               rw babel-dtls-default-apply;
-       babel-dtls-certs-obj  rw babel-dtls-certs<0..*>;
+       babel-dtls-cert-obj   rw babel-dtls-certs<0..*>;
    } babel-dtls-obj;
 ~~~~
 {: artwork-align="left"}
@@ -925,13 +925,13 @@ babel-dtls-default-apply:
   to expose this parameter as read-only ("ro").
 
 babel-dtls-certs:
-: A set of babel-dtls-keys-obj objects. This contains both certificates
+: A set of babel-dtls-key-obj objects. This contains both certificates
   for this implementation to present for authentication, and to accept
   from others. Certificates with a non-empty babel-cert-private-key can
   be presented by this implementation for authentication.
 
 
-## Definition of babel-dtls-certs-obj
+## Definition of babel-dtls-cert-obj
 
 ~~~~
   object {
@@ -940,7 +940,7 @@ babel-dtls-certs:
        string                rw babel-cert-type;
        binary                -- babel-cert-private-key;
       [operation                babel-cert-test;]
-   } babel-dtls-certs-obj;
+   } babel-dtls-cert-obj;
 ~~~~
 {: artwork-align="left"}
 
