@@ -854,7 +854,7 @@ babel-mac-key-name:
   instance is created (i.e., it is not subsequently writable).
   The value MAY be auto-generated if not explicitly supplied when the instance is created.
 
-babel-key-use-sign:
+babel-mac-key-use-sign:
 : Indicates whether this key value is used to sign sent Babel
   packets. Sent packets are signed using this key if the value
   is "true". If the value is "false", this key is not used to
@@ -862,7 +862,7 @@ babel-key-use-sign:
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
-babel-key-use-verify:
+babel-mac-key-use-verify:
 : Indicates whether this key value is used to verify
   incoming Babel packets. This key is used to verify
   incoming packets if the value is "true". If the value
@@ -871,7 +871,7 @@ babel-key-use-verify:
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
-babel-key-value:
+babel-mac-key-value:
 : The value of the MAC key. An implementation MUST NOT allow
   this parameter to be read. This can be done by always providing
   an empty string when read, or through permissions, or other means.
@@ -892,12 +892,12 @@ babel-mac-key-algorithm
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
-babel-mac-test:
+babel-mac-key-test:
 : An operation that allows the MAC key and hash algorithm to
   be tested to see if they produce an expected outcome. Input
   to this operation is a binary string. The implementation is
   expected to create a hash of this string using the
-  babel-mac-key-value and the babel-mac-algorithm. The
+  babel-mac-key-value and the babel-mac-key-algorithm. The
   output of this operation is the resulting hash,
   as a binary string.
 
@@ -908,7 +908,7 @@ babel-mac-test:
   object {
        boolean               rw babel-dtls-default-apply;
        babel-dtls-cert-obj   rw babel-dtls-certs<0..*>;
-   } babel-dtls-obj;
+   } babel-dtls-cert-set-obj;
 ~~~~
 {: artwork-align="left"}
 
@@ -925,7 +925,7 @@ babel-dtls-default-apply:
   to expose this parameter as read-only ("ro").
 
 babel-dtls-certs:
-: A set of babel-dtls-key-obj objects. This contains both certificates
+: A set of babel-dtls-cert-obj objects. This contains both certificates
   for this implementation to present for authentication, and to accept
   from others. Certificates with a non-empty babel-cert-private-key can
   be presented by this implementation for authentication.
