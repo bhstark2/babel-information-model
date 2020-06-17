@@ -320,23 +320,23 @@ model definitions in subsequent sections, the error is in this overview.
 
 
 ~~~~
-  object {
-       string                   ro babel-implementation-version;
-       boolean                  rw babel-enable;
-       binary                   ro babel-self-router-id;
-      [uint                     ro babel-self-seqno;]
-       string                   ro babel-metric-comp-algorithms<1..*>;
-       string                   ro babel-security-supported<0..*>;
-      [string                   ro babel-mac-algorithms<1..*>;]
-      [string                   ro babel-dtls-cert-types<1..*>;]
-      [boolean                  rw babel-stats-enable;]
-      [operation                   babel-stats-reset;]
-       babel-constants-obj      ro babel-constants;
-       babel-interface-obj      ro babel-interfaces<0..*>;
-       babel-route-obj          ro babel-routes<0..*>;
-      [babel-mac-key-set-obj    rw babel-mac-key-sets<0..*>;]
-      [babel-dtls-cert-set-obj  rw babel-dtls-cert-sets<0..*>;]
-   } babel-information-obj;
+object {
+     string                    ro babel-implementation-version;
+     boolean                   rw babel-enable;
+     binary                    ro babel-self-router-id;
+    [uint                      ro babel-self-seqno;]
+     string                    ro babel-metric-comp-algorithms<1..*>;
+     string                    ro babel-security-supported<0..*>;
+    [string                    ro babel-mac-algorithms<1..*>;]
+    [string                    ro babel-dtls-cert-types<1..*>;]
+    [boolean                   rw babel-stats-enable;]
+    [operation                    babel-stats-reset;]
+     babel-constants-obj       ro babel-constants;
+     babel-interface-obj       ro babel-interfaces<0..*>;
+     babel-route-obj           ro babel-routes<0..*>;
+    [babel-mac-key-set-obj     rw babel-mac-key-sets<0..*>;]
+    [babel-dtls-cert-set-obj   rw babel-dtls-cert-sets<0..*>;]
+} babel-information-obj;
 ~~~~
 {: artwork-align="left"}
 
@@ -425,10 +425,10 @@ babel-dtls-cert-sets:
 
 
 ~~~~
-  object {
-       uint         rw babel-udp-port;
-      [ip-address   rw babel-mcast-group;]
-   } babel-constants-obj;
+object {
+     uint         rw babel-udp-port;
+    [ip-address   rw babel-mcast-group;]
+} babel-constants-obj;
 ~~~~
 {: artwork-align="left"}
 
@@ -450,26 +450,26 @@ babel-mcast-group:
 
 
 ~~~~
-  object {
-       reference            ro babel-interface-reference;
-      [boolean              rw babel-interface-enable;]
-       string               rw babel-interface-metric-algorithm;
-      [boolean              rw babel-interface-split-horizon;]
-      [uint                 ro babel-mcast-hello-seqno;]
-      [uint                 ro babel-mcast-hello-interval;]
-      [uint                 ro babel-update-interval;]
-      [boolean              rw babel-mac-enable;]
-      [reference            rw babel-if-mac-key-sets<0..*>;]
-      [boolean              rw babel-mac-verify;]
-      [boolean              rw babel-dtls-enable;]
-      [reference            rw babel-if-dtls-cert-sets<0..*>;]
-      [boolean              rw babel-dtls-cached-info;]
-      [string               rw babel-dtls-cert-prefer<0..*>;]
-      [boolean              rw babel-packet-log-enable;]
-      [reference            ro babel-packet-log;]
-      [babel-if-stats-obj   ro babel-if-stats;]
-       babel-neighbor-obj   ro babel-neighbors<0..*>;
-   } babel-interface-obj;
+object {
+     reference            ro babel-interface-reference;
+    [boolean              rw babel-interface-enable;]
+     string               rw babel-interface-metric-algorithm;
+    [boolean              rw babel-interface-split-horizon;]
+    [uint                 ro babel-mcast-hello-seqno;]
+    [uint                 ro babel-mcast-hello-interval;]
+    [uint                 ro babel-update-interval;]
+    [boolean              rw babel-mac-enable;]
+    [reference            rw babel-if-mac-key-sets<0..*>;]
+    [boolean              rw babel-mac-verify;]
+    [boolean              rw babel-dtls-enable;]
+    [reference            rw babel-if-dtls-cert-sets<0..*>;]
+    [boolean              rw babel-dtls-cached-info;]
+    [string               rw babel-dtls-cert-prefer<0..*>;]
+    [boolean              rw babel-packet-log-enable;]
+    [reference            ro babel-packet-log;]
+    [babel-if-stats-obj   ro babel-if-stats;]
+     babel-neighbor-obj   ro babel-neighbors<0..*>;
+} babel-interface-obj;
 ~~~~
 {: artwork-align="left"}
 
@@ -600,14 +600,14 @@ babel-neighbors:
 ## Definition of babel-if-stats-obj
 
 ~~~~
-  object {
-       uint                 ro babel-sent-mcast-hello;
-       uint                 ro babel-sent-mcast-update;
-       uint                 ro babel-sent-ucast-hello;
-       uint                 ro babel-sent-ucast-update;
-       uint                 ro babel-sent-IHU;
-       uint                 ro babel-received-packets;
-   } babel-if-stats-obj;
+object {
+     uint   ro babel-sent-mcast-hello;
+     uint   ro babel-sent-mcast-update;
+     uint   ro babel-sent-ucast-hello;
+     uint   ro babel-sent-ucast-update;
+     uint   ro babel-sent-IHU;
+     uint   ro babel-received-packets;
+} babel-if-stats-obj;
 ~~~~
 {: artwork-align="left"}
 
@@ -634,18 +634,18 @@ babel-received-packets:
 ## Definition of babel-neighbor-obj
 
 ~~~~
-  object {
-       ip-address          ro babel-neighbor-address;
-      [binary              ro babel-hello-mcast-history;]
-      [binary              ro babel-hello-ucast-history;]
-       uint                ro babel-txcost;
-       uint                ro babel-exp-mcast-hello-seqno;
-       uint                ro babel-exp-ucast-hello-seqno;
-      [uint                ro babel-ucast-hello-seqno;]
-      [uint                ro babel-ucast-hello-interval;]
-      [uint                ro babel-rxcost;]
-      [uint                ro babel-cost;]
-   } babel-neighbor-obj;
+object {
+     ip-address   ro babel-neighbor-address;
+    [binary       ro babel-hello-mcast-history;]
+    [binary       ro babel-hello-ucast-history;]
+     uint         ro babel-txcost;
+     uint         ro babel-exp-mcast-hello-seqno;
+     uint         ro babel-exp-ucast-hello-seqno;
+    [uint         ro babel-ucast-hello-seqno;]
+    [uint         ro babel-ucast-hello-interval;]
+    [uint         ro babel-rxcost;]
+    [uint         ro babel-cost;]
+} babel-neighbor-obj;
 ~~~~
 {: artwork-align="left"}
 
@@ -730,18 +730,18 @@ babel-cost:
 ## Definition of babel-route-obj
 
 ~~~~
-  object {
-       ip-address           ro babel-route-prefix;
-       uint                 ro babel-route-prefix-length;
-       binary               ro babel-route-router-id;
-       string               ro babel-route-neighbor;
-       uint                 ro babel-route-received-metric;
-       uint                 ro babel-route-calculated-metric;
-       uint                 ro babel-route-seqno;
-       ip-address           ro babel-route-next-hop;
-       boolean              ro babel-route-feasible;
-       boolean              ro babel-route-selected;
-   } babel-route-obj;
+object {
+     ip-address   ro babel-route-prefix;
+     uint         ro babel-route-prefix-length;
+     binary       ro babel-route-router-id;
+     string       ro babel-route-neighbor;
+     uint         ro babel-route-received-metric;
+     uint         ro babel-route-calculated-metric;
+     uint         ro babel-route-seqno;
+     ip-address   ro babel-route-next-hop;
+     boolean      ro babel-route-feasible;
+     boolean      ro babel-route-selected;
+} babel-route-obj;
 ~~~~
 {: artwork-align="left"}
 
@@ -811,10 +811,10 @@ babel-route-selected:
 ## Definition of babel-mac-key-set-obj
 
 ~~~~
-  object {
-       boolean               rw babel-mac-default-apply;
-       babel-mac-key-obj     rw babel-mac-keys<0..*>;
-   } babel-mac-obj;
+object {
+     boolean             rw babel-mac-default-apply;
+     babel-mac-key-obj   rw babel-mac-keys<0..*>;
+} babel-mac-obj;
 ~~~~
 {: artwork-align="left"}
 
@@ -836,14 +836,14 @@ babel-mac-keys:
 ## Definition of babel-mac-key-obj
 
 ~~~~
-  object {
-       string                rw babel-mac-key-name;
-       boolean               rw babel-mac-key-use-sign;
-       boolean               rw babel-mac-key-use-verify;
-       binary                -- babel-mac-key-value;
-       string                rw babel-mac-key-algorithm;
-      [operation                babel-mac-key-test;]
-   } babel-mac-key-obj;
+object {
+     string      rw babel-mac-key-name;
+     boolean     rw babel-mac-key-use-sign;
+     boolean     rw babel-mac-key-use-verify;
+     binary      -- babel-mac-key-value;
+     string      rw babel-mac-key-algorithm;
+    [operation      babel-mac-key-test;]
+} babel-mac-key-obj;
 ~~~~
 {: artwork-align="left"}
 
@@ -905,10 +905,10 @@ babel-mac-key-test:
 ## Definition of babel-dtls-cert-set-obj
 
 ~~~~
-  object {
-       boolean               rw babel-dtls-default-apply;
-       babel-dtls-cert-obj   rw babel-dtls-certs<0..*>;
-   } babel-dtls-cert-set-obj;
+object {
+     boolean               rw babel-dtls-default-apply;
+     babel-dtls-cert-obj   rw babel-dtls-certs<0..*>;
+} babel-dtls-cert-set-obj;
 ~~~~
 {: artwork-align="left"}
 
@@ -934,13 +934,13 @@ babel-dtls-certs:
 ## Definition of babel-dtls-cert-obj
 
 ~~~~
-  object {
-       string                rw babel-cert-name;
-       string                rw babel-cert-value;
-       string                rw babel-cert-type;
-       binary                -- babel-cert-private-key;
-      [operation                babel-cert-test;]
-   } babel-dtls-cert-obj;
+object {
+     string      rw babel-cert-name;
+     string      rw babel-cert-value;
+     string      rw babel-cert-type;
+     binary      -- babel-cert-private-key;
+    [operation      babel-cert-test;]
+} babel-dtls-cert-obj;
 ~~~~
 {: artwork-align="left"}
 
