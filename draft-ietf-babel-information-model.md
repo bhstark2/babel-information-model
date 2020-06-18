@@ -215,16 +215,16 @@ The Information Model is hierarchically structured as follows:
    |  |  +-- babel-sent-IHU
    |  |  +-- babel-received-packets
    |  +-- babel-neighbors
-   |  |  +-- babel-neighbor-address
-   |  |  +-- babel-hello-mcast-history
-   |  |  +-- babel-hello-ucast-history
-   |  |  +-- babel-txcost
-   |  |  +-- babel-exp-mcast-hello-seqno
-   |  |  +-- babel-exp-ucast-hello-seqno
-   |  |  +-- babel-ucast-hello-seqno
-   |  |  +-- babel-ucast-hello-interval
-   |  |  +-- babel-rxcost
-   |  |  +-- babel-cost
+   |     +-- babel-neighbor-address
+   |     +-- babel-hello-mcast-history
+   |     +-- babel-hello-ucast-history
+   |     +-- babel-txcost
+   |     +-- babel-exp-mcast-hello-seqno
+   |     +-- babel-exp-ucast-hello-seqno
+   |     +-- babel-ucast-hello-seqno
+   |     +-- babel-ucast-hello-interval
+   |     +-- babel-rxcost
+   |     +-- babel-cost
    +-- babel-routes
    |  +-- babel-route-prefix
    |  +-- babel-route-prefix-length
@@ -239,20 +239,20 @@ The Information Model is hierarchically structured as follows:
    +-- babel-mac-key-sets
    |  +-- babel-mac-default-apply
    |  +-- babel-mac-keys
-   |  |  +-- babel-mac-key-name
-   |  |  +-- babel-mac-key-use-sign
-   |  |  +-- babel-mac-key-use-verify
-   |  |  +-- babel-mac-key-value
-   |  |  +-- babel-mac-key-algorithm
-   |  |  +-- babel-mac-key-test
+   |     +-- babel-mac-key-name
+   |     +-- babel-mac-key-use-sign
+   |     +-- babel-mac-key-use-verify
+   |     +-- babel-mac-key-value
+   |     +-- babel-mac-key-algorithm
+   |     +-- babel-mac-key-test
    +-- babel-dtls-cert-sets
-   |  +-- babel-dtls-default-apply
-   |  +-- babel-dtls-certs
-   |  |  +-- babel-cert-name
-   |  |  +-- babel-cert-value
-   |  |  +-- babel-cert-type
-   |  |  +-- babel-cert-private-key
-   |  |  +-- babel-cert-test
+      +-- babel-dtls-default-apply
+      +-- babel-dtls-certs
+         +-- babel-cert-name
+         +-- babel-cert-value
+         +-- babel-cert-type
+         +-- babel-cert-private-key
+         +-- babel-cert-test
 ~~~~
 {: artwork-align="left"}
 
