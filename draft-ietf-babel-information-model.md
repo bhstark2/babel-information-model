@@ -1,7 +1,7 @@
 ---
 stand_alone: true
 ipr: trust200902
-docname: draft-ietf-babel-information-model-10
+docname: draft-ietf-babel-information-model-11
 cat: info
 pi:
   strict: 'yes'
