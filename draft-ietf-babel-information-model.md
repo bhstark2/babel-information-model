@@ -389,7 +389,9 @@ babel-dtls-cert-types:
 
 babel-stats-enable:
 : Indicates whether statistics collection is enabled
-  (true) or disabled (false) on all interfaces.
+  (true) or disabled (false) on all interfaces. When
+  enabled, existing statistics values are not cleared
+  and will be incremented as new packets are counted.
 
 babel-stats-reset:
 : An operation that resets all babel-if-stats
@@ -589,6 +591,8 @@ babel-packet-log:
   The {{libpcap}} file format with .pcap file extension SHOULD be supported for
   packet log files. Logging is
   enabled / disabled by babel-packet-log-enable.
+  Implementations will need to carefully manage and limit
+  memory used by packet logs.
 
 babel-if-stats:
 : Statistics collection object for this interface.
@@ -1033,6 +1037,7 @@ This document has no IANA actions.
 # Acknowledgements {#Acknowledgements}
 
 Juliusz Chroboczek, Toke Høiland-Jørgensen, David Schinazi,
+Antonin Décimo,
 Acee Lindem, and Carsten Bormann have been very helpful in
 refining this information model.
 
