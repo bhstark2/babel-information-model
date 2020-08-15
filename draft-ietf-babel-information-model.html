@@ -289,14 +289,14 @@ ul.toc li {
 <link href="#rfc.section.3" rel="Chapter" title="3 The Information Model">
 <link href="#rfc.section.3.1" rel="Chapter" title="3.1 Definition of babel-information-obj">
 <link href="#rfc.section.3.2" rel="Chapter" title="3.2 Definition of babel-constants-obj">
-<link href="#rfc.section.3.3" rel="Chapter" title="3.3 Definition of babel-interfaces-obj">
+<link href="#rfc.section.3.3" rel="Chapter" title="3.3 Definition of babel-interface-obj">
 <link href="#rfc.section.3.4" rel="Chapter" title="3.4 Definition of babel-if-stats-obj">
-<link href="#rfc.section.3.5" rel="Chapter" title="3.5 Definition of babel-neighbors-obj">
-<link href="#rfc.section.3.6" rel="Chapter" title="3.6 Definition of babel-routes-obj">
-<link href="#rfc.section.3.7" rel="Chapter" title="3.7 Definition of babel-mac-key-sets-obj">
-<link href="#rfc.section.3.8" rel="Chapter" title="3.8 Definition of babel-mac-keys-obj">
-<link href="#rfc.section.3.9" rel="Chapter" title="3.9 Definition of babel-dtls-cert-sets-obj">
-<link href="#rfc.section.3.10" rel="Chapter" title="3.10 Definition of babel-dtls-certs-obj">
+<link href="#rfc.section.3.5" rel="Chapter" title="3.5 Definition of babel-neighbor-obj">
+<link href="#rfc.section.3.6" rel="Chapter" title="3.6 Definition of babel-route-obj">
+<link href="#rfc.section.3.7" rel="Chapter" title="3.7 Definition of babel-mac-key-set-obj">
+<link href="#rfc.section.3.8" rel="Chapter" title="3.8 Definition of babel-mac-key-obj">
+<link href="#rfc.section.3.9" rel="Chapter" title="3.9 Definition of babel-dtls-cert-set-obj">
+<link href="#rfc.section.3.10" rel="Chapter" title="3.10 Definition of babel-dtls-cert-obj">
 <link href="#rfc.section.4" rel="Chapter" title="4 Extending the Information Model">
 <link href="#rfc.section.5" rel="Chapter" title="5 Security Considerations">
 <link href="#rfc.section.6" rel="Chapter" title="6 IANA Considerations">
@@ -311,8 +311,8 @@ ul.toc li {
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Stark, B. and M. Jethanandani" />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-babel-information-model-10" />
-  <meta name="dct.issued" scheme="ISO8601" content="2019-09" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-babel-information-model-11" />
+  <meta name="dct.issued" scheme="ISO8601" content="2020-14" />
   <meta name="dct.abstract" content="This Babel Information Model provides structured data elements for a Babel implementation reporting its current state and may allow limited configuration of some such data elements.  This information model can be used as a basis for creating data models under various data modeling regimes." />
   <meta name="description" content="This Babel Information Model provides structured data elements for a Babel implementation reporting its current state and may allow limited configuration of some such data elements.  This information model can be used as a basis for creating data models under various data modeling regimes." />
 
@@ -336,12 +336,12 @@ ul.toc li {
 <td class="right">M. Jethanandani</td>
 </tr>
 <tr>
-<td class="left">Expires: April 11, 2020</td>
+<td class="left">Expires: February 15, 2021</td>
 <td class="right">VMware</td>
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">October 9, 2019</td>
+<td class="right">August 14, 2020</td>
 </tr>
 
     	
@@ -349,7 +349,7 @@ ul.toc li {
   </table>
 
   <p class="title">Babel Information Model<br />
-  <span class="filename">draft-ietf-babel-information-model-10</span></p>
+  <span class="filename">draft-ietf-babel-information-model-11</span></p>
   
   <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
 <p>This Babel Information Model provides structured data elements for a Babel implementation reporting its current state and may allow limited configuration of some such data elements.  This information model can be used as a basis for creating data models under various data modeling regimes.</p>
@@ -357,9 +357,9 @@ ul.toc li {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on April 11, 2020.</p>
+<p>This Internet-Draft will expire on February 15, 2021.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
-<p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>Copyright (c) 2020 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
 
   
@@ -381,21 +381,21 @@ ul.toc li {
 </li>
 <li>3.2.   <a href="#rfc.section.3.2">Definition of babel-constants-obj</a>
 </li>
-<li>3.3.   <a href="#rfc.section.3.3">Definition of babel-interfaces-obj</a>
+<li>3.3.   <a href="#rfc.section.3.3">Definition of babel-interface-obj</a>
 </li>
 <li>3.4.   <a href="#rfc.section.3.4">Definition of babel-if-stats-obj</a>
 </li>
-<li>3.5.   <a href="#rfc.section.3.5">Definition of babel-neighbors-obj</a>
+<li>3.5.   <a href="#rfc.section.3.5">Definition of babel-neighbor-obj</a>
 </li>
-<li>3.6.   <a href="#rfc.section.3.6">Definition of babel-routes-obj</a>
+<li>3.6.   <a href="#rfc.section.3.6">Definition of babel-route-obj</a>
 </li>
-<li>3.7.   <a href="#rfc.section.3.7">Definition of babel-mac-key-sets-obj</a>
+<li>3.7.   <a href="#rfc.section.3.7">Definition of babel-mac-key-set-obj</a>
 </li>
-<li>3.8.   <a href="#rfc.section.3.8">Definition of babel-mac-keys-obj</a>
+<li>3.8.   <a href="#rfc.section.3.8">Definition of babel-mac-key-obj</a>
 </li>
-<li>3.9.   <a href="#rfc.section.3.9">Definition of babel-dtls-cert-sets-obj</a>
+<li>3.9.   <a href="#rfc.section.3.9">Definition of babel-dtls-cert-set-obj</a>
 </li>
-<li>3.10.   <a href="#rfc.section.3.10">Definition of babel-dtls-certs-obj</a>
+<li>3.10.   <a href="#rfc.section.3.10">Definition of babel-dtls-cert-obj</a>
 </li>
 </ul><li>4.   <a href="#rfc.section.4">Extending the Information Model</a>
 </li>
@@ -498,16 +498,16 @@ ul.toc li {
    |  |  +-- babel-sent-IHU
    |  |  +-- babel-received-packets
    |  +-- babel-neighbors
-   |  |  +-- babel-neighbor-address
-   |  |  +-- babel-hello-mcast-history
-   |  |  +-- babel-hello-ucast-history
-   |  |  +-- babel-txcost
-   |  |  +-- babel-exp-mcast-hello-seqno
-   |  |  +-- babel-exp-ucast-hello-seqno
-   |  |  +-- babel-ucast-hello-seqno
-   |  |  +-- babel-ucast-hello-interval
-   |  |  +-- babel-rxcost
-   |  |  +-- babel-cost
+   |     +-- babel-neighbor-address
+   |     +-- babel-hello-mcast-history
+   |     +-- babel-hello-ucast-history
+   |     +-- babel-txcost
+   |     +-- babel-exp-mcast-hello-seqno
+   |     +-- babel-exp-ucast-hello-seqno
+   |     +-- babel-ucast-hello-seqno
+   |     +-- babel-ucast-hello-interval
+   |     +-- babel-rxcost
+   |     +-- babel-cost
    +-- babel-routes
    |  +-- babel-route-prefix
    |  +-- babel-route-prefix-length
@@ -522,20 +522,20 @@ ul.toc li {
    +-- babel-mac-key-sets
    |  +-- babel-mac-default-apply
    |  +-- babel-mac-keys
-   |  |  +-- babel-mac-key-name
-   |  |  +-- babel-mac-key-use-sign
-   |  |  +-- babel-mac-key-use-verify
-   |  |  +-- babel-mac-key-value
-   |  |  +-- babel-mac-key-algorithm
-   |  |  +-- babel-mac-key-test
+   |     +-- babel-mac-key-name
+   |     +-- babel-mac-key-use-sign
+   |     +-- babel-mac-key-use-verify
+   |     +-- babel-mac-key-value
+   |     +-- babel-mac-key-algorithm
+   |     +-- babel-mac-key-test
    +-- babel-dtls-cert-sets
-   |  +-- babel-dtls-default-apply
-   |  +-- babel-dtls-certs
-   |  |  +-- babel-cert-name
-   |  |  +-- babel-cert-value
-   |  |  +-- babel-cert-type
-   |  |  +-- babel-cert-private-key
-   |  |  +-- babel-cert-test
+      +-- babel-dtls-default-apply
+      +-- babel-dtls-certs
+         +-- babel-cert-name
+         +-- babel-cert-value
+         +-- babel-cert-type
+         +-- babel-cert-private-key
+         +-- babel-cert-test
 </pre>
 <p id="rfc.section.2.p.2">Most parameters are read-only. Following is a descriptive list of the parameters that are not required to be read-only:</p>
 <p></p>
@@ -577,23 +577,23 @@ ul.toc li {
 <a href="#rfc.section.3.1">3.1.</a> <a href="#definition-of-babel-information-obj" id="definition-of-babel-information-obj">Definition of babel-information-obj</a>
 </h1>
 <pre>
-  object {
-       string                   ro babel-implementation-version;
-       boolean                  rw babel-enable;
-       binary                   ro babel-self-router-id;
-      [uint                     ro babel-self-seqno;]
-       string                   ro babel-metric-comp-algorithms&lt;1..*&gt;;
-       string                   ro babel-security-supported&lt;0..*&gt;;
-      [string                   ro babel-mac-algorithms&lt;1..*&gt;;]
-      [string                   ro babel-dtls-cert-types&lt;1..*&gt;;]
-      [boolean                  rw babel-stats-enable;]
-      [operation                   babel-stats-reset;]
-       babel-constants-obj      ro babel-constants;
-       babel-interfaces-obj     ro babel-interfaces&lt;0..*&gt;;
-       babel-routes-obj         ro babel-routes&lt;0..*&gt;;
-      [babel-mac-key-sets-obj   rw babel-mac-key-sets&lt;0..*&gt;;]
-      [babel-dtls-cert-sets-obj rw babel-dtls-cert-sets&lt;0..*&gt;;]
-   } babel-information-obj;
+object {
+     string                    ro babel-implementation-version;
+     boolean                   rw babel-enable;
+     binary                    ro babel-self-router-id;
+    [uint                      ro babel-self-seqno;]
+     string                    ro babel-metric-comp-algorithms&lt;1..*&gt;;
+     string                    ro babel-security-supported&lt;0..*&gt;;
+    [string                    ro babel-mac-algorithms&lt;1..*&gt;;]
+    [string                    ro babel-dtls-cert-types&lt;1..*&gt;;]
+    [boolean                   rw babel-stats-enable;]
+    [operation                    babel-stats-reset;]
+     babel-constants-obj       ro babel-constants;
+     babel-interface-obj       ro babel-interfaces&lt;0..*&gt;;
+     babel-route-obj           ro babel-routes&lt;0..*&gt;;
+    [babel-mac-key-set-obj     rw babel-mac-key-sets&lt;0..*&gt;;]
+    [babel-dtls-cert-set-obj   rw babel-dtls-cert-sets&lt;0..*&gt;;]
+} babel-information-obj;
 </pre>
 <p></p>
 
@@ -615,7 +615,7 @@ ul.toc li {
 <dt>babel-dtls-cert-types:</dt>
 <dd style="margin-left: 8">List of supported DTLS certificate types. Possible values include &#8220;X.509&#8221; and &#8220;RawPublicKey&#8221;.</dd>
 <dt>babel-stats-enable:</dt>
-<dd style="margin-left: 8">Indicates whether statistics collection is enabled (true) or disabled (false) on all interfaces.</dd>
+<dd style="margin-left: 8">Indicates whether statistics collection is enabled (true) or disabled (false) on all interfaces. When enabled, existing statistics values are not cleared and will be incremented as new packets are counted.</dd>
 <dt>babel-stats-reset:</dt>
 <dd style="margin-left: 8">An operation that resets all babel-if-stats parameters to zero. This operation has no input or output parameters.</dd>
 <dt>babel-constants:</dt>
@@ -625,18 +625,18 @@ ul.toc li {
 <dt>babel-routes:</dt>
 <dd style="margin-left: 8">A set of babel-route-obj objects. Contains the routes known to this node.</dd>
 <dt>babel-mac-key-sets:</dt>
-<dd style="margin-left: 8">A babel-mac-key-sets-obj object. If this object is implemented, it provides access to parameters related to the MAC security mechanism.  An implementation MAY choose to expose this object as read-only (&#8220;ro&#8221;).</dd>
+<dd style="margin-left: 8">A set of babel-mac-key-set-obj objects. If this object is implemented, it provides access to parameters related to the MAC security mechanism.  An implementation MAY choose to expose this object as read-only (&#8220;ro&#8221;).</dd>
 <dt>babel-dtls-cert-sets:</dt>
-<dd style="margin-left: 8">A babel-dtls-cert-sets-obj object. If this object is implemented, it provides access to parameters related to the DTLS security mechanism.  An implementation MAY choose to expose this object as read-only (&#8220;ro&#8221;).</dd>
+<dd style="margin-left: 8">A set of babel-dtls-cert-set-obj objects. If this object is implemented, it provides access to parameters related to the DTLS security mechanism.  An implementation MAY choose to expose this object as read-only (&#8220;ro&#8221;).</dd>
 </dl>
 <h1 id="rfc.section.3.2">
 <a href="#rfc.section.3.2">3.2.</a> <a href="#definition-of-babel-constants-obj" id="definition-of-babel-constants-obj">Definition of babel-constants-obj</a>
 </h1>
 <pre>
-  object {
-       uint         rw babel-udp-port;
-      [ip-address   rw babel-mcast-group;]
-   } babel-constants-obj;
+object {
+     uint         rw babel-udp-port;
+    [ip-address   rw babel-mcast-group;]
+} babel-constants-obj;
 </pre>
 <p></p>
 
@@ -647,29 +647,29 @@ ul.toc li {
 <dd style="margin-left: 8">Multicast group for sending and listening to multicast announcements on IPv6. Default is ff02::1:6.  An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
 </dl>
 <h1 id="rfc.section.3.3">
-<a href="#rfc.section.3.3">3.3.</a> <a href="#definition-of-babel-interfaces-obj" id="definition-of-babel-interfaces-obj">Definition of babel-interfaces-obj</a>
+<a href="#rfc.section.3.3">3.3.</a> <a href="#definition-of-babel-interface-obj" id="definition-of-babel-interface-obj">Definition of babel-interface-obj</a>
 </h1>
 <pre>
-  object {
-       reference            ro babel-interface-reference;
-      [boolean              rw babel-interface-enable;]
-       string               rw babel-interface-metric-algorithm;
-      [boolean              rw babel-interface-split-horizon;]
-      [uint                 ro babel-mcast-hello-seqno;]
-      [uint                 ro babel-mcast-hello-interval;]
-      [uint                 ro babel-update-interval;]
-      [boolean              rw babel-mac-enable;]
-      [reference            rw babel-if-mac-key-sets&lt;0..*&gt;;]
-      [boolean              rw babel-mac-verify;]
-      [boolean              rw babel-dtls-enable;]
-      [reference            rw babel-if-dtls-cert-sets&lt;0..*&gt;;]
-      [boolean              rw babel-dtls-cached-info;]
-      [string               rw babel-dtls-cert-prefer&lt;0..*&gt;;]
-      [boolean              rw babel-packet-log-enable;]
-      [reference            ro babel-packet-log;]
-      [babel-if-stats-obj   ro babel-if-stats;]
-       babel-neighbors-obj  ro babel-neighbors&lt;0..*&gt;;
-   } babel-interfaces-obj;
+object {
+     reference            ro babel-interface-reference;
+    [boolean              rw babel-interface-enable;]
+     string               rw babel-interface-metric-algorithm;
+    [boolean              rw babel-interface-split-horizon;]
+    [uint                 ro babel-mcast-hello-seqno;]
+    [uint                 ro babel-mcast-hello-interval;]
+    [uint                 ro babel-update-interval;]
+    [boolean              rw babel-mac-enable;]
+    [reference            rw babel-if-mac-key-sets&lt;0..*&gt;;]
+    [boolean              rw babel-mac-verify;]
+    [boolean              rw babel-dtls-enable;]
+    [reference            rw babel-if-dtls-cert-sets&lt;0..*&gt;;]
+    [boolean              rw babel-dtls-cached-info;]
+    [string               rw babel-dtls-cert-prefer&lt;0..*&gt;;]
+    [boolean              rw babel-packet-log-enable;]
+    [reference            ro babel-packet-log;]
+    [babel-if-stats-obj   ro babel-if-stats;]
+     babel-neighbor-obj   ro babel-neighbors&lt;0..*&gt;;
+} babel-interface-obj;
 </pre>
 <p></p>
 
@@ -705,24 +705,24 @@ ul.toc li {
 <dt>babel-packet-log-enable:</dt>
 <dd style="margin-left: 8">Indicates whether packet logging is enabled (true) or disabled (false) on this interface.</dd>
 <dt>babel-packet-log:</dt>
-<dd style="margin-left: 8">A reference or url link to a file that contains a timestamped log of packets received and sent on babel-udp-port on this interface.  The <a href="#libpcap" class="xref">[libpcap]</a> file format with .pcap file extension SHOULD be supported for packet log files. Logging is enabled / disabled by babel-packet-log-enable.</dd>
+<dd style="margin-left: 8">A reference or url link to a file that contains a timestamped log of packets received and sent on babel-udp-port on this interface.  The <a href="#libpcap" class="xref">[libpcap]</a> file format with .pcap file extension SHOULD be supported for packet log files. Logging is enabled / disabled by babel-packet-log-enable.  Implementations will need to carefully manage and limit memory used by packet logs.</dd>
 <dt>babel-if-stats:</dt>
 <dd style="margin-left: 8">Statistics collection object for this interface.</dd>
 <dt>babel-neighbors:</dt>
-<dd style="margin-left: 8">A set of babel-neighbors-obj objects.</dd>
+<dd style="margin-left: 8">A set of babel-neighbor-obj objects.</dd>
 </dl>
 <h1 id="rfc.section.3.4">
 <a href="#rfc.section.3.4">3.4.</a> <a href="#definition-of-babel-if-stats-obj" id="definition-of-babel-if-stats-obj">Definition of babel-if-stats-obj</a>
 </h1>
 <pre>
-  object {
-       uint                 ro babel-sent-mcast-hello;
-       uint                 ro babel-sent-mcast-update;
-       uint                 ro babel-sent-ucast-hello;
-       uint                 ro babel-sent-ucast-update;
-       uint                 ro babel-sent-IHU;
-       uint                 ro babel-received-packets;
-   } babel-if-stats-obj;
+object {
+     uint   ro babel-sent-mcast-hello;
+     uint   ro babel-sent-mcast-update;
+     uint   ro babel-sent-ucast-hello;
+     uint   ro babel-sent-ucast-update;
+     uint   ro babel-sent-IHU;
+     uint   ro babel-received-packets;
+} babel-if-stats-obj;
 </pre>
 <p></p>
 
@@ -741,21 +741,21 @@ ul.toc li {
 <dd style="margin-left: 8">A count of the number of Babel packets received on this interface.</dd>
 </dl>
 <h1 id="rfc.section.3.5">
-<a href="#rfc.section.3.5">3.5.</a> <a href="#definition-of-babel-neighbors-obj" id="definition-of-babel-neighbors-obj">Definition of babel-neighbors-obj</a>
+<a href="#rfc.section.3.5">3.5.</a> <a href="#definition-of-babel-neighbor-obj" id="definition-of-babel-neighbor-obj">Definition of babel-neighbor-obj</a>
 </h1>
 <pre>
-  object {
-       ip-address          ro babel-neighbor-address;
-      [binary              ro babel-hello-mcast-history;]
-      [binary              ro babel-hello-ucast-history;]
-       uint                ro babel-txcost;
-       uint                ro babel-exp-mcast-hello-seqno;
-       uint                ro babel-exp-ucast-hello-seqno;
-      [uint                ro babel-ucast-hello-seqno;]
-      [uint                ro babel-ucast-hello-interval;]
-      [uint                ro babel-rxcost;]
-      [uint                ro babel-cost;]
-   } babel-neighbors-obj;
+object {
+     ip-address   ro babel-neighbor-address;
+    [binary       ro babel-hello-mcast-history;]
+    [binary       ro babel-hello-ucast-history;]
+     uint         ro babel-txcost;
+     uint         ro babel-exp-mcast-hello-seqno;
+     uint         ro babel-exp-ucast-hello-seqno;
+    [uint         ro babel-ucast-hello-seqno;]
+    [uint         ro babel-ucast-hello-interval;]
+    [uint         ro babel-rxcost;]
+    [uint         ro babel-cost;]
+} babel-neighbor-obj;
 </pre>
 <p></p>
 
@@ -782,21 +782,21 @@ ul.toc li {
 <dd style="margin-left: 8">The link cost, as computed from the values maintained in the neighbor table: the statistics kept in the neighbor table about the reception of Hellos, and the txcost computed from received IHU packets.  This is a 16-bit unsigned integer.</dd>
 </dl>
 <h1 id="rfc.section.3.6">
-<a href="#rfc.section.3.6">3.6.</a> <a href="#definition-of-babel-routes-obj" id="definition-of-babel-routes-obj">Definition of babel-routes-obj</a>
+<a href="#rfc.section.3.6">3.6.</a> <a href="#definition-of-babel-route-obj" id="definition-of-babel-route-obj">Definition of babel-route-obj</a>
 </h1>
 <pre>
-  object {
-       ip-address           ro babel-route-prefix;
-       uint                 ro babel-route-prefix-length;
-       binary               ro babel-route-router-id;
-       string               ro babel-route-neighbor;
-       uint                 ro babel-route-received-metric;
-       uint                 ro babel-route-calculated-metric;
-       uint                 ro babel-route-seqno;
-       ip-address           ro babel-route-next-hop;
-       boolean              ro babel-route-feasible;
-       boolean              ro babel-route-selected;
-   } babel-routes-obj;
+object {
+     ip-address   ro babel-route-prefix;
+     uint         ro babel-route-prefix-length;
+     binary       ro babel-route-router-id;
+     string       ro babel-route-neighbor;
+     uint         ro babel-route-received-metric;
+     uint         ro babel-route-calculated-metric;
+     uint         ro babel-route-seqno;
+     ip-address   ro babel-route-next-hop;
+     boolean      ro babel-route-feasible;
+     boolean      ro babel-route-selected;
+} babel-route-obj;
 </pre>
 <p></p>
 
@@ -823,13 +823,13 @@ ul.toc li {
 <dd style="margin-left: 8">A Boolean flag indicating whether this route is selected (i.e., whether it is currently being used for forwarding and is being advertised).</dd>
 </dl>
 <h1 id="rfc.section.3.7">
-<a href="#rfc.section.3.7">3.7.</a> <a href="#definition-of-babel-mac-key-sets-obj" id="definition-of-babel-mac-key-sets-obj">Definition of babel-mac-key-sets-obj</a>
+<a href="#rfc.section.3.7">3.7.</a> <a href="#definition-of-babel-mac-key-set-obj" id="definition-of-babel-mac-key-set-obj">Definition of babel-mac-key-set-obj</a>
 </h1>
 <pre>
-  object {
-       boolean               rw babel-mac-default-apply;
-       babel-mac-keys-obj    rw babel-mac-keys&lt;0..*&gt;;
-   } babel-mac-obj;
+object {
+     boolean             rw babel-mac-default-apply;
+     babel-mac-key-obj   rw babel-mac-keys&lt;0..*&gt;;
+} babel-mac-obj;
 </pre>
 <p></p>
 
@@ -837,45 +837,45 @@ ul.toc li {
 <dt>babel-mac-default-apply:</dt>
 <dd style="margin-left: 8">A Boolean flag indicating whether this babel-mac instance is applied to all new babel-interface instances, by default.  If &#8220;true&#8221;, this instance is applied to new babel-interfaces instances at the time they are created, by including it in the babel-interface-mac-keys list.  If &#8220;false&#8221;, this instance is not applied to new babel-interfaces instances when they are created.  An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
 <dt>babel-mac-keys:</dt>
-<dd style="margin-left: 8">A set of babel-mac-keys-obj objects.</dd>
+<dd style="margin-left: 8">A set of babel-mac-key-obj objects.</dd>
 </dl>
 <h1 id="rfc.section.3.8">
-<a href="#rfc.section.3.8">3.8.</a> <a href="#definition-of-babel-mac-keys-obj" id="definition-of-babel-mac-keys-obj">Definition of babel-mac-keys-obj</a>
+<a href="#rfc.section.3.8">3.8.</a> <a href="#definition-of-babel-mac-key-obj" id="definition-of-babel-mac-key-obj">Definition of babel-mac-key-obj</a>
 </h1>
 <pre>
-  object {
-       string                rw babel-mac-key-name;
-       boolean               rw babel-mac-key-use-sign;
-       boolean               rw babel-mac-key-use-verify;
-       binary                -- babel-mac-key-value;
-       string                rw babel-mac-key-algorithm;
-      [operation                babel-mac-key-test;]
-   } babel-mac-keys-obj;
+object {
+     string      rw babel-mac-key-name;
+     boolean     rw babel-mac-key-use-sign;
+     boolean     rw babel-mac-key-use-verify;
+     binary      -- babel-mac-key-value;
+     string      rw babel-mac-key-algorithm;
+    [operation      babel-mac-key-test;]
+} babel-mac-key-obj;
 </pre>
 <p></p>
 
 <dl>
 <dt>babel-mac-key-name:</dt>
 <dd style="margin-left: 8">A unique name for this MAC key that can be used to identify the key in this object instance, since the key value is not allowed to be read. This value MUST NOT be empty and can only be provided when this instance is created (i.e., it is not subsequently writable).  The value MAY be auto-generated if not explicitly supplied when the instance is created.</dd>
-<dt>babel-key-use-sign:</dt>
+<dt>babel-mac-key-use-sign:</dt>
 <dd style="margin-left: 8">Indicates whether this key value is used to sign sent Babel packets. Sent packets are signed using this key if the value is &#8220;true&#8221;. If the value is &#8220;false&#8221;, this key is not used to sign sent Babel packets.  An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
-<dt>babel-key-use-verify:</dt>
+<dt>babel-mac-key-use-verify:</dt>
 <dd style="margin-left: 8">Indicates whether this key value is used to verify incoming Babel packets. This key is used to verify incoming packets if the value is &#8220;true&#8221;. If the value is &#8220;false&#8221;, no MAC is computed from this key for comparing with the MAC in an incoming packet.  An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
-<dt>babel-key-value:</dt>
+<dt>babel-mac-key-value:</dt>
 <dd style="margin-left: 8">The value of the MAC key. An implementation MUST NOT allow this parameter to be read. This can be done by always providing an empty string when read, or through permissions, or other means.  This value MUST be provided when this instance is created, and is not subsequently writable.  This value is of a length suitable for the associated babel-mac-key-algorithm. If the algorithm is based on the HMAC construction <a href="#RFC2104" class="xref">[RFC2104]</a>, the length MUST be between 0 and the block size of the underlying hash inclusive (where &#8220;HMAC-SHA256&#8221; block size is 64 bytes as described in <a href="#RFC4868" class="xref">[RFC4868]</a>). If the algorithm is &#8220;BLAKE2s&#8221;, the length MUST be between 0 and 32 bytes inclusive, as described in <a href="#RFC7693" class="xref">[RFC7693]</a>.</dd>
 <dt>babel-mac-key-algorithm</dt>
 <dd style="margin-left: 8">The name of the MAC algorithm used with this key.  The value MUST be the same as one of the enumerations listed in the babel-mac-algorithms parameter.  An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
-<dt>babel-mac-test:</dt>
-<dd style="margin-left: 8">An operation that allows the MAC key and hash algorithm to be tested to see if they produce an expected outcome. Input to this operation is a binary string. The implementation is expected to create a hash of this string using the babel-mac-key-value and the babel-mac-algorithm. The output of this operation is the resulting hash, as a binary string.</dd>
+<dt>babel-mac-key-test:</dt>
+<dd style="margin-left: 8">An operation that allows the MAC key and hash algorithm to be tested to see if they produce an expected outcome. Input to this operation is a binary string. The implementation is expected to create a hash of this string using the babel-mac-key-value and the babel-mac-key-algorithm. The output of this operation is the resulting hash, as a binary string.</dd>
 </dl>
 <h1 id="rfc.section.3.9">
-<a href="#rfc.section.3.9">3.9.</a> <a href="#definition-of-babel-dtls-cert-sets-obj" id="definition-of-babel-dtls-cert-sets-obj">Definition of babel-dtls-cert-sets-obj</a>
+<a href="#rfc.section.3.9">3.9.</a> <a href="#definition-of-babel-dtls-cert-set-obj" id="definition-of-babel-dtls-cert-set-obj">Definition of babel-dtls-cert-set-obj</a>
 </h1>
 <pre>
-  object {
-       boolean               rw babel-dtls-default-apply;
-       babel-dtls-certs-obj  rw babel-dtls-certs&lt;0..*&gt;;
-   } babel-dtls-obj;
+object {
+     boolean               rw babel-dtls-default-apply;
+     babel-dtls-cert-obj   rw babel-dtls-certs&lt;0..*&gt;;
+} babel-dtls-cert-set-obj;
 </pre>
 <p></p>
 
@@ -883,19 +883,19 @@ ul.toc li {
 <dt>babel-dtls-default-apply:</dt>
 <dd style="margin-left: 8">A Boolean flag indicating whether this babel-dtls instance is applied to all new babel-interface instances, by default.  If &#8220;true&#8221;, this instance is applied to new babel-interfaces instances at the time they are created, by including it in the babel-interface-dtls-certs list.  If &#8220;false&#8221;, this instance is not applied to new babel-interfaces instances when they are created.  An implementation MAY choose to expose this parameter as read-only (&#8220;ro&#8221;).</dd>
 <dt>babel-dtls-certs:</dt>
-<dd style="margin-left: 8">A set of babel-dtls-keys-obj objects. This contains both certificates for this implementation to present for authentication, and to accept from others. Certificates with a non-empty babel-cert-private-key can be presented by this implementation for authentication.</dd>
+<dd style="margin-left: 8">A set of babel-dtls-cert-obj objects. This contains both certificates for this implementation to present for authentication, and to accept from others. Certificates with a non-empty babel-cert-private-key can be presented by this implementation for authentication.</dd>
 </dl>
 <h1 id="rfc.section.3.10">
-<a href="#rfc.section.3.10">3.10.</a> <a href="#definition-of-babel-dtls-certs-obj" id="definition-of-babel-dtls-certs-obj">Definition of babel-dtls-certs-obj</a>
+<a href="#rfc.section.3.10">3.10.</a> <a href="#definition-of-babel-dtls-cert-obj" id="definition-of-babel-dtls-cert-obj">Definition of babel-dtls-cert-obj</a>
 </h1>
 <pre>
-  object {
-       string                rw babel-cert-name;
-       string                rw babel-cert-value;
-       string                rw babel-cert-type;
-       binary                -- babel-cert-private-key;
-      [operation                babel-cert-test;]
-   } babel-dtls-certs-obj;
+object {
+     string      rw babel-cert-name;
+     string      rw babel-cert-value;
+     string      rw babel-cert-type;
+     binary      -- babel-cert-private-key;
+    [operation      babel-cert-test;]
+} babel-dtls-cert-obj;
 </pre>
 <p></p>
 
@@ -929,7 +929,7 @@ ul.toc li {
 <h1 id="rfc.section.7">
 <a href="#rfc.section.7">7.</a> <a href="#Acknowledgements" id="Acknowledgements">Acknowledgements</a>
 </h1>
-<p id="rfc.section.7.p.1">Juliusz Chroboczek, Toke H&#248;iland-J&#248;rgensen, David Schinazi, Acee Lindem, and Carsten Bormann have been very helpful in refining this information model.</p>
+<p id="rfc.section.7.p.1">Juliusz Chroboczek, Toke H&#248;iland-J&#248;rgensen, David Schinazi, Antonin D&#233;cimo, Acee Lindem, and Carsten Bormann have been very helpful in refining this information model.</p>
 <p id="rfc.section.7.p.2">The language in the Notation section was mostly taken from <a href="#RFC8193" class="xref">[RFC8193]</a>.</p>
 <h1 id="rfc.references">
 <a href="#rfc.references">8.</a> References</h1>
@@ -939,7 +939,7 @@ ul.toc li {
 <tr>
 <td class="reference"><b id="I-D.ietf-babel-rfc6126bis">[I-D.ietf-babel-rfc6126bis]</b></td>
 <td class="top">
-<a>Chroboczek, J.</a> and <a>D. Schinazi</a>, "<a href="https://tools.ietf.org/html/draft-ietf-babel-rfc6126bis-14">The Babel Routing Protocol</a>", Internet-Draft draft-ietf-babel-rfc6126bis-14, August 2019.</td>
+<a>Chroboczek, J.</a> and <a>D. Schinazi</a>, "<a href="https://tools.ietf.org/html/draft-ietf-babel-rfc6126bis-19">The Babel Routing Protocol</a>", Internet-Draft draft-ietf-babel-rfc6126bis-19, August 2020.</td>
 </tr>
 <tr>
 <td class="reference"><b id="libpcap">[libpcap]</b></td>
@@ -968,7 +968,7 @@ ul.toc li {
 <tr>
 <td class="reference"><b id="I-D.ietf-babel-dtls">[I-D.ietf-babel-dtls]</b></td>
 <td class="top">
-<a>Decimo, A.</a>, <a>Schinazi, D.</a> and <a>J. Chroboczek</a>, "<a href="https://tools.ietf.org/html/draft-ietf-babel-dtls-09">Babel Routing Protocol over Datagram Transport Layer Security</a>", Internet-Draft draft-ietf-babel-dtls-09, August 2019.</td>
+<a>Decimo, A.</a>, <a>Schinazi, D.</a> and <a>J. Chroboczek</a>, "<a href="https://tools.ietf.org/html/draft-ietf-babel-dtls-10">Babel Routing Protocol over Datagram Transport Layer Security</a>", Internet-Draft draft-ietf-babel-dtls-10, June 2020.</td>
 </tr>
 <tr>
 <td class="reference"><b id="I-D.ietf-babel-hmac">[I-D.ietf-babel-hmac]</b></td>
