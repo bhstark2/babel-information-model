@@ -1,7 +1,7 @@
 ---
 stand_alone: true
 ipr: trust200902
-docname: draft-ietf-babel-information-model-11
+docname: draft-ietf-babel-information-model-12
 cat: info
 pi:
   strict: 'yes'
@@ -39,25 +39,14 @@ author:
   email: mjethanandani@gmail.com
 ref: {}
 normative:
+  RFC2104:
   RFC2119:
+  RFC4868:
+  RFC3339:
   RFC7468:
+  RFC7693:
   RFC8174:
   I-D.ietf-babel-rfc6126bis:
-  libpcap:
-    title: Libpcap File Format
-    author:
-    - org: Wireshark
-    date: 2015
-    target: https://wiki.wireshark.org/Development/LibpcapFileFormat
-
-informative:
-  RFC2104:
-  RFC3339:
-  RFC4868:
-  RFC6241:
-  RFC7693:
-  RFC7950:
-  RFC8193:
   I-D.ietf-babel-dtls:
   I-D.ietf-babel-hmac:
   ISO.10646:
@@ -67,6 +56,17 @@ informative:
     date: 2014
     seriesinfo:
       ISO Standard: 10646:2014
+  libpcap:
+    title: Libpcap File Format
+    author:
+    - org: Wireshark
+    date: 2015
+    target: https://wiki.wireshark.org/Development/LibpcapFileFormat
+
+informative:
+  RFC6241:
+  RFC7950:
+  RFC8193:
   TR-181:
     title: Device Data Model
     author:
@@ -80,7 +80,9 @@ This Babel Information Model provides structured data elements
 for a Babel implementation reporting its current state and may
 allow limited configuration of some such data elements.
 This information model can be used as a basis for creating data
-models under various data modeling regimes.
+models under various data modeling regimes. This information
+model only includes parameters and parameter values useful for
+managing Babel over IPv6.
 
 --- middle
 
@@ -90,7 +92,7 @@ Babel is a loop-avoiding distance-vector routing protocol defined in
 {{I-D.ietf-babel-rfc6126bis}}. {{I-D.ietf-babel-hmac}} defines a security
 mechanism that allows Babel packets to be cryptographically
 authenticated, and {{I-D.ietf-babel-dtls}} defines a security mechanism
-that allows Babel packets to be encrypted.
+that allows Babel packets to be both authenticated and encrypted.
 This document describes an information model for Babel (including implementations
 using one or both of these security mechanisms) that can be used to create management
 protocol data models (such as a NETCONF {{RFC6241}} YANG {{RFC7950}} data model.
@@ -108,12 +110,28 @@ The Information Model is presented using a hierarchical structure. This does
 not preclude a data model based on this Information Model from using a referential
 or other structure.
 
+This information model only includes parameters and parameter values
+useful for managing Babel over IPv6. This model has no parameters
+or values specific to operating Babel over IPv4, even though
+{{I-D.ietf-babel-rfc6126bis}} does define a multicast group for
+sending and listening to multicast announcements on IPv4.
+There is less likelihood of breakage due to inconsistent
+configuration and increased implementation simplicity if
+Babel is operated always and only over IPv6. Running Babel
+over IPv6 requires IPv6 at the link layer and does not need
+advertised prefixes, router advertisements or DHCPv6 to be
+present in the network. Link-local IPv6 is widely supported
+among devices where Babel is expected to be used. Note that
+Babel over IPv6 can be used for configuration of both IPv4
+and IPv6 routes.
+
 ## Requirements Language
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-document are to be interpreted as described in {{RFC2119}} and updated by {{RFC8174}}.
-
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+"MAY", and "OPTIONAL" in this document are to be interpreted as
+described in BCP014 {{RFC2119}} {{RFC8174}} when, and only when, they
+appear in all capitals, as shown here.
 
 ## Notation
 
@@ -140,13 +158,9 @@ binary
 boolean
 : A type representing a Boolean (true or false) value.
 
-counter
-: A non-negative integer that  monotonically increases. Counters may have discontinuities
-  and they are not expected to persist across restarts.
-
 datetime
 : A type representing a date and time using the Gregorian calendar. The datetime
-  format MUST conform to RFC 3339 {{RFC3339}}.
+  format MUST conform to RFC 3339 {{RFC3339}} Section 5.6.
 
 ip-address
 : A type representing an IP address. This type supports both IPv4 and IPv6
@@ -252,7 +266,6 @@ The Information Model is hierarchically structured as follows:
          +-- babel-cert-value
          +-- babel-cert-type
          +-- babel-cert-private-key
-         +-- babel-cert-test
 ~~~~
 {: artwork-align="left"}
 
@@ -264,7 +277,7 @@ Most parameters are read-only. Following is a descriptive list of the parameters
 
 * create/delete Babel MAC Key sets
 
-* create/delete Babel DTLS Certificate sets
+* create/delete Babel Certificate sets
 
 * enable/disable statistics collection
 
@@ -272,19 +285,17 @@ Most parameters are read-only. Following is a descriptive list of the parameters
 
 * Constant: IPv6 multicast group
 
+* Interface: enable/disable Babel on this interface
+
 * Interface: Metric algorithm
 
 * Interface: Split horizon
 
-* Interface: enable/disable Babel on this interface
-
 * Interface: sets of MAC keys
-
-* Interface: MAC algorithm
 
 * Interface: verify received MAC packets
 
-* Interface: set of DTLS certificates
+* Interface: set of certificates for use with DTLS
 
 * Interface: use cached info extensions
 
@@ -306,7 +317,7 @@ The following parameters are required to return no value when read:
 
 * MAC key values
 
-* DTLS certificate values
+* DTLS private keys
 
 
 Note that this overview is intended simply to be informative and is not normative.
@@ -377,15 +388,15 @@ babel-metric-comp-algorithms:
 
 babel-security-supported:
 : List of supported security mechanisms. Possible values include
-  "MAC" and "DTLS".
+  "MAC" {{I-D.ietf-babel-hmac}} and "D for use with DTLSTLS" {{I-D.ietf-babel-dtls}}.
 
 babel-mac-algorithms:
 : List of supported MAC computation algorithms. Possible values
-  include "HMAC-SHA256", "BLAKE2s".
+  include "HMAC-SHA256", "BLAKE2s-128" {{I-D.ietf-babel-hmac}}.
 
 babel-dtls-cert-types:
 : List of supported DTLS certificate types. Possible values include
-  "X.509" and "RawPublicKey".
+  "X.509" and "RawPublicKey" {{I-D.ietf-babel-dtls}}.
 
 babel-stats-enable:
 : Indicates whether statistics collection is enabled
@@ -543,9 +554,9 @@ babel-if-mac-keys-sets:
   to expose this parameter as read-only ("ro").
 
 babel-mac-verify
-: A Boolean flag indicating whether MAC hashes in incoming Babel packets
+: A Boolean flag indicating whether MACs in incoming Babel packets
   are required to be present and are verified. If this parameter is "true",
-  incoming packets are required to have a valid MAC hash.
+  incoming packets are required to have a valid MAC.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
@@ -564,7 +575,8 @@ babel-if-dtls-cert-sets:
   to expose this parameter as read-only ("ro").
 
 babel-dtls-cached-info:
-: Indicates whether the cached_info extension is included in ClientHello
+: Indicates whether the cached_info extension
+  (see {{I-D.ietf-babel-dtls}} Appendix A) is included in ClientHello
   and ServerHello packets. The extension is included if the value
   is "true".
   An implementation MAY choose
@@ -575,7 +587,8 @@ babel-dtls-cert-prefer:
   The values MUST be among those
   listed in the babel-dtls-cert-types parameter.
   This list is used to populate the server_certificate_type
-  extension in a Client Hello. Values that are present in
+  extension (see {{I-D.ietf-babel-dtls}} Appendix A)
+  in a Client Hello. Values that are present in
   at least one instance in the babel-dtls-certs object of a
   referenced babel-dtls instance and that have
   a non-empty babel-cert-private-key will be used to populate
@@ -738,7 +751,7 @@ object {
      ip-address   ro babel-route-prefix;
      uint         ro babel-route-prefix-length;
      binary       ro babel-route-router-id;
-     string       ro babel-route-neighbor;
+     reference    ro babel-route-neighbor;
      uint         ro babel-route-received-metric;
      uint         ro babel-route-calculated-metric;
      uint         ro babel-route-seqno;
@@ -818,17 +831,17 @@ babel-route-selected:
 object {
      boolean             rw babel-mac-default-apply;
      babel-mac-key-obj   rw babel-mac-keys<0..*>;
-} babel-mac-obj;
+} babel-mac-key-set-obj;
 ~~~~
 {: artwork-align="left"}
 
 
 babel-mac-default-apply:
-: A Boolean flag indicating whether this babel-mac instance is
+: A Boolean flag indicating whether this object instance is
   applied to all new babel-interface instances, by default.
   If "true", this instance is applied to
   new babel-interfaces instances at the time they are created, by including
-  it in the babel-interface-mac-keys list.
+  it in the babel-if-mac-key-sets list.
   If "false", this instance is not applied to new babel-interfaces
   instances when they are created.
   An implementation MAY choose
@@ -842,7 +855,7 @@ babel-mac-keys:
 ~~~~
 object {
      string      rw babel-mac-key-name;
-     boolean     rw babel-mac-key-use-sign;
+     boolean     rw babel-mac-key-use-send;
      boolean     rw babel-mac-key-use-verify;
      binary      -- babel-mac-key-value;
      string      rw babel-mac-key-algorithm;
@@ -858,11 +871,12 @@ babel-mac-key-name:
   instance is created (i.e., it is not subsequently writable).
   The value MAY be auto-generated if not explicitly supplied when the instance is created.
 
-babel-mac-key-use-sign:
-: Indicates whether this key value is used to sign sent Babel
-  packets. Sent packets are signed using this key if the value
+babel-mac-key-use-send:
+: Indicates whether this key value is used to compute a MAC
+  and include that MAC in the sent Babel
+  packet. A MAC for sent packets is computed using this key if the value
   is "true". If the value is "false", this key is not used to
-  sign sent Babel packets.
+  compute a MAC to include in sent Babel packets.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
@@ -886,7 +900,7 @@ babel-mac-key-value:
   construction {{RFC2104}}, the length MUST be between 0 and the
   block size of the underlying hash inclusive (where "HMAC-SHA256"
   block size is 64 bytes as described in {{RFC4868}}). If the
-  algorithm is "BLAKE2s", the length MUST be between 0 and 32 bytes
+  algorithm is "BLAKE2s-128", the length MUST be between 0 and 32 bytes
   inclusive, as described in {{RFC7693}}.
 
 babel-mac-key-algorithm
@@ -897,13 +911,16 @@ babel-mac-key-algorithm
   to expose this parameter as read-only ("ro").
 
 babel-mac-key-test:
-: An operation that allows the MAC key and hash algorithm to
+: An operation that allows the MAC key and MAC algorithm to
   be tested to see if they produce an expected outcome. Input
-  to this operation is a binary string. The implementation is
-  expected to create a hash of this string using the
+  to this operation are a binary string and a calculated MAC
+  (also in the format of a binary string) for the binary string.
+  The implementation is
+  expected to create a MAC over the binary string using the
   babel-mac-key-value and the babel-mac-key-algorithm. The
-  output of this operation is the resulting hash,
-  as a binary string.
+  output of this operation is a binary indication that the
+  calculated MAC matched the input MAC (true) or
+  the MACs did not match (false).
 
 
 ## Definition of babel-dtls-cert-set-obj
@@ -918,7 +935,7 @@ object {
 
 
 babel-dtls-default-apply:
-: A Boolean flag indicating whether this babel-dtls instance is
+: A Boolean flag indicating whether this object instance is
   applied to all new babel-interface instances, by default.
   If "true", this instance is applied to
   new babel-interfaces instances at the time they are created, by including
@@ -943,13 +960,12 @@ object {
      string      rw babel-cert-value;
      string      rw babel-cert-type;
      binary      -- babel-cert-private-key;
-    [operation      babel-cert-test;]
 } babel-dtls-cert-obj;
 ~~~~
 {: artwork-align="left"}
 
 babel-cert-name:
-: A unique name for this DTLS certificate that can be used to identify
+: A unique name for this certificate that can be used to identify
   the certificate in this object instance, since the value is too long
   to be useful for identification. This value MUST NOT be empty and can
   only be provided when this instance is created (i.e., it is not
@@ -957,7 +973,7 @@ babel-cert-name:
   explicitly supplied when the instance is created.
 
 babel-cert-value:
-: The DTLS certificate in PEM format {{RFC7468}}.
+: The certificate in PEM format {{RFC7468}}.
   This value MUST be provided when this
   instance is created, and is not subsequently writable.
 
@@ -977,14 +993,6 @@ babel-cert-private-key:
   an empty string when read, or through permissions, or other means.
   This value can only be provided when this
   instance is created, and is not subsequently writable.
-
-babel-cert-test:
-: An operation that allows a hash of the provided input string
-  to be created using the certificate public key and the
-  SHA-256 hash algorithm. Input
-  to this operation is a binary string. The
-  output of this operation is the resulting hash, as a
-  binary string.
 
 
 # Extending the Information Model
@@ -1016,17 +1024,25 @@ to mount subsequent attacks on traffic traversing the network.
 This information model defines objects that can allow credentials (for this
 device, for trusted devices, and for trusted certificate authorities) to
 be added and deleted. Public keys may be exposed through
-this model. This model requires that private keys never be exposed. The Babel
-security mechanisms that make use of these credentials
-(e.g., {{I-D.ietf-babel-dtls}}, {{I-D.ietf-babel-hmac}}) identify
-what credentials can be used with those mechanisms.
+this model. This model requires that private keys and MAC
+keys never be exposed. Certificates used by {{I-D.ietf-babel-dtls}}
+implementations use separate parameters to model the public
+parts (including the public key) and the private key.
 
 MAC keys are allowed to be as short as zero-length. This is
-useful for testing. Network operators are advised to follow
+useful for testing. Network operators are RECOMMENDED to follow
 current best practices for key length and generation of
 keys related to the MAC algorithm associated with the key.
-Short (and zero-length) keys and keys that make use of only
-alphanumeric characters are highly susceptible to brute force attacks.
+Short (and zero-length) keys are highly susceptible to brute force attacks
+and therefore SHOULD NOT be used.
+See the Security Considerations section of {{I-D.ietf-babel-hmac}}
+for additional considerations related to MAC keys.
+
+This information model uses key sets and certification sets to provide
+a means of grouping keys and certificates. This makes it easy to use
+a different set per interface, the same set for one or more interfaces,
+have a default set in case a new interface is instantiated and to
+change keys and certificates as needed.
 
 
 # IANA Considerations
