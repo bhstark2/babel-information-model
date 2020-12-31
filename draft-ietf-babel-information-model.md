@@ -388,15 +388,18 @@ babel-metric-comp-algorithms:
 
 babel-security-supported:
 : List of supported security mechanisms. Possible values include
-  "MAC" {{I-D.ietf-babel-hmac}} and "D for use with DTLSTLS" {{I-D.ietf-babel-dtls}}.
+  "MAC" to indicate support of {{I-D.ietf-babel-hmac}} and "DTLS"
+  to indicate support of {{I-D.ietf-babel-dtls}}.
 
 babel-mac-algorithms:
 : List of supported MAC computation algorithms. Possible values
-  include "HMAC-SHA256", "BLAKE2s-128" {{I-D.ietf-babel-hmac}}.
+  include "HMAC-SHA256", "BLAKE2s-128" to indicate support for
+  algorithms indicated in {{I-D.ietf-babel-hmac}}.
 
 babel-dtls-cert-types:
 : List of supported DTLS certificate types. Possible values include
-  "X.509" and "RawPublicKey" {{I-D.ietf-babel-dtls}}.
+  "X.509" and "RawPublicKey" to indicate support for types
+  indicated in {{I-D.ietf-babel-dtls}}.
 
 babel-stats-enable:
 : Indicates whether statistics collection is enabled
