@@ -95,7 +95,7 @@ authenticated, and {{I-D.ietf-babel-dtls}} defines a security mechanism
 that allows Babel packets to be both authenticated and encrypted.
 This document describes an information model for Babel (including implementations
 using one or both of these security mechanisms) that can be used to create management
-protocol data models (such as a NETCONF {{RFC6241}} YANG {{RFC7950}} data model.
+protocol data models (such as a NETCONF {{RFC6241}} YANG {{RFC7950}} data model).
 
 Due to the simplicity of the Babel protocol, most of the information model
 is focused on reporting Babel protocol operational state, and very little of
