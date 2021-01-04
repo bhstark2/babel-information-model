@@ -5,8 +5,8 @@
 Babel routing protocol                                        B.H. Stark
 Internet-Draft                                                      AT&T
 Intended status: Informational                         M.J. Jethanandani
-Expires: 4 July 2021                                              VMware
-                                                        31 December 2020
+Expires: 8 July 2021                                              VMware
+                                                          4 January 2021
 
 
                         Babel Information Model
@@ -36,11 +36,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 July 2021.
+   This Internet-Draft will expire on 8 July 2021.
 
 Copyright Notice
 
-   Copyright (c) 2020 IETF Trust and the persons identified as the
+   Copyright (c) 2021 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -88,7 +88,7 @@ Table of Contents
    This document describes an information model for Babel (including
    implementations using one or both of these security mechanisms) that
    can be used to create management protocol data models (such as a
-   NETCONF [RFC6241] YANG [RFC7950] data model.
+   NETCONF [RFC6241] YANG [RFC7950] data model).
 
    Due to the simplicity of the Babel protocol, most of the information
    model is focused on reporting Babel protocol operational state, and
