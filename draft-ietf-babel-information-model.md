@@ -921,7 +921,7 @@ babel-mac-key-test:
   The implementation is
   expected to create a MAC over the binary string using the
   babel-mac-key-value and the babel-mac-key-algorithm. The
-  output of this operation is a binary indication that the
+  output of this operation is a Boolean indication that the
   calculated MAC matched the input MAC (true) or
   the MACs did not match (false).
 
