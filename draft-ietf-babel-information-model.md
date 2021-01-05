@@ -254,7 +254,7 @@ The Information Model is hierarchically structured as follows:
    |  +-- babel-mac-default-apply
    |  +-- babel-mac-keys
    |     +-- babel-mac-key-name
-   |     +-- babel-mac-key-use-sign
+   |     +-- babel-mac-key-use-send
    |     +-- babel-mac-key-use-verify
    |     +-- babel-mac-key-value
    |     +-- babel-mac-key-algorithm
@@ -305,7 +305,7 @@ Most parameters are read-only. Following is a descriptive list of the parameters
 
 * MAC-keys: create/delete entries
 
-* MAC-keys: key used to sign packets
+* MAC-keys: key used for sent packets
 
 * MAC-keys: key used to verify packets
 
