@@ -5,8 +5,8 @@
 Babel routing protocol                                        B.H. Stark
 Internet-Draft                                                      AT&T
 Intended status: Informational                         M.J. Jethanandani
-Expires: 8 July 2021                                              VMware
-                                                          4 January 2021
+Expires: 9 July 2021                                              VMware
+                                                          5 January 2021
 
 
                         Babel Information Model
@@ -36,7 +36,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 July 2021.
+   This Internet-Draft will expire on 9 July 2021.
 
 Copyright Notice
 
@@ -787,7 +787,7 @@ Table of Contents
       (also in the format of a binary string) for the binary string.
       The implementation is expected to create a MAC over the binary
       string using the babel-mac-key-value and the babel-mac-key-
-      algorithm.  The output of this operation is a binary indication
+      algorithm.  The output of this operation is a Boolean indication
       that the calculated MAC matched the input MAC (true) or the MACs
       did not match (false).
 
