@@ -1,7 +1,7 @@
 ---
 stand_alone: true
 ipr: trust200902
-docname: draft-ietf-babel-information-model-12
+docname: draft-ietf-babel-information-model-13
 cat: info
 pi:
   strict: 'yes'
@@ -46,9 +46,9 @@ normative:
   RFC7468:
   RFC7693:
   RFC8174:
-  I-D.ietf-babel-rfc6126bis:
-  I-D.ietf-babel-dtls:
-  I-D.ietf-babel-hmac:
+  RFC8966:
+  RFC8967:
+  RFC8968:
   ISO.10646:
     title: Information Technology - Universal Multiple-Octet Coded Character Set (UCS)
     author:
@@ -89,9 +89,9 @@ managing Babel over IPv6.
 # Introduction
 
 Babel is a loop-avoiding distance-vector routing protocol defined in
-{{I-D.ietf-babel-rfc6126bis}}. {{I-D.ietf-babel-hmac}} defines a security
+{{RFC8966}}. {{RFC8967}} defines a security
 mechanism that allows Babel packets to be cryptographically
-authenticated, and {{I-D.ietf-babel-dtls}} defines a security mechanism
+authenticated, and {{RFC8968}} defines a security mechanism
 that allows Babel packets to be both authenticated and encrypted.
 This document describes an information model for Babel (including implementations
 using one or both of these security mechanisms) that can be used to create management
@@ -113,7 +113,7 @@ or other structure.
 This information model only includes parameters and parameter values
 useful for managing Babel over IPv6. This model has no parameters
 or values specific to operating Babel over IPv4, even though
-{{I-D.ietf-babel-rfc6126bis}} does define a multicast group for
+{{RFC8966}} does define a multicast group for
 sending and listening to multicast announcements on IPv4.
 There is less likelihood of breakage due to inconsistent
 configuration and increased implementation simplicity if
@@ -370,9 +370,8 @@ babel-enable:
 
 babel-self-router-id:
 : The router-id used by this instance of the Babel protocol
-  to identify itself. {{I-D.ietf-babel-rfc6126bis}}
+  to identify itself. {{RFC8966}}
   describes this as an arbitrary string of 8 octets.
-  The router-id value MUST NOT consist of all zeroes or all ones.
 
 babel-self-seqno:
 : The current sequence number included in route updates for routes
@@ -382,24 +381,24 @@ babel-metric-comp-algorithms:
 : List of supported cost computation algorithms. Possible
   values include "2-out-of-3", and "ETX".
   "2-out-of-3" is described in
-  {{I-D.ietf-babel-rfc6126bis}}, section A.2.1.
+  {{RFC8966}}, section A.2.1.
   "ETX" is described in
-  {{I-D.ietf-babel-rfc6126bis}}, section A.2.2.
+  {{RFC8966}}, section A.2.2.
 
 babel-security-supported:
 : List of supported security mechanisms. Possible values include
-  "MAC" to indicate support of {{I-D.ietf-babel-hmac}} and "DTLS"
-  to indicate support of {{I-D.ietf-babel-dtls}}.
+  "MAC" to indicate support of {{RFC8967}} and "DTLS"
+  to indicate support of {{RFC8968}}.
 
 babel-mac-algorithms:
 : List of supported MAC computation algorithms. Possible values
   include "HMAC-SHA256", "BLAKE2s-128" to indicate support for
-  algorithms indicated in {{I-D.ietf-babel-hmac}}.
+  algorithms indicated in {{RFC8967}}.
 
 babel-dtls-cert-types:
-: List of supported DTLS certificate types. Possible values include
+: List of supported certificate types. Possible values include
   "X.509" and "RawPublicKey" to indicate support for types
-  indicated in {{I-D.ietf-babel-dtls}}.
+  indicated in {{RFC8968}}.
 
 babel-stats-enable:
 : Indicates whether statistics collection is enabled
@@ -523,7 +522,7 @@ babel-interface-split-horizon:
   when calculating metrics on this interface. A value of true
   indicates split horizon optimization is used.
   Split horizon optimization is described in
-  {{I-D.ietf-babel-rfc6126bis}}, section 3.7.4.
+  {{RFC8966}}, section 3.7.4.
   An implementation MAY choose
   to expose this parameter as read-only ("ro").
 
@@ -579,7 +578,7 @@ babel-if-dtls-cert-sets:
 
 babel-dtls-cached-info:
 : Indicates whether the cached_info extension
-  (see {{I-D.ietf-babel-dtls}} Appendix A) is included in ClientHello
+  (see {{RFC8968}} Appendix A) is included in ClientHello
   and ServerHello packets. The extension is included if the value
   is "true".
   An implementation MAY choose
@@ -590,7 +589,7 @@ babel-dtls-cert-prefer:
   The values MUST be among those
   listed in the babel-dtls-cert-types parameter.
   This list is used to populate the server_certificate_type
-  extension (see {{I-D.ietf-babel-dtls}} Appendix A)
+  extension (see {{RFC8968}} Appendix A)
   in a Client Hello. Values that are present in
   at least one instance in the babel-dtls-certs object of a
   referenced babel-dtls instance and that have
@@ -681,7 +680,7 @@ babel-hello-mcast-history:
   is expressed as a "1" placed in the left-most bit, with prior bits shifted
   right (and "0" bits placed between prior Hello bits and most recent Hello
   for any not-received Hellos). This value should be displayed using
-  hex digits (\[0-9a-fA-F]). See {{I-D.ietf-babel-rfc6126bis}}, section A.1.
+  hex digits (\[0-9a-fA-F]). See {{RFC8966}}, section A.1.
 
 babel-hello-ucast-history:
 : The unicast Hello history of whether or not the
@@ -690,12 +689,12 @@ babel-hello-ucast-history:
   is expressed as a "1" placed in the left-most bit, with prior bits shifted
   right (and "0" bits placed between prior Hello bits and most recent Hello
   for any not-received Hellos). This value should be displayed using
-  hex digits (\[0-9a-fA-F]). See {{I-D.ietf-babel-rfc6126bis}}, section A.1.
+  hex digits (\[0-9a-fA-F]). See {{RFC8966}}, section A.1.
 
 babel-txcost:
 : Transmission cost value from the last IHU packet received from
   this neighbor, or maximum value to indicate the IHU hold timer
-  for this neighbor has expired. See {{I-D.ietf-babel-rfc6126bis}}, section 3.4.2.
+  for this neighbor has expired. See {{RFC8966}}, section 3.4.2.
   This is a 16-bit unsigned integer.
 
 babel-exp-mcast-hello-seqno:
@@ -736,7 +735,7 @@ babel-rxcost:
 : Reception cost calculated for this neighbor. This value is
   usually derived from the Hello history, which may be combined with other
   data, such as statistics maintained by the link layer. The rxcost is sent
-  to a neighbor in each IHU. See {{I-D.ietf-babel-rfc6126bis}}, section 3.4.3.
+  to a neighbor in each IHU. See {{RFC8966}}, section 3.4.3.
   This is a 16-bit unsigned integer.
 
 babel-cost:
@@ -784,7 +783,7 @@ babel-route-received-metric:
 : The metric with which this route was advertised
   by the neighbor, or maximum value to indicate the route was
   recently retracted and is temporarily unreachable (see Section 3.5.5
-  of {{I-D.ietf-babel-rfc6126bis}}). This metric will be
+  of {{RFC8966}}). This metric will be
   NULL if the route was not received from a neighbor
   but was generated through other means. At least one of
   babel-route-calculated-metric
@@ -800,7 +799,7 @@ babel-route-calculated-metric:
 : A calculated metric for this route. How the
   metric is calculated is implementation-specific. Maximum value
   indicates the route was recently retracted and is temporarily unreachable
-  (see Section 3.5.5 of {{I-D.ietf-babel-rfc6126bis}}).
+  (see Section 3.5.5 of {{RFC8966}}).
   At least one of babel-route-calculated-metric and
   babel-route-received-metric MUST be non-NULL.
   Having both be non-NULL is expected for a route that is received and
@@ -820,7 +819,7 @@ babel-route-next-hop:
 
 babel-route-feasible:
 : A Boolean flag indicating whether this route is feasible,
-  as defined in Section 3.5.1 of {{I-D.ietf-babel-rfc6126bis}}).
+  as defined in Section 3.5.1 of {{RFC8966}}).
 
 babel-route-selected:
 : A Boolean flag indicating whether this route is selected
@@ -1021,6 +1020,8 @@ transport it.
 
 Misconfiguration (whether unintentional or malicious) can prevent reachability
 or cause poor network performance (increased latency, jitter, etc.).
+Misconfiguration of security credentials can cause a denial of service condition
+for the Babel routing protocol.
 The information in this model discloses network topology, which can be used
 to mount subsequent attacks on traffic traversing the network.
 
@@ -1028,7 +1029,7 @@ This information model defines objects that can allow credentials (for this
 device, for trusted devices, and for trusted certificate authorities) to
 be added and deleted. Public keys may be exposed through
 this model. This model requires that private keys and MAC
-keys never be exposed. Certificates used by {{I-D.ietf-babel-dtls}}
+keys never be exposed. Certificates used by {{RFC8968}}
 implementations use separate parameters to model the public
 parts (including the public key) and the private key.
 
@@ -1038,7 +1039,7 @@ current best practices for key length and generation of
 keys related to the MAC algorithm associated with the key.
 Short (and zero-length) keys are highly susceptible to brute force attacks
 and therefore SHOULD NOT be used.
-See the Security Considerations section of {{I-D.ietf-babel-hmac}}
+See the Security Considerations section of {{RFC8967}}
 for additional considerations related to MAC keys.
 
 This information model uses key sets and certification sets to provide
